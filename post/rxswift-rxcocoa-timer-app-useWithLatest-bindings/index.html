@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Split laps timer with RxSwift and RxCocoa: Part 2 - rx_marin&lt;blog&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="http://rx-marin.local:8888//css/combined-min.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="http://rx-marin.local:8888/" style="font-size: 1.3em; font-style: italic; font-family: serif;">rx_marin&lt;blog&gt;</a>
+      <nav class="site-nav right">
+      <a href="http://rx-marin.local:8888/tags">Tags</a>
+<a href="http://www.underplot.com" target="_blank">Contact</a>
+
+<form class="navbar-search" action="http://rx-marin.local:8888//search/index.html"
+    onsubmit="return validateForm(this.elements['q'].value);">
+    
+
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Split laps timer with RxSwift and RxCocoa: Part 2</h1>
+        <span class="post-meta">Feb 22, 2016 by Marin Todorov</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
+
+<p>Well this week I am implementing exactly this functionality.</p>
+
+<p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
+
+<p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
+
+<p><img src="http://rx-marin.local:8888/images/latimer-new-ui.png" alt="" /></p>
+
+<p>Download the starter project to follow along here: <a href="http://rx-marin.local:8888/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
+
+<p>Now let&rsquo;s put all those buttons to work!</p>
+
+<p>My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce <code>true</code> values and the stop button will produce <code>false</code> values. When merged I will get one sequence that emits every time the state changes:</p>
+
+<p><code>o---- (play tap) true--- (stop tap) false --- (play tap) true ---&gt;</code></p>
+
+<p>So at the top of <code>viewDidLoad()</code> I created a new Observable like so:</p>
+
+<pre><code>let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
+    .toObservable()
+    .merge()
+    .startWith(false)
+    .shareReplayLatestWhileConnected()
+</code></pre>
+
+<p>First I mapped the taps on <code>btnPlay</code> to <code>true</code> and the taps on <code>btnStop</code> to <code>false</code> and merged them together.</p>
+
+<p>The Observable starts with a <code>false</code> value to give the user the opportunity to start the timer at their convenience.</p>
+
+<p>I printed the values the new observable emits and was quite happy with the result:</p>
+
+<pre><code>isRunning.subscribeNext({state in
+    print(state)
+}).addDisposableTo(bag)
+</code></pre>
+
+<p>The code printed <code>true</code> or <code>false</code> in the console each time I pressed play or stop. Neato!</p>
+
+<p>Now it looked very easy to bind that Observable to the buttons&rsquo; <code>rx_enabled</code> property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&rsquo;t running at all!</p>
+
+<p>And since some of the controls needed to be enabled when the timer is running and others when it isn&rsquo;t - I made myself yet another observable and bound the controls like so:</p>
+
+<pre><code>let isntRunning = isRunning.map({running in !running}).shareReplay(1)
+
+isRunning.bindTo(btnStop.rx_enabled).addDisposableTo(bag)
+isntRunning.bindTo(btnLap.rx_hidden).addDisposableTo(bag)
+isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
+</code></pre>
+
+<p>The stop button is enabled while the timer is running. Play is enabled when the timer is paused.</p>
+
+<p>I really love this kind of code. No <code>if</code>s no <code>switch</code>es; once you get the code running it&rsquo;s very difficult to mess up and there&rsquo;s simply no space for introducing bugs. Everything is air-tight.</p>
+
+<p>The app started with the laps button hidden and only the play button enabled like so:</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-play.png" alt="" /></p>
+
+<p>Further you could click play just once because it instantly became disabled. How cool :]</p>
+
+<p>Now my problem was that even though the UI already reflected the different states of the timer - well &hellip; the timer didn&rsquo;t care at all about any of that :]</p>
+
+<p>I looked into the <code>RxSwift</code> implementation of a timer but didn&rsquo;t find a way how to pause it (I guess that it couldn&rsquo;t implement state, who knows &hellip;). That&rsquo;s why I thought I&rsquo;d move away from directly binding the timer to the UI and implement my own counter.</p>
+
+<p>At the time my timer looked like this:</p>
+
+<pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
+</code></pre>
+
+<p>Well, I thought, I just need to somehow combine <code>isRunning</code> and <code>timer</code> and filter the observable output when <code>isRunning</code> is <code>false</code>.</p>
+
+<p>So I did the following: I appended to the existing <code>timer</code> an operator to combine it with the latest value from <code>isRunning</code>:</p>
+
+<pre><code>.withLatestFrom(isRunning, resultSelector: {_, running in running})
+</code></pre>
+
+<p>You see that I just ignored the value emitted by <code>timer</code> since I never use it for anything and return from <code>withLatestFrom</code> the unchanged <code>running</code> input parameter:</p>
+
+<p><code>(Int, Boolean) -&gt; withLatestFrom -&gt; Boolean</code></p>
+
+<p>Next I could simply use <code>filter</code> to stop the observable from emitting when the timer is not running:</p>
+
+<pre><code>.filter({running in running})
+</code></pre>
+
+<p>And last but not least I had to attach a counter, but that was already something I knew how to do with <code>scan</code> like so:</p>
+
+<pre><code>.scan(0, accumulator: {(acc, _) in
+    return acc+1
+})
+</code></pre>
+
+<p>What <code>scan</code> does above is to count how many times the timer fired while <code>isRunning</code> was <code>true</code> (which is exactly what I wanted).</p>
+
+<p>Finally I had to set the initial value to show in the UI and to share the result between all observers:</p>
+
+<pre><code> .startWith(0)
+ .shareReplayLatestWhileConnected()
+</code></pre>
+
+<p>The complete code of the enhanced timer observable looked like this:</p>
+
+<pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
+    .withLatestFrom(isRunning, resultSelector: {_, running in running})
+    .filter({running in running})
+    .scan(0, accumulator: {(acc, _) in
+        return acc+1
+    })
+    .startWith(0)
+    .shareReplayLatestWhileConnected()
+</code></pre>
+
+<p>And that&rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single <code>if</code>!</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-2-final.gif" alt="" /></p>
+
+<p>You can get the completed project from here: <a href="http://rx-marin.local:8888/zip/rx_laptimer_finished.zip">rx_laptimer_finished.zip</a></p>
+
+<p>Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.</p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="http://rx-marin.local:8888//tags/rxswift">rxswift</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/rxcocoa">rxcocoa</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/useWithLatest">useWithLatest</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/bindings">bindings</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/interval">interval</a>
+        
+      </p>
+
+<blockquote>
+	<img src="http://rx-marin.local:8888/images/me_rwdevcon.png" align="left" hspace="10">
+	The best way to leave me a comment is to ping me on Twitter at <a href="https://twitter.com/icanzilb">@icanzilb</a>. 
+	Or star my repos on <a href="https://github.com/icanzilb">GitHub/icanzilb</a> and create an issue there.
+	<br><br>
+</blockquote>
+
+<style type="text/css">
+
+.post-content img {
+	border: 1px solid gray;
+}
+
+#share-buttons img {
+width: 35px;
+padding: 5px;
+border: 0;
+box-shadow: 0;
+display: inline;
+}
+ 
+</style>
+
+<div id="share-buttons">
+    
+    
+    <a href="https://bufferapp.com/add?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+    
+    
+    <a href="https://twitter.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202&amp;hashtags=rxswift" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+    </a>
+
+    
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+    
+    
+    <a href="https://plus.google.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+    </a>
+    
+    
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+    </a>
+    
+    
+    <a href="http://reddit.com/submit?url=https://simplesharebuttons.com&amp;title=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
+    </a>
+    
+</div>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="http://rx-marin.local:8888/index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/icanzilb"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2015<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="http://rx-marin.local:8888/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

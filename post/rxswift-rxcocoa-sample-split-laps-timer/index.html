@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Split laps timer with RxSwift and RxCocoa - rx_marin&lt;blog&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="http://rx-marin.local:8888//css/combined-min.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="http://rx-marin.local:8888/" style="font-size: 1.3em; font-style: italic; font-family: serif;">rx_marin&lt;blog&gt;</a>
+      <nav class="site-nav right">
+      <a href="http://rx-marin.local:8888/tags">Tags</a>
+<a href="http://www.underplot.com" target="_blank">Contact</a>
+
+<form class="navbar-search" action="http://rx-marin.local:8888//search/index.html"
+    onsubmit="return validateForm(this.elements['q'].value);">
+    
+
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Split laps timer with RxSwift and RxCocoa</h1>
+        <span class="post-meta">Feb 16, 2016 by Marin Todorov</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      
+
+<p>I was browsing through <a href="http://rxmarbles.com/">RxMarbles</a> and was totally baffled by the <code>sample</code> function. The marble diagram looks pretty random at first sight:</p>
+
+<p><img src="http://rx-marin.local:8888/images/marbles-sample.png" alt="" /></p>
+
+<p>At first I thought - &ldquo;Hey, that second sequence is getting totally ignored!&rdquo;. But after I read the description I figured it out:</p>
+
+<blockquote>
+<p>The first sequence&rsquo;s elements is <strong>what</strong> <code>sample</code> emits, while the second sequence&rsquo;s elements determine <strong>when</strong> <code>sample</code> emits. So in a way yes - the actual values A, B, C, D do get totally ignored.</p>
+</blockquote>
+
+<p>When it was clear to me what <code>sample</code> does I started wondering if this function has any practical application :]</p>
+
+<p>This brought me to creating a split lap timer app to test what <code>sample</code> can do for me. In the finished project I have a timer emitting time values (aka the first sequence) and I want to grab (or sample) the values whenever the user taps a button (aka the second sequence).</p>
+
+<p>Here&rsquo;s how the marble diagram looks like for the app setup:</p>
+
+<p><img src="http://rx-marin.local:8888/images/sample-dia.png" alt="" /></p>
+
+<p>And this is how the app looks like when finished:</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-finished.png" alt="" /></p>
+
+<p>Let&rsquo;s build that app :]</p>
+
+<p>Here are the specs I wanted for my split lap timer app:</p>
+
+<ol>
+<li>start the timer at launch</li>
+<li>show the running time in format MM:SS.MS</li>
+<li>when the user taps &ldquo;Split Lap&rdquo; add a split time</li>
+<li>show a table of the split times</li>
+<li>show a table head with the total of laps</li>
+</ol>
+
+<h3 id="1-start-a-timer:1db2c1bfd63c48e8c3c8b2b212141dce">1 Start a timer</h3>
+
+<p>Like in my <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">previous post</a> about manually disposing bag&rsquo;s contents I added a timer:</p>
+
+<pre><code>var timer: Observable&lt;NSInteger&gt;!
+</code></pre>
+
+<p>And in <code>viewDidLoad</code> let it run every <code>1/10</code> of a second (I chose to show only 1 digit for milliseconds so no need to fire more often):</p>
+
+<pre><code>//create the timer
+timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
+
+timer.subscribeNext({ msecs -&gt; Void in
+  print(&quot;\(msecs)00ms&quot;)
+}).addDisposableTo(bag)
+</code></pre>
+
+<p>This got the timer running and filling up the console:</p>
+
+<pre><code>000ms
+100ms
+200ms
+300ms
+400ms
+500ms
+600ms
+700ms
+800ms
+900ms
+1000ms
+1100ms
+</code></pre>
+
+<p>Cool - that was easy (well, I already knew how to do that part, lol)</p>
+
+<h3 id="2-show-the-current-elapsed-time:1db2c1bfd63c48e8c3c8b2b212141dce">2 Show the current elapsed time</h3>
+
+<p>This was also a part I already knew how to do. First I put together a little function to take the elapsed time and return a nicely formatted string:</p>
+
+<pre><code>func stringFromTimeInterval(ms: NSInteger) -&gt; String {
+  return String(format: &quot;%0.2d:%0.2d.%0.1d&quot;,
+    arguments: [(ms / 600) % 600, (ms % 600 ) / 10, ms % 10])
+}
+</code></pre>
+
+<p>And then back in <code>viewDidLoad</code> I used it to bind the timer to a label I added via Interface Builder:</p>
+
+<pre><code>//wire the chrono
+timer.map(stringFromTimeInterval)
+  .bindTo(lblChrono.rx_text)
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>I really love how the code flows and tells the story of what should happen:</p>
+
+<p><code>timer -&gt; 1,2,3 -&gt; stringFromTimeInterval -&gt; &quot;string&quot;, &quot;string&quot; -&gt; lblChrono</code></p>
+
+<p>Functional code is awesome because I get 2 huge wins for free: I can easily reuse <code>stringFromTimeInterval</code> and I can write very simple tests for it.</p>
+
+<p>At this point the timer label already displayed the elapsed time:</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-label.png" alt="" /></p>
+
+<h3 id="3-grab-the-split-time-when-the-user-taps-the-split-lap-button:1db2c1bfd63c48e8c3c8b2b212141dce">3 Grab the split time when the user taps the &ldquo;Split Lap&rdquo; button</h3>
+
+<p>Ok here I was supposed to have my ultimate win by using <code>sample</code>. The first few tries didn&rsquo;t get me far until I realized that the <code>rx_tap</code> property on <code>UIButton</code> is also an <code>Observable</code>.</p>
+
+<blockquote>
+<p>Duh, everything is an <code>Observable</code> :]</p>
+</blockquote>
+
+<p>Then it was just a matter of calling <code>sample</code> on my timer and providing as a control sequence the <code>rx_tap</code> property of the button like so: <code>timer.sample(btnLap.rx_tap)</code> Whaaaat?</p>
+
+<p>Now each time I tapped the button <code>sample</code> emitted the latest value produced by <code>timer</code>. And since I wasn&rsquo;t interested in the number but in the formatted string I again mapped the result with <code>stringFromTimeInterval</code>.</p>
+
+<p>And since I needed to build a list of those split times I used <code>scan</code>. Actually at first I came around <code>reduce</code> because I was thinking of accumulating values in a list, but then realized I needed to produce a sequence that emits the list for each new value&hellip; hence I kind of knew I got to use <code>scan</code>:</p>
+
+<pre><code>let lapsSequence = timer.sample(btnLap.rx_tap)
+    .map(stringFromTimeInterval)
+    .scan([String](), accumulator: {lapTimes, newTime in
+        return lapTimes + [newTime]
+    })
+    .shareReplay(1)
+</code></pre>
+
+<p>So - each time <code>sample</code> emits a new lap time <code>scan</code> emits an array of all the split times so far.</p>
+
+<p>Not sure how to explain <code>scan</code> more simply but I&rsquo;ll try: In RxSwift any time you&rsquo;re thinking of using <code>reduce</code> chances are you need <code>scan</code> instead :]</p>
+
+<h3 id="4-show-a-table-of-the-split-times-so-far:1db2c1bfd63c48e8c3c8b2b212141dce">4 Show a table of the split times so far</h3>
+
+<p>Ok so I got <code>lapsSequence</code> emit an array of split times. From there (after consulting RxExample) was a walk in the park to wire up the table view:</p>
+
+<pre><code>//show laps in table
+lapsSequence.bindTo(tableView.rx_itemsWithCellIdentifier(&quot;Cell&quot;, cellType: UITableViewCell.self)) { (row, element, cell) in
+    cell.textLabel!.text = &quot;\(row+1)) \(element)&quot;
+}
+.addDisposableTo(bag)
+</code></pre>
+
+<p>And my app was already working!</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-table.png" alt="" /></p>
+
+<p>Each time I tap the &ldquo;Split Lap&rdquo; button I get a new split time added in the table view. Sweet!</p>
+
+<h3 id="5-show-a-table-header-with-the-number-of-laps:1db2c1bfd63c48e8c3c8b2b212141dce">5 Show a table header with the number of laps</h3>
+
+<p>This part was the one that tripped me the most. There wasn&rsquo;t a binding I could use for the table header and I didn&rsquo;t want to complicate the code unneccessarily by adding a section table data source.</p>
+
+<p>What came to mind was to add a <code>UILabel</code> property to my view controller and use it as the table header view. Then bind the count of split times to the <code>rx_text</code> of that label.</p>
+
+<p>So I added to the view controller class:</p>
+
+<pre><code>let tableHeaderView = UILabel()
+</code></pre>
+
+<p>And then an extension to set this label as my table view header:</p>
+
+<pre><code>extension ViewController: UITableViewDelegate {
+  func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -&gt; UIView? {
+    return tableHeaderView
+  }
+}
+</code></pre>
+
+<p>I knew how to set my class as the proxy delegate to the table view (back in <code>viewDidLoad</code>):</p>
+
+<pre><code>//set table delegate
+tableView
+  .rx_setDelegate(self)
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>And now came the coup d&rsquo;etat - I had to map <code>lapsSequence</code> from an array to a single string (e.g. &ldquo;5 laps&rdquo;) and bind that string to the table header.</p>
+
+<p>I got overexcited about using <code>scan</code> but the code did feel itchy so after asking around on the RxSwift slack <a href="https://twitter.com/KrunoslavZaher">KrunoslavZaher</a> enlightened me that since I have one array I can turn it into one string by simply using <code>map</code>.</p>
+
+<p>Here&rsquo;s the final code addition to <code>viewDidLoad</code>:</p>
+
+<pre><code>//update the table header
+lapsSequence.map({ laps -&gt; String in
+    return &quot;\t\(laps.count) laps&quot;
+})
+.startWith(&quot;\tno laps&quot;)
+.bindTo(tableHeaderView.rx_text)
+.addDisposableTo(bag)
+</code></pre>
+
+<p>Since <code>lapsSequence</code> emits an array of <em>all</em> split times each time a new split time is emitted I just take that array and return a string with the number of elements.</p>
+
+<p>Additionally I set the initial value to &ldquo;no laps&rdquo; and that&rsquo;s pretty much it - I bind everything directly to <code>tableHeaderView.rx_text</code>.</p>
+
+<p>And that&rsquo;s the complete working app!</p>
+
+<p><img src="http://rx-marin.local:8888/images/laptimer-finished.png" alt="" /></p>
+
+<p>You can download the completed project and give it a try here: <a href="http://rx-marin.local:8888/zip/rx_laptimer.zip">rx_laptimer.zip</a>.</p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="http://rx-marin.local:8888//tags/rxswift">rxswift</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/rxcocoa">rxcocoa</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/sample">sample</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/scan">scan</a>
+        
+            ,&nbsp;
+            <a href="http://rx-marin.local:8888//tags/interval">interval</a>
+        
+      </p>
+
+<blockquote>
+	<img src="http://rx-marin.local:8888/images/me_rwdevcon.png" align="left" hspace="10">
+	The best way to leave me a comment is to ping me on Twitter at <a href="https://twitter.com/icanzilb">@icanzilb</a>. 
+	Or star my repos on <a href="https://github.com/icanzilb">GitHub/icanzilb</a> and create an issue there.
+	<br><br>
+</blockquote>
+
+<style type="text/css">
+
+.post-content img {
+	border: 1px solid gray;
+}
+
+#share-buttons img {
+width: 35px;
+padding: 5px;
+border: 0;
+box-shadow: 0;
+display: inline;
+}
+ 
+</style>
+
+<div id="share-buttons">
+    
+    
+    <a href="https://bufferapp.com/add?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-sample-split-laps-timer%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+    
+    
+    <a href="https://twitter.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-sample-split-laps-timer%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa&amp;hashtags=rxswift" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+    </a>
+
+    
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-sample-split-laps-timer%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+    
+    
+    <a href="https://plus.google.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-sample-split-laps-timer%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+    </a>
+    
+    
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-rxcocoa-sample-split-laps-timer%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+    </a>
+    
+    
+    <a href="http://reddit.com/submit?url=https://simplesharebuttons.com&amp;title=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
+    </a>
+    
+</div>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="http://rx-marin.local:8888/index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/icanzilb"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2015<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="http://rx-marin.local:8888/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

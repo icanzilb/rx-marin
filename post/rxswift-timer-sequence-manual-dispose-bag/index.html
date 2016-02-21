@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Manually disposing a bag and creating a timer - rx_marin&lt;blog&gt;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="http://rx-marin.local:8888/post/rxswift-timer-sequence-manual-dispose-bag/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="http://rx-marin.local:8888//css/combined-min.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="http://rx-marin.local:8888/" style="font-size: 1.3em; font-style: italic; font-family: serif;">rx_marin&lt;blog&gt;</a>
+      <nav class="site-nav right">
+      <a href="http://rx-marin.local:8888/tags">Tags</a>
+<a href="http://www.underplot.com" target="_blank">Contact</a>
+
+<form class="navbar-search" action="http://rx-marin.local:8888//search/index.html"
+    onsubmit="return validateForm(this.elements['q'].value);">
+    
+
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Manually disposing a bag and creating a timer</h1>
+        <span class="post-meta">Jan 17, 2016 by Marin Todorov</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      <p>I was reading through the <a href="https://github.com/ReactiveX/RxSwift/tree/master/Documentation">RxSwift docs</a> and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&rsquo;s not a bad idea to share it online.</p>
+
+<p>So <code>DisposeBag</code> kind of <code>retains</code> all your observables that&rsquo;s why you add them to a bag all the time when you create them. You probably never get to dispose them manually since the moment the bag gets disposed it also disposes all your observables (magic!).</p>
+
+<p>To test disposing I wrote this:</p>
+
+<pre><code class="language-swift">import UIKit
+
+import RxSwift
+import RxCocoa
+
+
+class ViewController: UIViewController {
+
+    var bag: DisposeBag! = DisposeBag()
+    var sig: Observable&lt;Int&gt;!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        sig = Observable&lt;Int&gt;.interval(1.0, scheduler: MainScheduler.instance)
+        
+        sig.map({num in
+            num * 10
+        }).subscribeNext({num in
+            print(num)
+        }).addDisposableTo(bag)
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: &quot;didTap&quot;)
+        view.addGestureRecognizer(tap)
+    }
+
+    func didTap() {
+        bag = nil
+    }
+    
+}
+</code></pre>
+
+<p><code>Observable&lt;Int&gt;.interval(:scheduler:)</code> creates a sequence that emits each time the timer fires - in the case of the example above each second the observable emits the next integer number.</p>
+
+<p>I map the value and finally in <code>subscribeNext()</code> I print to the console:</p>
+
+<pre><code>0
+10
+20
+30
+40
+etc.
+</code></pre>
+
+<p>I attached a gesture recognizer to the view controller&rsquo;s view and when the user taps on the view I destroy the bag:</p>
+
+<pre><code class="language-swift">bag = nil
+</code></pre>
+
+<p>If you give the code a try you will see that when you tap the view the observable stops emitting because the original bag get destroyed and it automatically disposes of all observables added to it.</p>
+
+<p>Very nice and handy when you need to be sure when a resource is deallocated. Further - how cool is that you can create a timer by simply doing <code>Observable&lt;Int&gt;.interval(:scheduler:)</code>?</p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="http://rx-marin.local:8888//tags/rxswift">rxswift</a>
+        
+      </p>
+
+<blockquote>
+	<img src="http://rx-marin.local:8888/images/me_rwdevcon.png" align="left" hspace="10">
+	The best way to leave me a comment is to ping me on Twitter at <a href="https://twitter.com/icanzilb">@icanzilb</a>. 
+	Or star my repos on <a href="https://github.com/icanzilb">GitHub/icanzilb</a> and create an issue there.
+	<br><br>
+</blockquote>
+
+<style type="text/css">
+
+.post-content img {
+	border: 1px solid gray;
+}
+
+#share-buttons img {
+width: 35px;
+padding: 5px;
+border: 0;
+box-shadow: 0;
+display: inline;
+}
+ 
+</style>
+
+<div id="share-buttons">
+    
+    
+    <a href="https://bufferapp.com/add?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-timer-sequence-manual-dispose-bag%2f&amp;text=Manually%20disposing%20a%20bag%20and%20creating%20a%20timer" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
+    </a>
+    
+    
+    <a href="https://twitter.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-timer-sequence-manual-dispose-bag%2f&amp;text=Manually%20disposing%20a%20bag%20and%20creating%20a%20timer&amp;hashtags=rxswift" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+    </a>
+
+    
+    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-timer-sequence-manual-dispose-bag%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+    </a>
+    
+    
+    <a href="https://plus.google.com/share?url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-timer-sequence-manual-dispose-bag%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+    </a>
+    
+    
+    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-timer-sequence-manual-dispose-bag%2f" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+    </a>
+    
+    
+    <a href="http://reddit.com/submit?url=https://simplesharebuttons.com&amp;title=Manually%20disposing%20a%20bag%20and%20creating%20a%20timer" target="_blank">
+        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
+    </a>
+    
+</div>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="http://rx-marin.local:8888/index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/icanzilb"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2015<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="http://rx-marin.local:8888/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

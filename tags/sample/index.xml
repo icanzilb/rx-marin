@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title>Sample on rx_marin&lt;blog&gt; </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>http://rx-marin.local:8888/tags/sample/</link>
+    <language>en-us</language>
+    
+    
+    <updated>Tue, 16 Feb 2016 00:00:00 UTC</updated>
+    
+    <item>
+      <title>Split laps timer with RxSwift and RxCocoa</title>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 UTC</pubDate>
+      
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
+      <description>&lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;At first I thought - &amp;ldquo;Hey, that second sequence is getting totally ignored!&amp;rdquo;. But after I read the description I figured it out:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The first sequence&amp;rsquo;s elements is &lt;strong&gt;what&lt;/strong&gt; &lt;code&gt;sample&lt;/code&gt; emits, while the second sequence&amp;rsquo;s elements determine &lt;strong&gt;when&lt;/strong&gt; &lt;code&gt;sample&lt;/code&gt; emits. So in a way yes - the actual values A, B, C, D do get totally ignored.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;When it was clear to me what &lt;code&gt;sample&lt;/code&gt; does I started wondering if this function has any practical application :]&lt;/p&gt;
+
+&lt;p&gt;This brought me to creating a split lap timer app to test what &lt;code&gt;sample&lt;/code&gt; can do for me. In the finished project I have a timer emitting time values (aka the first sequence) and I want to grab (or sample) the values whenever the user taps a button (aka the second sequence).&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how the marble diagram looks like for the app setup:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And this is how the app looks like when finished:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
+
