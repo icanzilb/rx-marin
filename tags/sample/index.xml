@@ -3,7 +3,7 @@
   <channel>
       <title>Sample on rx_marin&lt;blog&gt; </title>
       <generator uri="https://gohugo.io">Hugo</generator>
-    <link>http://rx-marin.local:8888/tags/sample/</link>
+    <link>http://rx-marin.com/tags/sample/</link>
     <language>en-us</language>
     
     
@@ -11,13 +11,13 @@
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa</title>
-      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 UTC</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
       <description>&lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;At first I thought - &amp;ldquo;Hey, that second sequence is getting totally ignored!&amp;rdquo;. But after I read the description I figured it out:&lt;/p&gt;
 
@@ -31,11 +31,11 @@
 
 &lt;p&gt;Here&amp;rsquo;s how the marble diagram looks like for the app setup:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;And this is how the app looks like when finished:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
 </description>
