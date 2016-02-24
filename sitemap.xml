@@ -1,1 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://rx-marin.com/</loc>
+    <lastmod>2016-02-22T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</loc>
+    <lastmod>2016-02-22T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</loc>
+    <lastmod>2016-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</loc>
+    <lastmod>2016-01-17T00:00:00+00:00</lastmod>
+  </url>
+  
+</urlset>

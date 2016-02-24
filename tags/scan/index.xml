@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-      <title>Scan on rx_marin&lt;blog&gt; </title>
-      <generator uri="https://gohugo.io">Hugo</generator>
+    <title>Scan on rx_marin&lt;blog&gt;</title>
     <link>http://rx-marin.com/tags/scan/</link>
+    <description>Recent content in Scan on rx_marin&lt;blog&gt;</description>
+    <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    
-    
-    <updated>Tue, 16 Feb 2016 00:00:00 UTC</updated>
+    <lastBuildDate>Tue, 16 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://rx-marin.com/tags/scan/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa</title>
       <link>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
-      <pubDate>Tue, 16 Feb 2016 00:00:00 UTC</pubDate>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
-      <description>&lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
+      <description>
+
+&lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
@@ -38,9 +40,177 @@
 &lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
+
+&lt;p&gt;Here are the specs I wanted for my split lap timer app:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;start the timer at launch&lt;/li&gt;
+&lt;li&gt;show the running time in format MM:SS.MS&lt;/li&gt;
+&lt;li&gt;when the user taps &amp;ldquo;Split Lap&amp;rdquo; add a split time&lt;/li&gt;
+&lt;li&gt;show a table of the split times&lt;/li&gt;
+&lt;li&gt;show a table head with the total of laps&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-start-a-timer:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;1 Start a timer&lt;/h3&gt;
+
+&lt;p&gt;Like in my &lt;a href=&#34;http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/&#34;&gt;previous post&lt;/a&gt; about manually disposing bag&amp;rsquo;s contents I added a timer:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var timer: Observable&amp;lt;NSInteger&amp;gt;!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And in &lt;code&gt;viewDidLoad&lt;/code&gt; let it run every &lt;code&gt;1/10&lt;/code&gt; of a second (I chose to show only 1 digit for milliseconds so no need to fire more often):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//create the timer
+timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
+
+timer.subscribeNext({ msecs -&amp;gt; Void in
+  print(&amp;quot;\(msecs)00ms&amp;quot;)
+}).addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This got the timer running and filling up the console:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;000ms
+100ms
+200ms
+300ms
+400ms
+500ms
+600ms
+700ms
+800ms
+900ms
+1000ms
+1100ms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool - that was easy (well, I already knew how to do that part, lol)&lt;/p&gt;
+
+&lt;h3 id=&#34;2-show-the-current-elapsed-time:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;2 Show the current elapsed time&lt;/h3&gt;
+
+&lt;p&gt;This was also a part I already knew how to do. First I put together a little function to take the elapsed time and return a nicely formatted string:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func stringFromTimeInterval(ms: NSInteger) -&amp;gt; String {
+  return String(format: &amp;quot;%0.2d:%0.2d.%0.1d&amp;quot;,
+    arguments: [(ms / 600) % 600, (ms % 600 ) / 10, ms % 10])
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then back in &lt;code&gt;viewDidLoad&lt;/code&gt; I used it to bind the timer to a label I added via Interface Builder:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//wire the chrono
+timer.map(stringFromTimeInterval)
+  .bindTo(lblChrono.rx_text)
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I really love how the code flows and tells the story of what should happen:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;timer -&amp;gt; 1,2,3 -&amp;gt; stringFromTimeInterval -&amp;gt; &amp;quot;string&amp;quot;, &amp;quot;string&amp;quot; -&amp;gt; lblChrono&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Functional code is awesome because I get 2 huge wins for free: I can easily reuse &lt;code&gt;stringFromTimeInterval&lt;/code&gt; and I can write very simple tests for it.&lt;/p&gt;
+
+&lt;p&gt;At this point the timer label already displayed the elapsed time:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;3-grab-the-split-time-when-the-user-taps-the-split-lap-button:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;3 Grab the split time when the user taps the &amp;ldquo;Split Lap&amp;rdquo; button&lt;/h3&gt;
+
+&lt;p&gt;Ok here I was supposed to have my ultimate win by using &lt;code&gt;sample&lt;/code&gt;. The first few tries didn&amp;rsquo;t get me far until I realized that the &lt;code&gt;rx_tap&lt;/code&gt; property on &lt;code&gt;UIButton&lt;/code&gt; is also an &lt;code&gt;Observable&lt;/code&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Duh, everything is an &lt;code&gt;Observable&lt;/code&gt; :]&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Then it was just a matter of calling &lt;code&gt;sample&lt;/code&gt; on my timer and providing as a control sequence the &lt;code&gt;rx_tap&lt;/code&gt; property of the button like so: &lt;code&gt;timer.sample(btnLap.rx_tap)&lt;/code&gt; Whaaaat?&lt;/p&gt;
+
+&lt;p&gt;Now each time I tapped the button &lt;code&gt;sample&lt;/code&gt; emitted the latest value produced by &lt;code&gt;timer&lt;/code&gt;. And since I wasn&amp;rsquo;t interested in the number but in the formatted string I again mapped the result with &lt;code&gt;stringFromTimeInterval&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;And since I needed to build a list of those split times I used &lt;code&gt;scan&lt;/code&gt;. Actually at first I came around &lt;code&gt;reduce&lt;/code&gt; because I was thinking of accumulating values in a list, but then realized I needed to produce a sequence that emits the list for each new value&amp;hellip; hence I kind of knew I got to use &lt;code&gt;scan&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let lapsSequence = timer.sample(btnLap.rx_tap)
+    .map(stringFromTimeInterval)
+    .scan([String](), accumulator: {lapTimes, newTime in
+        return lapTimes + [newTime]
+    })
+    .shareReplay(1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So - each time &lt;code&gt;sample&lt;/code&gt; emits a new lap time &lt;code&gt;scan&lt;/code&gt; emits an array of all the split times so far.&lt;/p&gt;
+
+&lt;p&gt;Not sure how to explain &lt;code&gt;scan&lt;/code&gt; more simply but I&amp;rsquo;ll try: In RxSwift any time you&amp;rsquo;re thinking of using &lt;code&gt;reduce&lt;/code&gt; chances are you need &lt;code&gt;scan&lt;/code&gt; instead :]&lt;/p&gt;
+
+&lt;h3 id=&#34;4-show-a-table-of-the-split-times-so-far:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;4 Show a table of the split times so far&lt;/h3&gt;
+
+&lt;p&gt;Ok so I got &lt;code&gt;lapsSequence&lt;/code&gt; emit an array of split times. From there (after consulting RxExample) was a walk in the park to wire up the table view:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//show laps in table
+lapsSequence.bindTo(tableView.rx_itemsWithCellIdentifier(&amp;quot;Cell&amp;quot;, cellType: UITableViewCell.self)) { (row, element, cell) in
+    cell.textLabel!.text = &amp;quot;\(row+1)) \(element)&amp;quot;
+}
+.addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And my app was already working!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Each time I tap the &amp;ldquo;Split Lap&amp;rdquo; button I get a new split time added in the table view. Sweet!&lt;/p&gt;
+
+&lt;h3 id=&#34;5-show-a-table-header-with-the-number-of-laps:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;5 Show a table header with the number of laps&lt;/h3&gt;
+
+&lt;p&gt;This part was the one that tripped me the most. There wasn&amp;rsquo;t a binding I could use for the table header and I didn&amp;rsquo;t want to complicate the code unneccessarily by adding a section table data source.&lt;/p&gt;
+
+&lt;p&gt;What came to mind was to add a &lt;code&gt;UILabel&lt;/code&gt; property to my view controller and use it as the table header view. Then bind the count of split times to the &lt;code&gt;rx_text&lt;/code&gt; of that label.&lt;/p&gt;
+
+&lt;p&gt;So I added to the view controller class:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let tableHeaderView = UILabel()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then an extension to set this label as my table view header:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;extension ViewController: UITableViewDelegate {
+  func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -&amp;gt; UIView? {
+    return tableHeaderView
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I knew how to set my class as the proxy delegate to the table view (back in &lt;code&gt;viewDidLoad&lt;/code&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//set table delegate
+tableView
+  .rx_setDelegate(self)
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And now came the coup d&amp;rsquo;etat - I had to map &lt;code&gt;lapsSequence&lt;/code&gt; from an array to a single string (e.g. &amp;ldquo;5 laps&amp;rdquo;) and bind that string to the table header.&lt;/p&gt;
+
+&lt;p&gt;I got overexcited about using &lt;code&gt;scan&lt;/code&gt; but the code did feel itchy so after asking around on the RxSwift slack &lt;a href=&#34;https://twitter.com/KrunoslavZaher&#34;&gt;KrunoslavZaher&lt;/a&gt; enlightened me that since I have one array I can turn it into one string by simply using &lt;code&gt;map&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the final code addition to &lt;code&gt;viewDidLoad&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//update the table header
+lapsSequence.map({ laps -&amp;gt; String in
+    return &amp;quot;\t\(laps.count) laps&amp;quot;
+})
+.startWith(&amp;quot;\tno laps&amp;quot;)
+.bindTo(tableHeaderView.rx_text)
+.addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since &lt;code&gt;lapsSequence&lt;/code&gt; emits an array of &lt;em&gt;all&lt;/em&gt; split times each time a new split time is emitted I just take that array and return a string with the number of elements.&lt;/p&gt;
+
+&lt;p&gt;Additionally I set the initial value to &amp;ldquo;no laps&amp;rdquo; and that&amp;rsquo;s pretty much it - I bind everything directly to &lt;code&gt;tableHeaderView.rx_text&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s the complete working app!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
   </channel>
 </rss>
-

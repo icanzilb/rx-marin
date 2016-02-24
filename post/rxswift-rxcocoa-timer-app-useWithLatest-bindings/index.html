@@ -1,60 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Split laps timer with RxSwift and RxCocoa: Part 2 - rx_marin&lt;blog&gt;</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="keywords" content="">
-  <link rel="canonical" href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">
+  <title>
+    Split laps timer with RxSwift and RxCocoa: Part 2 // rx_marin&lt;blog&gt;
+  </title>
 
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="Split laps timer with RxSwift and RxCocoa: Part 2" />
+<meta property="og:description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
   
   
 
-  
-  
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
 
   
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
   
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
 
-  <link rel="stylesheet" type="text/css" href="http://rx-marin.com//css/combined-min.css">
-
-</head>
-<body class="">
-
-<div class="site-wrap">
-  <header class="site-header px2 px-responsive">
-  <div class="mt2 wrap">
-    <div class="measure">
-      <a href="http://rx-marin.com/" style="font-size: 1.3em; font-style: italic; font-family: serif;">rx_marin&lt;blog&gt;</a>
-      <nav class="site-nav right">
-      <a href="http://rx-marin.com/tags">Tags</a>
-<a href="http://www.underplot.com" target="_blank">Contact</a>
-
-<form class="navbar-search" action="http://rx-marin.com//search/index.html"
-    onsubmit="return validateForm(this.elements['q'].value);">
     
 
-</form>
+  
 
-      </nav>
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</header>
+  
 
-  <div class="post p2 p-responsive wrap" role="main">
-    <div class="measure">
-      <div class="post-header mb2">
-        <h1 class="py2">Split laps timer with RxSwift and RxCocoa: Part 2</h1>
-        <span class="post-meta">Feb 22, 2016 by Marin Todorov</span><br>
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+	
+
+    <h1 class="brand-title">rx_marin</h1>
+    <h2 class="brand-tagline">&lt;blog&gt;</h2>
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
         
-      </div>
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/tags/">Tags</a></li>
+        
+      </ul>
+    </nav>
 
-      <article class="post-content">
-      <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">Split laps timer with RxSwift and RxCocoa: Part 2</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>22</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
 
 <p>Well this week I am implementing exactly this functionality.</p>
 
@@ -175,126 +270,64 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.</p>
 
-      </article>
+	
+			
 
-      <p class="post-meta">Tags:&nbsp;
-        
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+	                <a class="post-tag post-tag-usewithlatest" href="http://rx-marin.com//tags/usewithlatest">useWithLatest</a>,
+	                
+	                <a class="post-tag post-tag-bindings" href="http://rx-marin.com//tags/bindings">bindings</a>,
+	                
+	                <a class="post-tag post-tag-interval" href="http://rx-marin.com//tags/interval">interval</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
+		            </div>
+		            
+	            </div>
             
-            <a href="http://rx-marin.com//tags/rxswift">rxswift</a>
+          </section>
+          
+          	
+          
         
-            ,&nbsp;
-            <a href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>
-        
-            ,&nbsp;
-            <a href="http://rx-marin.com//tags/useWithLatest">useWithLatest</a>
-        
-            ,&nbsp;
-            <a href="http://rx-marin.com//tags/bindings">bindings</a>
-        
-            ,&nbsp;
-            <a href="http://rx-marin.com//tags/interval">interval</a>
-        
-      </p>
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
 
-<blockquote>
-	<img src="http://rx-marin.com/images/me_rwdevcon.png" align="left" hspace="10">
-	The best way to leave me a comment is to ping me on Twitter at <a href="https://twitter.com/icanzilb">@icanzilb</a>. 
-	Or star my repos on <a href="https://github.com/icanzilb">GitHub/icanzilb</a> and create an issue there.
-	<br><br>
-</blockquote>
-
-<style type="text/css">
-
-.post-content img {
-	border: 1px solid gray;
-}
-
-#share-buttons img {
-width: 35px;
-padding: 5px;
-border: 0;
-box-shadow: 0;
-display: inline;
-}
- 
-</style>
-
-<div id="share-buttons">
-    
-    
-    <a href="https://bufferapp.com/add?url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/buffer.png" alt="Buffer" />
-    </a>
-    
-    
-    <a href="https://twitter.com/share?url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f&amp;text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202&amp;hashtags=rxswift" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
-    </a>
-
-    
-    <a href="http://www.facebook.com/sharer.php?u=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
-    </a>
-    
-    
-    <a href="https://plus.google.com/share?url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
-    </a>
-    
-    
-    <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
-    </a>
-    
-    
-    <a href="http://reddit.com/submit?url=https://simplesharebuttons.com&amp;title=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202" target="_blank">
-        <img src="https://simplesharebuttons.com/images/somacro/reddit.png" alt="Reddit" />
-    </a>
-    
+	<p>&copy; 2016. All rights reserved.</p>
 </div>
 
-      
-
+<script src="http://rx-marin.com/etc/prism.js"></script>
     </div>
   </div>
-</div>
-    <footer class="footer">
-      <div class="p2 wrap">
-        <div class="measure mt1 center">
-      <nav class="social-icons icons">
-<a class="fa fa-rss rss" href="http://rx-marin.com/index.xml"></a>
+	
 
-<a class="fa fa-twitter twitter" href="https://twitter.com/icanzilb"></a>
+	
 
-</nav>
-
-          <small>
-            Copyright &#169; 2015<br>
-            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
-          </small>
-        </div>
-      </div>
-    </footer>
-
-    
-    <script src="http://rx-marin.com/js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
-    
-    
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-34358526-7', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
-
-
+  
 </body>
 </html>
-
