@@ -65,22 +65,6 @@
 
 	
 	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
-	
-
-    <h1 class="brand-title">rx_marin</h1>
-    <h2 class="brand-tagline">&lt;blog&gt;</h2>
-
-    <nav class="nav">
-      <ul class="nav-list">
-        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
-        
-          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
-        
-          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/tags/">Tags</a></li>
-        
-      </ul>
-    </nav>
-
     
     <div class="social-buttons">
       
@@ -99,6 +83,48 @@
       
     </div>
     
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/tags/">Tags</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
 
   </div>
 </div>
@@ -294,6 +320,11 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
+		            </div>
+		            
 
 					
 					<div class="paging-older">

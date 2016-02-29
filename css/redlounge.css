@@ -80,13 +80,10 @@ h1 {
 h1.brand-title {
 	font-family: 'Libre Baskerville', serif;
 	font-weight: 400;
-	padding-top: 1rem;
 	font-size: 3rem;
-	margin-bottom: 0.25rem;
 }
 h2.brand-tagline {
 	font-size: 1.4rem;
-	margin-top: 0.25rem;
 }
 .sidebar h1.brand-title {
 	color: #fff;
@@ -394,12 +391,21 @@ a.post-category:hover {
 	border-left: 1px solid #eee;
 	font-size: 0.9rem;
 }
-nav#TableOfContents li {
-	padding-bottom: 0.25rem;
+nav#TableOfContents ul li {
+	padding-bottom: 0.5rem;
+	list-style-type: none;
+}
+nav#TableOfContents ul li ul li {
+	padding-bottom: 0.5rem;
+	list-style-type: lower-roman;
 }
 .toc-label {
 	font-size: 0.8rem;
 	color: #aeaeae;
+}
+
+nav#TableOfContents ul {
+	padding: 0 0 0 5px!important;
 }
 
 /* Footer */
