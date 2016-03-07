@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Custom convenience operators with RxSwift, Part 2 // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Some more convenience operators with RxSwift in part 2 of the series">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="Custom convenience operators with RxSwift, Part 2" />
+<meta property="og:description" content="Some more convenience operators with RxSwift in part 2 of the series" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/tags/">Tags</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#intro:46ffa07f8102997fe7674832bad6bc33">Intro</a></li>
+<li><a href="#a-better-negate-operator:46ffa07f8102997fe7674832bad6bc33">A better negate() operator</a></li>
+<li><a href="#filternegatives:46ffa07f8102997fe7674832bad6bc33">filterNegatives()</a></li>
+<li><a href="#replacenilwith:46ffa07f8102997fe7674832bad6bc33">replaceNilWith(_)</a></li>
+<li><a href="#filterout:46ffa07f8102997fe7674832bad6bc33">filterOut(_)</a></li>
+<li><a href="#unwrap:46ffa07f8102997fe7674832bad6bc33">unwrap(_)</a></li>
+<li><a href="#conclusion:46ffa07f8102997fe7674832bad6bc33">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">Custom convenience operators with RxSwift, Part 2</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<h2 id="intro:46ffa07f8102997fe7674832bad6bc33">Intro</h2>
+
+<p>I got some great feedback on last week&rsquo;s post on convenience operators <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">part 1</a> so I&rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.</p>
+
+<p>Without further ado let&rsquo;s dive in code&hellip;</p>
+
+<h2 id="a-better-negate-operator:46ffa07f8102997fe7674832bad6bc33">A better negate() operator</h2>
+
+<p>First of all I have a better version of my <code>negate()</code> operator from last week for you. What I wrote on my own was a pretty simple function that looked like so:</p>
+
+<pre><code class="language-swift">extension Observable where Element: BooleanType {
+  public func negate() -&gt; Observable&lt;Bool&gt; {
+     return map {value in !value}
+  }
+}
+</code></pre>
+
+<p>It doesn&rsquo;t get simpler than that, right? You map a value in a single line of code and that&rsquo;s it (careful, it&rsquo;s a trick question).</p>
+
+<p><a href="http://www.tailec.com/">@tailec</a> grabbed me in Slack and showed me his version of the same operator, which definitely beats mine:</p>
+
+<pre><code class="language-swift">extension Observable where Element: BooleanType {
+    public func negate() -&gt; Observable&lt;Bool&gt; {
+        return map(!)
+    }
+}
+</code></pre>
+
+<p>Yup! Since <code>!</code> is a function with a single parameter you can simply use in conjunction with <code>map</code> as shown above. That code definitely looks better than mine and I&rsquo;m gonna be using this version in my own projects too. Thanks <a href="https://twitter.com/tailectailec">Pawel</a>.</p>
+
+<blockquote>
+<p><em>Please guys, if you see something I&rsquo;m posting here that can be improved get in touch, like Pawel did, and help get some awesome rx code out together!</em></p>
+</blockquote>
+
+<h2 id="filternegatives:46ffa07f8102997fe7674832bad6bc33">filterNegatives()</h2>
+
+<p>I was looking over my current project&rsquo;s code and trying to identify repeating patterns I can easily <em>outsource</em> to a convenience operator.</p>
+
+<p>I noticed I have few <code>Bool</code> observables that I am sometimes interested in only if they were emitting <code>true</code> value. For example if we take the code from my <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">lap timer post</a>:</p>
+
+<pre><code class="language-swift">let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
+  .toObservable()
+  .merge()
+  .startWith(false)
+  .shareReplayLatestWhileConnected()
+</code></pre>
+
+<p>Which produces depending on taps on the play and stop buttons:</p>
+
+<blockquote>
+<p>true &mdash; false &mdash; true &mdash; true &ndash;&gt;</p>
+</blockquote>
+
+<p>How about observing only the taps on play? (Except just subscribing to the play button of course)</p>
+
+<p>Since what I wanted was to basically get rid of the all <code>false</code> values I wrote:</p>
+
+<pre><code class="language-swift">extension Observable where Element: BooleanType {
+  public func filterNegatives() -&gt; Observable&lt;Bool&gt; {
+     return map {value in value.boolValue}
+  }
+}
+</code></pre>
+
+<p>Pretty easy piece of code, it does the work well and it&rsquo;s clear to read. Great!</p>
+
+<h2 id="replacenilwith:46ffa07f8102997fe7674832bad6bc33">replaceNilWith(_)</h2>
+
+<p>This was an easy operator to implement. I had a couple of observables emitting optional values and I actually wanted to get a given <em>default</em> value instead of <code>nil</code>. I just had to map to a simple condition that checks for a <code>nil</code> value like so:</p>
+
+<pre><code class="language-swift">extension Observable {
+  func replaceNilWith(value: Element) -&gt; Observable&lt;Element&gt; {
+     return map {element in element == nil ? value : element}
+  }
+}
+</code></pre>
+
+<p>Note that the elements of the observable are still of type <code>Optional&lt;Element&gt;</code> but you just never get a <code>nil</code> value - you get your default value instead.</p>
+
+<h2 id="filterout:46ffa07f8102997fe7674832bad6bc33">filterOut(_)</h2>
+
+<p>While I was having a lot of momentum I decided to also write a filter that gets rid of specific values. Since the approach is exactly the same as before I&rsquo;ll just add the code here:</p>
+
+<pre><code class="language-swift">extension Observable where Element: Equatable {
+    public func filterOut(targetValue: Element) -&gt; Observable&lt;Element&gt; {
+        return self.filter {value in targetValue != value}
+    }
+}
+</code></pre>
+
+<p>The interesting aspect about this piece of code is that to be able to identify the offending value in your sequence it needs to be <code>Equatable</code> so you have to restrict the <code>filterOut</code> operator to only observables that emit <code>Equatable</code> elements.</p>
+
+<p>This of course is a walk in the park in Swift where you can just add <code>where Element: Equatable</code> on your extension.</p>
+
+<p>The best thing about <code>filterOut(_)</code> is that whenever I have an observable emitting optional values like for example <code>Observable&lt;Bool?&gt;</code>, I can ensure no <code>nil</code> values are emitted like so:</p>
+
+<pre><code class="language-swift">optionalBoolSequence.filterOut(nil)
+</code></pre>
+
+<p>The observable elements are still of type <code>Optional&lt;Bool&gt;</code> but now I am sure that the observable never emits a <code>nil</code> value.</p>
+
+<p>And leads me to &hellip;</p>
+
+<h2 id="unwrap:46ffa07f8102997fe7674832bad6bc33">unwrap(_)</h2>
+
+<p>At that point I had two convenience operators to get rid of <code>nil</code>s in my observables but the elements were still <code>Optional</code>.</p>
+
+<p>Well, I thought, it could not be so hard to actually unwrap the elements of an <code>Observable</code> with all the Swift protocols black magic and such!</p>
+
+<p>Boy, was I <strong>totally</strong> and <strong>completely</strong> wrong&hellip;</p>
+
+<p><img src="http://rx-marin.com/images/fry-wrong.png" alt="" /></p>
+
+<p>My first realization was that <code>Optional</code> is <strong>not</strong> a protocol. Thus I couldn&rsquo;t do any protocol black magic with it. Ugh!</p>
+
+<p><code>Optional</code> is actually an enum. Yes - this sounded pretty exciting when Swift 1.0 alpha was out, but honestly right now I&rsquo;d expect that it was a protocol or something more flexible.</p>
+
+<p>Anywho, since <code>Optional</code> isn&rsquo;t a protocol I couldn&rsquo;t create an extension on <code>Observable</code> that matches optional elements. Gulp.</p>
+
+<p>I had a long long conversation with <a href="https://twitter.com/mhollemans">Matthijs</a> and Ross O&rsquo;Brien in Slack until in the end I could figure out the way&hellip;</p>
+
+<p>First of all I had to define a protocol for optionals myself. My protocol had to define two methods:</p>
+
+<ul>
+<li>one that checks if the current value is <code>nil</code> (guess what - simply comparing <code>self</code> to <code>nil</code> didn&rsquo;t really work, yay!)</li>
+<li>another that unwraps <code>self</code> from <code>Optional&lt;Type&gt;</code> to <code>Type</code></li>
+</ul>
+
+<p>The big question that I had to wrap my mind around was: What type is the unwrapped value? I didn&rsquo;t know that in my protocol so I had to define a type that the concrete implementations would set.</p>
+
+<p>I ended up with:</p>
+
+<pre><code class="language-swift">protocol Optionable
+{
+  typealias WrappedType
+  func unwrap() -&gt; WrappedType
+  func isEmpty() -&gt; Bool
+}
+</code></pre>
+
+<p>Cool - I had a protocol which I could use to add a method to <code>Observable</code> via an extension.</p>
+
+<p>But first I had to make the <code>Optional</code> enum to conform to <code>Optionable</code>. So <code>Optional</code> exposes the type of the wrapped value via <code>Wrapped</code> and that&rsquo;s where the magic fusion between <code>Optional</code> and my <code>Optionable</code> protocol happened.</p>
+
+<p>Here&rsquo;s the declaration of <code>Optional</code>:</p>
+
+<pre><code class="language-swift">public enum Optional&lt;Wrapped&gt; : _Reflectable, NilLiteralConvertible {...}
+</code></pre>
+
+<p>And here&rsquo;s how I wired <code>Optionable</code> to to the type of any concrete optional value:</p>
+
+<pre><code class="language-swift">extension Optional : Optionable
+{
+    typealias WrappedType = Wrapped
+}
+</code></pre>
+
+<p>Ha! <em>(Again Matthijs and Ross helped a lot along the way of untangling all of this. I must say that there is very little info online about protocol magic and associated types.)</em></p>
+
+<p>Now I could also add the implementation of the two methods in the extension:</p>
+
+<pre><code class="language-swift">func unwrap() -&gt; WrappedType {
+    return self!
+}
+
+func isEmpty() -&gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+}
+</code></pre>
+
+<p>You guessed it - coding <code>unwrap()</code> was pretty straight forward, but <code>isEmpty()</code> caused me serious headache.</p>
+
+<p>To my surprise (repeating myself here I know), <code>Optional</code> doesn&rsquo;t give you means to check whether it&rsquo;s empty or not.</p>
+
+<p>At first I came with this naïve implementation:</p>
+
+<pre><code class="language-swift">func isEmpty() -&gt; Bool {
+  switch self {
+    case .None: return false
+    case .Some(_): return true
+  }
+}
+</code></pre>
+
+<p>Well, let me tell you: this doesn&rsquo;t work. Although if you ask me it should. But it doesn&rsquo;t - it never falls in the <code>case .None</code> branch for some reason and is beyond me why.</p>
+
+<p>So I had to take the hard way, I looked again through everything I can find in an <code>Optional</code>:</p>
+
+<p><img src="http://rx-marin.com/images/optional-docs.png" alt="" /></p>
+
+<p>It&rsquo;s not much. Not much &hellip;</p>
+
+<p>Wait! <code>flatMap</code>? But of course! Here&rsquo;s the (complete) docs on Optional&rsquo;s flatMap:</p>
+
+<blockquote>
+<p><em>Returns nil if self is nil, f(self!) otherwise.</em></p>
+</blockquote>
+
+<p>I rewrote my <code>isEmpty()</code> method to use <code>flatMap</code> and I was off to the races:</p>
+
+<pre><code class="language-swift">func isEmpty() -&gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+}
+</code></pre>
+
+<p>And now (<em>finally</em>) I could get to adding the extension to <code>Observable</code>. Compared to all the rest I&rsquo;ve been through this was &hellip; let&rsquo;s say <em>not so difficult</em>:</p>
+
+<pre><code class="language-swift">extension Observable where Element : Optionable {
+  func unwrap() -&gt; Observable&lt;Element.WrappedType&gt; {
+    return self
+      .filter {value in
+        return !value.isEmpty()
+      }
+      .map {value -&gt; Element.WrappedType in
+        value.unwrap()
+      }
+  }
+}
+</code></pre>
+
+<p>Notable mentions about that piece of code:</p>
+
+<ul>
+<li>I&rsquo;m matching the Observable type to <code>Optionable</code>. <code>Optional</code> implements <code>Optionable</code> but if any other type does that <code>unwrap()</code> will work for it too</li>
+<li><code>unwrap()</code> takes in an <code>Element</code> value and outputs <code>Element.WrappedType</code>, so for <code>Int?</code> outputs <code>Int</code>, for <code>NSDate?</code> outputs <code>NSDate</code>, etc.</li>
+<li>why not use <code>filterOut(nil)</code> to get rid of the <code>nil</code> values? <code>filterOut(_)</code> works for <code>Equatable</code> values and <code>Element.WrappedType</code> might not be <code>Equatable</code> in some cases</li>
+<li>I had to explicitly set the return type for my <code>map</code> closure because Xcode thought things were getting a bit too abstract for it</li>
+</ul>
+
+<p>Now let&rsquo;s see the complete implementation (and if you can think of ways to simplify this please let me know, I still think there should be an easier way):</p>
+
+<pre><code class="language-swift">protocol Optionable
+{
+  typealias WrappedType
+  func unwrap() -&gt; WrappedType
+  func isEmpty() -&gt; Bool
+}
+
+extension Optional : Optionable
+{
+  typealias WrappedType = Wrapped
+  func unwrap() -&gt; WrappedType {
+    return self!
+  }
+    
+  func isEmpty() -&gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+  }
+}
+
+extension Observable where Element : Optionable {
+  func unwrap() -&gt; Observable&lt;Element.WrappedType&gt; {
+    return self
+      .filter {value in
+        return !value.isEmpty()
+      }
+      .map {value -&gt; Element.WrappedType in
+        value.unwrap()
+      }
+  }
+}
+</code></pre>
+
+<p>Well that was a fun day! To be fair I also learned quite a lot about protocols, associated types, etc.</p>
+
+<p>Later on I was talking to <a href="https://twitter.com/fpillet">@fpillet</a> who shared this piece here:</p>
+
+<pre><code class="language-swift">someOptionalSequence
+  .flatMap { $0 == nil ? Observable.empty() : Observable.just($0!) }`
+</code></pre>
+
+<p>It&rsquo;s a one liner you can use directly on your Observable of <code>Optional&lt;Element&gt;</code> type. It does pretty much the same as my <code>unwrap()</code> operator but it&rsquo;s way shorter because the <code>flatMap</code> closure doesn&rsquo;t need to specify its return type - it leaves it to Xcode to figure it out out of context.</p>
+
+<p>I still like my own operator though - I think it&rsquo;s much more readable and it adds less stress to the compiler to write just:</p>
+
+<pre><code class="language-swift">someOptionalSequence.unwrap()
+</code></pre>
+
+<p><img src="http://rx-marin.com/images/unwrap-doge.png" alt="" /></p>
+
+<h2 id="conclusion:46ffa07f8102997fe7674832bad6bc33">Conclusion</h2>
+
+<p>Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&rsquo;s nothing wrong with it.</p>
+
+<p>I&rsquo;m already planning the next post: creating your own Cocoa bindings. If you have done some cool custom bindings for UIKit classes, or any other interesting bindable properties let me know. Woot!</p>
+
+<p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

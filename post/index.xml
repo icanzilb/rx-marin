@@ -6,8 +6,306 @@
     <description>Recent content in Posts on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 29 Feb 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Mar 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Custom convenience operators with RxSwift, Part 2</title>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/</link>
+      <pubDate>Mon, 07 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/</guid>
+      <description>
+
+&lt;h2 id=&#34;intro:46ffa07f8102997fe7674832bad6bc33&#34;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;I got some great feedback on last week&amp;rsquo;s post on convenience operators &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/&#34;&gt;part 1&lt;/a&gt; so I&amp;rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.&lt;/p&gt;
+
+&lt;p&gt;Without further ado let&amp;rsquo;s dive in code&amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;a-better-negate-operator:46ffa07f8102997fe7674832bad6bc33&#34;&gt;A better negate() operator&lt;/h2&gt;
+
+&lt;p&gt;First of all I have a better version of my &lt;code&gt;negate()&lt;/code&gt; operator from last week for you. What I wrote on my own was a pretty simple function that looked like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element: BooleanType {
+  public func negate() -&amp;gt; Observable&amp;lt;Bool&amp;gt; {
+     return map {value in !value}
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It doesn&amp;rsquo;t get simpler than that, right? You map a value in a single line of code and that&amp;rsquo;s it (careful, it&amp;rsquo;s a trick question).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.tailec.com/&#34;&gt;@tailec&lt;/a&gt; grabbed me in Slack and showed me his version of the same operator, which definitely beats mine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element: BooleanType {
+    public func negate() -&amp;gt; Observable&amp;lt;Bool&amp;gt; {
+        return map(!)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yup! Since &lt;code&gt;!&lt;/code&gt; is a function with a single parameter you can simply use in conjunction with &lt;code&gt;map&lt;/code&gt; as shown above. That code definitely looks better than mine and I&amp;rsquo;m gonna be using this version in my own projects too. Thanks &lt;a href=&#34;https://twitter.com/tailectailec&#34;&gt;Pawel&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Please guys, if you see something I&amp;rsquo;m posting here that can be improved get in touch, like Pawel did, and help get some awesome rx code out together!&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;filternegatives:46ffa07f8102997fe7674832bad6bc33&#34;&gt;filterNegatives()&lt;/h2&gt;
+
+&lt;p&gt;I was looking over my current project&amp;rsquo;s code and trying to identify repeating patterns I can easily &lt;em&gt;outsource&lt;/em&gt; to a convenience operator.&lt;/p&gt;
+
+&lt;p&gt;I noticed I have few &lt;code&gt;Bool&lt;/code&gt; observables that I am sometimes interested in only if they were emitting &lt;code&gt;true&lt;/code&gt; value. For example if we take the code from my &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/&#34;&gt;lap timer post&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
+  .toObservable()
+  .merge()
+  .startWith(false)
+  .shareReplayLatestWhileConnected()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Which produces depending on taps on the play and stop buttons:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;true &amp;mdash; false &amp;mdash; true &amp;mdash; true &amp;ndash;&amp;gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How about observing only the taps on play? (Except just subscribing to the play button of course)&lt;/p&gt;
+
+&lt;p&gt;Since what I wanted was to basically get rid of the all &lt;code&gt;false&lt;/code&gt; values I wrote:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element: BooleanType {
+  public func filterNegatives() -&amp;gt; Observable&amp;lt;Bool&amp;gt; {
+     return map {value in value.boolValue}
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty easy piece of code, it does the work well and it&amp;rsquo;s clear to read. Great!&lt;/p&gt;
+
+&lt;h2 id=&#34;replacenilwith:46ffa07f8102997fe7674832bad6bc33&#34;&gt;replaceNilWith(_)&lt;/h2&gt;
+
+&lt;p&gt;This was an easy operator to implement. I had a couple of observables emitting optional values and I actually wanted to get a given &lt;em&gt;default&lt;/em&gt; value instead of &lt;code&gt;nil&lt;/code&gt;. I just had to map to a simple condition that checks for a &lt;code&gt;nil&lt;/code&gt; value like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable {
+  func replaceNilWith(value: Element) -&amp;gt; Observable&amp;lt;Element&amp;gt; {
+     return map {element in element == nil ? value : element}
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that the elements of the observable are still of type &lt;code&gt;Optional&amp;lt;Element&amp;gt;&lt;/code&gt; but you just never get a &lt;code&gt;nil&lt;/code&gt; value - you get your default value instead.&lt;/p&gt;
+
+&lt;h2 id=&#34;filterout:46ffa07f8102997fe7674832bad6bc33&#34;&gt;filterOut(_)&lt;/h2&gt;
+
+&lt;p&gt;While I was having a lot of momentum I decided to also write a filter that gets rid of specific values. Since the approach is exactly the same as before I&amp;rsquo;ll just add the code here:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element: Equatable {
+    public func filterOut(targetValue: Element) -&amp;gt; Observable&amp;lt;Element&amp;gt; {
+        return self.filter {value in targetValue != value}
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The interesting aspect about this piece of code is that to be able to identify the offending value in your sequence it needs to be &lt;code&gt;Equatable&lt;/code&gt; so you have to restrict the &lt;code&gt;filterOut&lt;/code&gt; operator to only observables that emit &lt;code&gt;Equatable&lt;/code&gt; elements.&lt;/p&gt;
+
+&lt;p&gt;This of course is a walk in the park in Swift where you can just add &lt;code&gt;where Element: Equatable&lt;/code&gt; on your extension.&lt;/p&gt;
+
+&lt;p&gt;The best thing about &lt;code&gt;filterOut(_)&lt;/code&gt; is that whenever I have an observable emitting optional values like for example &lt;code&gt;Observable&amp;lt;Bool?&amp;gt;&lt;/code&gt;, I can ensure no &lt;code&gt;nil&lt;/code&gt; values are emitted like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;optionalBoolSequence.filterOut(nil)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The observable elements are still of type &lt;code&gt;Optional&amp;lt;Bool&amp;gt;&lt;/code&gt; but now I am sure that the observable never emits a &lt;code&gt;nil&lt;/code&gt; value.&lt;/p&gt;
+
+&lt;p&gt;And leads me to &amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;unwrap:46ffa07f8102997fe7674832bad6bc33&#34;&gt;unwrap(_)&lt;/h2&gt;
+
+&lt;p&gt;At that point I had two convenience operators to get rid of &lt;code&gt;nil&lt;/code&gt;s in my observables but the elements were still &lt;code&gt;Optional&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Well, I thought, it could not be so hard to actually unwrap the elements of an &lt;code&gt;Observable&lt;/code&gt; with all the Swift protocols black magic and such!&lt;/p&gt;
+
+&lt;p&gt;Boy, was I &lt;strong&gt;totally&lt;/strong&gt; and &lt;strong&gt;completely&lt;/strong&gt; wrong&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/fry-wrong.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;My first realization was that &lt;code&gt;Optional&lt;/code&gt; is &lt;strong&gt;not&lt;/strong&gt; a protocol. Thus I couldn&amp;rsquo;t do any protocol black magic with it. Ugh!&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Optional&lt;/code&gt; is actually an enum. Yes - this sounded pretty exciting when Swift 1.0 alpha was out, but honestly right now I&amp;rsquo;d expect that it was a protocol or something more flexible.&lt;/p&gt;
+
+&lt;p&gt;Anywho, since &lt;code&gt;Optional&lt;/code&gt; isn&amp;rsquo;t a protocol I couldn&amp;rsquo;t create an extension on &lt;code&gt;Observable&lt;/code&gt; that matches optional elements. Gulp.&lt;/p&gt;
+
+&lt;p&gt;I had a long long conversation with &lt;a href=&#34;https://twitter.com/mhollemans&#34;&gt;Matthijs&lt;/a&gt; and Ross O&amp;rsquo;Brien in Slack until in the end I could figure out the way&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;First of all I had to define a protocol for optionals myself. My protocol had to define two methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;one that checks if the current value is &lt;code&gt;nil&lt;/code&gt; (guess what - simply comparing &lt;code&gt;self&lt;/code&gt; to &lt;code&gt;nil&lt;/code&gt; didn&amp;rsquo;t really work, yay!)&lt;/li&gt;
+&lt;li&gt;another that unwraps &lt;code&gt;self&lt;/code&gt; from &lt;code&gt;Optional&amp;lt;Type&amp;gt;&lt;/code&gt; to &lt;code&gt;Type&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The big question that I had to wrap my mind around was: What type is the unwrapped value? I didn&amp;rsquo;t know that in my protocol so I had to define a type that the concrete implementations would set.&lt;/p&gt;
+
+&lt;p&gt;I ended up with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;protocol Optionable
+{
+  typealias WrappedType
+  func unwrap() -&amp;gt; WrappedType
+  func isEmpty() -&amp;gt; Bool
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool - I had a protocol which I could use to add a method to &lt;code&gt;Observable&lt;/code&gt; via an extension.&lt;/p&gt;
+
+&lt;p&gt;But first I had to make the &lt;code&gt;Optional&lt;/code&gt; enum to conform to &lt;code&gt;Optionable&lt;/code&gt;. So &lt;code&gt;Optional&lt;/code&gt; exposes the type of the wrapped value via &lt;code&gt;Wrapped&lt;/code&gt; and that&amp;rsquo;s where the magic fusion between &lt;code&gt;Optional&lt;/code&gt; and my &lt;code&gt;Optionable&lt;/code&gt; protocol happened.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the declaration of &lt;code&gt;Optional&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;public enum Optional&amp;lt;Wrapped&amp;gt; : _Reflectable, NilLiteralConvertible {...}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here&amp;rsquo;s how I wired &lt;code&gt;Optionable&lt;/code&gt; to to the type of any concrete optional value:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Optional : Optionable
+{
+    typealias WrappedType = Wrapped
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ha! &lt;em&gt;(Again Matthijs and Ross helped a lot along the way of untangling all of this. I must say that there is very little info online about protocol magic and associated types.)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Now I could also add the implementation of the two methods in the extension:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func unwrap() -&amp;gt; WrappedType {
+    return self!
+}
+
+func isEmpty() -&amp;gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You guessed it - coding &lt;code&gt;unwrap()&lt;/code&gt; was pretty straight forward, but &lt;code&gt;isEmpty()&lt;/code&gt; caused me serious headache.&lt;/p&gt;
+
+&lt;p&gt;To my surprise (repeating myself here I know), &lt;code&gt;Optional&lt;/code&gt; doesn&amp;rsquo;t give you means to check whether it&amp;rsquo;s empty or not.&lt;/p&gt;
+
+&lt;p&gt;At first I came with this naïve implementation:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func isEmpty() -&amp;gt; Bool {
+  switch self {
+    case .None: return false
+    case .Some(_): return true
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Well, let me tell you: this doesn&amp;rsquo;t work. Although if you ask me it should. But it doesn&amp;rsquo;t - it never falls in the &lt;code&gt;case .None&lt;/code&gt; branch for some reason and is beyond me why.&lt;/p&gt;
+
+&lt;p&gt;So I had to take the hard way, I looked again through everything I can find in an &lt;code&gt;Optional&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/optional-docs.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s not much. Not much &amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Wait! &lt;code&gt;flatMap&lt;/code&gt;? But of course! Here&amp;rsquo;s the (complete) docs on Optional&amp;rsquo;s flatMap:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Returns nil if self is nil, f(self!) otherwise.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I rewrote my &lt;code&gt;isEmpty()&lt;/code&gt; method to use &lt;code&gt;flatMap&lt;/code&gt; and I was off to the races:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func isEmpty() -&amp;gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And now (&lt;em&gt;finally&lt;/em&gt;) I could get to adding the extension to &lt;code&gt;Observable&lt;/code&gt;. Compared to all the rest I&amp;rsquo;ve been through this was &amp;hellip; let&amp;rsquo;s say &lt;em&gt;not so difficult&lt;/em&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element : Optionable {
+  func unwrap() -&amp;gt; Observable&amp;lt;Element.WrappedType&amp;gt; {
+    return self
+      .filter {value in
+        return !value.isEmpty()
+      }
+      .map {value -&amp;gt; Element.WrappedType in
+        value.unwrap()
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notable mentions about that piece of code:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I&amp;rsquo;m matching the Observable type to &lt;code&gt;Optionable&lt;/code&gt;. &lt;code&gt;Optional&lt;/code&gt; implements &lt;code&gt;Optionable&lt;/code&gt; but if any other type does that &lt;code&gt;unwrap()&lt;/code&gt; will work for it too&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;unwrap()&lt;/code&gt; takes in an &lt;code&gt;Element&lt;/code&gt; value and outputs &lt;code&gt;Element.WrappedType&lt;/code&gt;, so for &lt;code&gt;Int?&lt;/code&gt; outputs &lt;code&gt;Int&lt;/code&gt;, for &lt;code&gt;NSDate?&lt;/code&gt; outputs &lt;code&gt;NSDate&lt;/code&gt;, etc.&lt;/li&gt;
+&lt;li&gt;why not use &lt;code&gt;filterOut(nil)&lt;/code&gt; to get rid of the &lt;code&gt;nil&lt;/code&gt; values? &lt;code&gt;filterOut(_)&lt;/code&gt; works for &lt;code&gt;Equatable&lt;/code&gt; values and &lt;code&gt;Element.WrappedType&lt;/code&gt; might not be &lt;code&gt;Equatable&lt;/code&gt; in some cases&lt;/li&gt;
+&lt;li&gt;I had to explicitly set the return type for my &lt;code&gt;map&lt;/code&gt; closure because Xcode thought things were getting a bit too abstract for it&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s see the complete implementation (and if you can think of ways to simplify this please let me know, I still think there should be an easier way):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;protocol Optionable
+{
+  typealias WrappedType
+  func unwrap() -&amp;gt; WrappedType
+  func isEmpty() -&amp;gt; Bool
+}
+
+extension Optional : Optionable
+{
+  typealias WrappedType = Wrapped
+  func unwrap() -&amp;gt; WrappedType {
+    return self!
+  }
+    
+  func isEmpty() -&amp;gt; Bool {
+    return !(flatMap({_ in true})?.boolValue == true)
+  }
+}
+
+extension Observable where Element : Optionable {
+  func unwrap() -&amp;gt; Observable&amp;lt;Element.WrappedType&amp;gt; {
+    return self
+      .filter {value in
+        return !value.isEmpty()
+      }
+      .map {value -&amp;gt; Element.WrappedType in
+        value.unwrap()
+      }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Well that was a fun day! To be fair I also learned quite a lot about protocols, associated types, etc.&lt;/p&gt;
+
+&lt;p&gt;Later on I was talking to &lt;a href=&#34;https://twitter.com/fpillet&#34;&gt;@fpillet&lt;/a&gt; who shared this piece here:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;someOptionalSequence
+  .flatMap { $0 == nil ? Observable.empty() : Observable.just($0!) }`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It&amp;rsquo;s a one liner you can use directly on your Observable of &lt;code&gt;Optional&amp;lt;Element&amp;gt;&lt;/code&gt; type. It does pretty much the same as my &lt;code&gt;unwrap()&lt;/code&gt; operator but it&amp;rsquo;s way shorter because the &lt;code&gt;flatMap&lt;/code&gt; closure doesn&amp;rsquo;t need to specify its return type - it leaves it to Xcode to figure it out out of context.&lt;/p&gt;
+
+&lt;p&gt;I still like my own operator though - I think it&amp;rsquo;s much more readable and it adds less stress to the compiler to write just:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;someOptionalSequence.unwrap()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unwrap-doge.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:46ffa07f8102997fe7674832bad6bc33&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&amp;rsquo;s nothing wrong with it.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m already planning the next post: creating your own Cocoa bindings. If you have done some cool custom bindings for UIKit classes, or any other interesting bindable properties let me know. Woot!&lt;/p&gt;
+
+&lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 1</title>

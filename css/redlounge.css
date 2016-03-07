@@ -304,6 +304,11 @@ a.post-category:hover {
 	color: #fff;
 	text-decoration: underline;
 }
+img {
+	max-width: 550px;
+	width: 100%;
+	height: auto;
+}
 
 /* Banner Image */
 .content-banner-image {
