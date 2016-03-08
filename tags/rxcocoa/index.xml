@@ -136,7 +136,7 @@
 
 &lt;p&gt;Anywho, since &lt;code&gt;Optional&lt;/code&gt; isn&amp;rsquo;t a protocol I couldn&amp;rsquo;t create an extension on &lt;code&gt;Observable&lt;/code&gt; that matches optional elements. Gulp.&lt;/p&gt;
 
-&lt;p&gt;I had a long long conversation with &lt;a href=&#34;https://twitter.com/mhollemans&#34;&gt;Matthijs&lt;/a&gt; and Ross O&amp;rsquo;Brien in Slack until in the end I could figure out the way&amp;hellip;&lt;/p&gt;
+&lt;p&gt;I had a long long conversation with &lt;a href=&#34;https://twitter.com/mhollemans&#34;&gt;Matthijs&lt;/a&gt; and &lt;a href=&#34;https://twitter.com/narrativium&#34;&gt;Ross O&amp;rsquo;Brien&lt;/a&gt; in Slack until in the end I could figure out the way&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;First of all I had to define a protocol for optionals myself. My protocol had to define two methods:&lt;/p&gt;
 
