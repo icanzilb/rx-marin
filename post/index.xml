@@ -6,8 +6,96 @@
     <description>Recent content in Posts on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Mar 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 31 Mar 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Custom bindings with RxSwift</title>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/</link>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/</guid>
+      <description>
+
+&lt;h2 id=&#34;intro:d4dcb38b814640de6df8a9df2675e24b&#34;&gt;Intro&lt;/h2&gt;
+
+&lt;p&gt;After I did some convenience operators of my own, which really made things easier while writing code I thought I&amp;rsquo;d be a good idea to look into building more stuff on my own.&lt;/p&gt;
+
+&lt;p&gt;It helps learning and it&amp;rsquo;s healthy :)&lt;/p&gt;
+
+&lt;h2 id=&#34;binding-to-make-a-view-visible:d4dcb38b814640de6df8a9df2675e24b&#34;&gt;Binding to make a view visible&lt;/h2&gt;
+
+&lt;p&gt;I noticed there is a binding on the &lt;code&gt;hidden&lt;/code&gt; property of &lt;code&gt;UIView&lt;/code&gt; but sometimes the code just reads better when you don&amp;rsquo;t have to think of &lt;em&gt;hiding something&lt;/em&gt; but rather &lt;strong&gt;showing something&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So I thought since I can check out the source code for &lt;code&gt;rx_hidden&lt;/code&gt; how hard could it be to make my own &lt;code&gt;rx_visible&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;So I just copied over the code and made my first bindable sink:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension UIView {
+    public var rx_visible: AnyObserver&amp;lt;Bool&amp;gt; {
+        return UIBindingObserver(UIElement: self) { view, visible in
+            view.hidden = !visible
+        }.asObserver()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I know that isn&amp;rsquo;t a great departure from &lt;code&gt;rx_hidden&lt;/code&gt; but sometimes it really makes more sense (and it&amp;rsquo;s more readable) to use &lt;code&gt;rx_visible&lt;/code&gt;. Let&amp;rsquo;s look:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;//longer, logic is reversed
+isEnabled.map {enabled in !enabled}.bindTo(messageView.rx_hidden)
+
+//short and sweet
+isEnabled.bindTo(messageView.rx_visible)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I really like the latter a bit better! So far so good :)&lt;/p&gt;
+
+&lt;h2 id=&#34;binding-for-becoming-and-resigning-first-responder:d4dcb38b814640de6df8a9df2675e24b&#34;&gt;Binding for becoming and resigning first responder&lt;/h2&gt;
+
+&lt;p&gt;Next - I felt like building something that would actually add functionality it isn&amp;rsquo;t already in.&lt;/p&gt;
+
+&lt;p&gt;In the project I&amp;rsquo;m currently working on I have a search bar and I have few buttons that show and hide the search bar depending on what the user wants to do.&lt;/p&gt;
+
+&lt;p&gt;Therefore I thought it&amp;rsquo;d be great to make my own bindable sink for being a first responder.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension UIResponder {
+    public var rx_firstResponder: AnyObserver&amp;lt;Bool&amp;gt; {
+        return UIBindingObserver(UIElement: self) {control, shouldRespond in
+            shouldRespond ? control.becomeFirstResponder() : control.resignFirstResponder()
+        }.asObserver()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The example isn&amp;rsquo;t more complex than the previous one. It&amp;rsquo;s a bindable &lt;code&gt;Bool&lt;/code&gt; property, which either makes the control become or resign first responder.&lt;/p&gt;
+
+&lt;p&gt;Now I could group the show and hide buttons into one observable:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let searchBarActive = [btnSearch.rx_tap.replaceWith(true), searchBarBtnCancel.replaceWith(false)].toObservable()
+  .merge()
+  .startWith(false)
+  .shareReplay(1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And besides all the other changes in the UI make the search bar active or force it to lose focus:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;searchBarActive.bindTo(searchController.searchBar.rx_firstResponder)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Neat! Since I started writing rx code I&amp;rsquo;ve really grown to dislike having &lt;code&gt;if&lt;/code&gt; operators (also &lt;code&gt;var&lt;/code&gt; but that&amp;rsquo;s a whole other story)&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:d4dcb38b814640de6df8a9df2675e24b&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Okay so creating simple on-the-fly cocoa bindings is easy. But is it worth it if it&amp;rsquo;s so easy?&lt;/p&gt;
+
+&lt;p&gt;I like bindings better than writing code to update the UI. No &lt;code&gt;if&lt;/code&gt; and no closures to update the UI - no problem. I know other people prefer to not use RxCocoa at all and just use RxSwift and update the UI themselves.&lt;/p&gt;
+
+&lt;p&gt;I guess either is okay :)&lt;/p&gt;
+
+&lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 2</title>
