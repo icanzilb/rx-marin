@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Implementing state with scan in RxSwift // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Common misconception about Rx is that you cannot have state - well you can and it&#39;s pretty easy with the scan operator">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="Implementing state with scan in RxSwift" />
+<meta property="og:description" content="Common misconception about Rx is that you cannot have state - well you can and it&#39;s pretty easy with the scan operator" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-state-with-scan/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#intro:af2be6c694d253c59ac4efd5a73d0daf">Intro</a></li>
+<li><a href="#creating-a-boolean-switch:af2be6c694d253c59ac4efd5a73d0daf">Creating a boolean switch</a></li>
+<li><a href="#creating-a-counter:af2be6c694d253c59ac4efd5a73d0daf">Creating a counter</a></li>
+<li><a href="#geting-the-last-n-values:af2be6c694d253c59ac4efd5a73d0daf">Geting the last N values</a></li>
+<li><a href="#using-enums-for-state:af2be6c694d253c59ac4efd5a73d0daf">Using enums for state</a></li>
+<li><a href="#conclusion:af2be6c694d253c59ac4efd5a73d0daf">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">Implementing state with scan in RxSwift</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>4</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<h2 id="intro:af2be6c694d253c59ac4efd5a73d0daf">Intro</h2>
+
+<p>Common misconception is that you cannot have state with Rx. Well you can - and there&rsquo;s a special operator that helps you to: <code>scan</code>.</p>
+
+<p>If you&rsquo;ve ever used <code>reduce</code> in Swift - scan is a very similar operator but <code>reduce</code> goes over the complete sequence and gives you the final value of the accumulator while <code>scan</code> emits each intermediate value as well.</p>
+
+<p>If you haven&rsquo;t used <code>reduce</code> - no worries you&rsquo;ll get to understand <code>scan</code> from the examples below. Let&rsquo;s get started!</p>
+
+<h2 id="creating-a-boolean-switch:af2be6c694d253c59ac4efd5a73d0daf">Creating a boolean switch</h2>
+
+<p>When you have to deal with UI you inevitably have to deal with state. Imagine a button that toggles between selected and deselected state as the user taps it repeatedly. One tap - the button is selected, another tap - it&rsquo;s not, a third taps selects it again, etc.</p>
+
+<p><code>UIButton.rx_tap</code> always emits the same value of <code>Void</code> so it doesn&rsquo;t provide you with any information to decide whether to select or deselect the button. Enter <code>scan</code>&hellip;</p>
+
+<p><code>scan</code> takes two parameters:</p>
+
+<ul>
+<li>initial value - you can think of it as the first value of your state</li>
+<li>closure(lastState, newValue) - <code>scan</code> runs that closure each time it gets a new value - it calls it with two parameters: the last state you had and the value that was just emitted.</li>
+</ul>
+
+<p>You might wander what the state is? Anything you want it to be (I know&hellip; clichés) - it can be a <code>Bool</code>, <code>String</code>, an <code>Array</code> anything you need for your code. Let&rsquo;s look at the first example to make everything click together.</p>
+
+<p>I had to make button get selected/deselected as described earlier so I used <code>scan</code> in the following way:</p>
+
+<pre><code class="language-swift">myButton.rx_tap.scan(false) { lastState, newValue in
+    return !lastState
+}
+.subscribeNext {value in
+    print(&quot;tap: \(value)&quot;)
+}
+</code></pre>
+
+<p>First of all consider how the <code>scan</code> above transforms the data stream. It starts with <code>Void</code> values emitted by <code>rx_tap</code> but then scan maps those to <code>Bool</code> values (determined by the type of its <code>return</code> type):</p>
+
+<blockquote>
+<p>(tap) &mdash;&gt; Void &mdash;&gt; (scan) &mdash;&gt; Bool &mdash;&gt; (subscribeNext)</p>
+</blockquote>
+
+<p>So scan starts with a <code>false</code> state and on each button tap it applies the closure. The first time <code>lastState = false</code> and <code>newValue = Void</code> (actually <code>newValue</code> is always <code>Void</code> so I&rsquo;ll ignore till the end of this example). You return the negation of <code>lastState</code>, which is <code>true</code>.</p>
+
+<p>The second time around <code>lastState</code> is <code>true</code> because this is what you return the first time. And your return <code>false</code>.</p>
+
+<p>Third time around <code>lastState</code> is <code>false</code> and you return <code>true</code>. Etc. etc. etc.</p>
+
+<p>The console output is:</p>
+
+<pre><code>tap: true
+tap: false
+tap: true
+tap: false
+tap: true
+</code></pre>
+
+<p>So as you can see you can implement state but it&rsquo;s contained within the closure you supply to <code>scan</code>. After <code>scan</code> you get a data stream of the type your closure returns - that&rsquo;s all :)</p>
+
+<p>So to complete the select/deselect example you just need to bind the <code>scan</code> result to your button&rsquo;s <code>rx_selected</code> sink like so:</p>
+
+<pre><code class="language-swift">myButton.rx_tap.scan(false) { lastState, newValue in
+    return !lastState
+}
+.bindTo(myButton.rx_selected)
+</code></pre>
+
+<h2 id="creating-a-counter:af2be6c694d253c59ac4efd5a73d0daf">Creating a counter</h2>
+
+<p>Now let&rsquo;s get beyond alternating between <code>Bool</code> values and write a code to count how many times a button has been tapped.</p>
+
+<p>I actually had to do this few times in the last couple months so I&rsquo;ll just put in here the code:</p>
+
+<pre><code class="language-swift">myButton.rx_tap.scan(0) { lastCount, newValue in
+    return lastCount + 1
+}
+.subscribeNext {value in
+    print(&quot;taps: \(value)&quot;)
+}
+</code></pre>
+
+<p>This time around the state is of type <code>Int</code> and it starts with <code>0</code>. Each time the user taps the button <code>scan</code> returns the last count plus 1. As the user taps the button the Console shows:</p>
+
+<pre><code class="language-swift">taps: 1
+taps: 2
+taps: 3
+taps: 4
+taps: 5
+</code></pre>
+
+<p>Once you grasp how the last state thing works it&rsquo;s pretty easy isn&rsquo;t it? :)</p>
+
+<h2 id="geting-the-last-n-values:af2be6c694d253c59ac4efd5a73d0daf">Geting the last N values</h2>
+
+<p>Somebody in the RxSwift Slack asked for this and it&rsquo;s an interesting (but very simple to solve) example.</p>
+
+<p>How to get the last N elements from an Observable?</p>
+
+<p>For example if you have a sequence of <code>Int</code> values: <code>[0, 1, 2, 3, 4, 5, 6]</code> how to have the last 3 each time a new value is emitted?</p>
+
+<p>Well, this smells like having a state since you need to &ldquo;<em>remember</em>&rdquo; values. So it must be solvable with <code>scan</code>.</p>
+
+<p>Obviously the first time the sequence emits you don&rsquo;t have any previous values so the initial state to give to <code>scan</code> is an empty array <code>[]</code>. Let&rsquo;s have a look at the complete code:</p>
+
+<pre><code class="language-swift">let numbers = [0, 1, 2 , 3, 4, 5, 6].toObservable()
+
+numbers.scan([]) { lastSlice, newValue in
+    return Array(lastSlice + [newValue]).suffix(3)
+}
+.subscribeNext {value in
+    print(&quot;last 3: \(value)&quot;)
+}
+</code></pre>
+
+<p>Each time <code>scan</code> adds the emitted value to the last array you had and than chops 3 elements off the end. Now the data stream looks like so:</p>
+
+<blockquote>
+<p>(numbers) &mdash;&gt; Int &mdash;&gt; (scan) &mdash;&gt; [Int] &mdash;&gt; subscribeNext</p>
+</blockquote>
+
+<p>And the Console output:</p>
+
+<pre><code>last 3: [0]
+last 3: [0, 1]
+last 3: [0, 1, 2]
+last 3: [1, 2, 3]
+last 3: [2, 3, 4]
+last 3: [3, 4, 5]
+last 3: [4, 5, 6]
+</code></pre>
+
+<p>But didn&rsquo;t I say I wanted elements of three? Just <code>filter</code> the output of <code>scan</code> and check for the length of the emitted array and that&rsquo;s it ;)</p>
+
+<h2 id="using-enums-for-state:af2be6c694d253c59ac4efd5a73d0daf">Using enums for state</h2>
+
+<p>I didn&rsquo;t have to do any more advanced <code>scan</code> stuff yet but I can imagine all kinds of uses for it. Let&rsquo;s say you&rsquo;re building a space game.</p>
+
+<p>When you start a level in your space game your ship has to make it through an asteroid field. Therefore the longer the ship is &ldquo;alive&rdquo; the more points you get, etc.</p>
+
+<p>So you can build a timer that tracks the level time and bind the level state and the amount of points earned like so:</p>
+
+<pre><code class="language-swift">enum LevelState {
+    case Normal, PowerUp
+}
+
+let timer = Observable&lt;NSInteger&gt;.interval(0.25, scheduler: MainScheduler.instance)
+
+timer.scan((LevelState.Normal, 0)) { lastState, _ in
+    
+    switch lastState.0 {
+    case .Normal:
+        if lastState.1 &gt; 1000 {
+            return (.PowerUp, lastState.1 + 30)
+        } else {
+            return (.Normal, lastState.1 + 30)
+        }
+    case .PowerUp:
+        return (.PowerUp, lastState.1 + 100)
+    }
+}
+.subscribeNext {_, points in
+    print(&quot;pts: \(points)&quot;)
+}
+</code></pre>
+
+<p>You have two states in your level - normal mode and power-up. Once the player manages to survive past 1,000 points they start gaining more points much faster. To do that you have two states listed in an enum <code>LevelState</code>.</p>
+
+<p>The state is a tuple of type <code>(LevelState, Int)</code> - the first element tracks the current level state, and second is the points counter.</p>
+
+<p>And this is still a pretty simple example of what is possible with <code>scan</code> and few lines of code. Woot!</p>
+
+<p>Look those numbers fly once you&rsquo;re past the <code>1,000</code> mark!</p>
+
+<pre><code class="language-swift">pts: 810
+pts: 840
+pts: 870
+pts: 900
+pts: 930
+pts: 960
+pts: 990
+pts: 1020
+pts: 1050
+pts: 1150
+pts: 1250
+pts: 1350
+</code></pre>
+
+<h2 id="conclusion:af2be6c694d253c59ac4efd5a73d0daf">Conclusion</h2>
+
+<p><code>scan</code> is simply fantastic and as I wrote in an earlier post - any time you&rsquo;re tempted to use <code>reduce</code> you probably need <code>scan</code>.</p>
+
+<p>I hope that post has been useful and if you have any operator that bums you out or can&rsquo;t figure out ping me on Twitter - I&rsquo;m also still learning but have few of those figured out pretty well :)</p>
+
+<p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-state" href="http://rx-marin.com//tags/state">state</a>,
+	                
+	                <a class="post-tag post-tag-scan" href="http://rx-marin.com//tags/scan">scan</a>,
+	                
+	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">Custom bindings with RxSwift</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
