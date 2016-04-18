@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Manually disposing a bag and creating a timer // rx_marin&lt;blog&gt;
+    Settings // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="Create observable timer based sequence and how to manually dispose a bag">
+<meta name="description" content="">
 <meta name="keywords" content="">
-<meta name="author" content="Marin Todorov">
+<meta name="author" content="">
 <meta name="generator" content="Hugo 0.15" />
 
-  <meta property="og:title" content="Manually disposing a bag and creating a timer" />
-<meta property="og:description" content="Create observable timer based sequence and how to manually dispose a bag" />
+  <meta property="og:title" content="Settings" />
+<meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/" />
+<meta property="og:url" content="http://rx-marin.com/tags/settings/" />
 
 
   
@@ -44,7 +44,7 @@
   <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
 
   
-  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+  <link href="http://rx-marin.com/tags/settings/index.xml" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
 
     
 
@@ -56,8 +56,6 @@
 </head>
 
 <body>
-	
-
 	<div id="layout" class="pure-g">
     <div class="sidebar pure-u-1 pure-u-md-1-4">
   <div class="header">
@@ -143,143 +141,51 @@
   </div>
 </div>
 
-	
-	
 
     <div class="content pure-u-1 pure-u-md-3-4">
-		<a name="top"></a>
-		
+      <a name="top"></a>
+      
 
-		
-			
-	    
-  		<section class="post">
+      <div class="posts">
+        
+          <section  class="post">
+            <header class="post-header">
+            
             <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">Manually disposing a bag and creating a timer</a>
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">App state with Realm and RxSwift</a>
             </h1>
-            <h3 class="post-subtitle">
+            </header>
+            <p class="post-meta">
             	
-            </h3>
-            
-            	<span class="post-date">
-                	<span class="post-date-day"><sup>17</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2016</span>
-            	</span>
-            	
-            
-            	
-            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
-            		
-
-
-
-
-            	
-            
-
-			
-			
-				<div class="post-categories">
-				
-					<a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-				
-				</div>
-			
-
-			
-
-			
-
-            <p>I was reading through the <a href="https://github.com/ReactiveX/RxSwift/tree/master/Documentation">RxSwift docs</a> and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&rsquo;s not a bad idea to share it online.</p>
-
-<p>So <code>DisposeBag</code> kind of <code>retains</code> all your observables that&rsquo;s why you add them to a bag all the time when you create them. You probably never get to dispose them manually since the moment the bag gets disposed it also disposes all your observables (magic!).</p>
-
-<p>To test disposing I wrote this:</p>
-
-<pre><code class="language-swift">import UIKit
-
-import RxSwift
-import RxCocoa
-
-
-class ViewController: UIViewController {
-
-    var bag: DisposeBag! = DisposeBag()
-    var sig: Observable&lt;Int&gt;!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        sig = Observable&lt;Int&gt;.interval(1.0, scheduler: MainScheduler.instance)
-        
-        sig.map({num in
-            num * 10
-        }).subscribeNext({num in
-            print(num)
-        }).addDisposableTo(bag)
-        
-        
-        let tap = UITapGestureRecognizer(target: self, action: &quot;didTap&quot;)
-        view.addGestureRecognizer(tap)
-    }
-
-    func didTap() {
-        bag = nil
-    }
-    
-}
-</code></pre>
-
-<p><code>Observable&lt;Int&gt;.interval(:scheduler:)</code> creates a sequence that emits each time the timer fires - in the case of the example above each second the observable emits the next integer number.</p>
-
-<p>I map the value and finally in <code>subscribeNext()</code> I print to the console:</p>
-
-<pre><code>0
-10
-20
-30
-40
-etc.
-</code></pre>
-
-<p>I attached a gesture recognizer to the view controller&rsquo;s view and when the user taps on the view I destroy the bag:</p>
-
-<pre><code class="language-swift">bag = nil
-</code></pre>
-
-<p>If you give the code a try you will see that when you tap the view the observable stops emitting because the original bag get destroyed and it automatically disposes of all observables added to it.</p>
-
-<p>Very nice and handy when you need to be sure when a resource is deallocated. Further - how cool is that you can create a timer by simply doing <code>Observable&lt;Int&gt;.interval(:scheduler:)</code>?</p>
-
-	
-			
-
-			
-				<div class="tags-list">
-					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
-					
-	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
-	                
-				</div>
-			
-
-			
-				<div class="paging">
-					<span class="paging-label">More Reading</span>
-					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
-		            </div>
-		            
-
-					
-	            </div>
-            
+		          <span class="post-date">
+		            <span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+		          </span>
+      				
+      				
+      					By <a class="post-author" >Marin Todorov</a>
+      				
+              
+                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
+              
+      				
+      					<div class="post-categories">
+				        
+      					
+					        <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+      					
+      					</div>
+      				
+            </p>
+            <article class="post-summary">
+            	Intro This post isn&rsquo;t that much about operators but how to leverage the awesome technology that Realm is. Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.
+            </article>
+			<div class="read-more-link">
+				<a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/"><span class="read-more-slashes">//</span>Read More...</a>
+			</div>
           </section>
-          
-          	
-          
         
+      </div>
+
       <div class="footer">
 	<hr class="thin" />
 	<div class="pure-menu pure-menu-horizontal pure-menu-open">
@@ -307,10 +213,6 @@ etc.
 </script>
     </div>
   </div>
-	
-
-	
-
   
 </body>
 </html>
