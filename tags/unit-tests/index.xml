@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unit Tests on rx_marin&lt;blog&gt;</title>
+    <link>http://rx-marin.com/tags/unit-tests/</link>
+    <description>Recent content in Unit Tests on rx_marin&lt;blog&gt;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 03 May 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://rx-marin.com/tags/unit-tests/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Testing your RxSwift code, part 1</title>
+      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</link>
+      <pubDate>Tue, 03 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</guid>
+      <description>
+
+&lt;p&gt;I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&amp;rsquo;s why I&amp;rsquo;d like to show few of the tests I got to write.&lt;/p&gt;
+
+&lt;p&gt;Before I start on the code itself I just want to mention how great contributing to open source is. If I didn&amp;rsquo;t jump in to helping around on the &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxSwift-Ext&#34;&gt;RxSwift-Ext&lt;/a&gt; project I&amp;rsquo;d probably haven&amp;rsquo;t looked into writing unit tests with RxSwift yet, but I did - and that&amp;rsquo;s great.&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s have a look at some of the unit tests I wrote&amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;intro-to-rxtests:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Intro to RxTests&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;RxTests&lt;/strong&gt; is a separate library (available as well through CocoaPods), which you should import in your test target to be able to use some really handy classes to write your tests.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how the Swift-Ext Podfile test target looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;target &#39;RxSwiftExtDemoTests&#39; do
+	pod &#39;RxSwift+Ext&#39;
+	pod &#39;RxSwift&#39;
+	pod &#39;RxTests&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;RxTests&lt;/strong&gt; gives you few handy tools like:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;TestableObserver&amp;lt;ElementType&amp;gt;&lt;/code&gt; - an observer, which records all emitted events so you can inspect them and run your asserts on those events,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;TestScheduler&lt;/code&gt; - a scheduler which let&amp;rsquo;s you control values and time, and let&amp;rsquo;s you create testable observers,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;== (lhs: Event&amp;lt;Element&amp;gt;, rhs: Event&amp;lt;Element&amp;gt;)&lt;/code&gt; adds &lt;code&gt;Equatable&lt;/code&gt; implementation to Rx events so you can easily check recorded events.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s have a look how to use those!&lt;/p&gt;
+
+&lt;h2 id=&#34;simple-tests-for-an-rx-operator:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Simple tests for an rx operator&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/&#34;&gt;Custom convenience operators with RxSwift, Part 2&lt;/a&gt; I discussed creating the &lt;code&gt;unwrap()&lt;/code&gt; operator, which unwraps non-&lt;code&gt;nil&lt;/code&gt; values emitted by an observable.&lt;/p&gt;
+
+&lt;p&gt;It took me a lot of time to make that operator work so when I saw folks contribute their operators to RxSwift-Ext I naturally also wanted to merge mine in.&lt;/p&gt;
+
+&lt;p&gt;In order to do that though, I wanted to add unit tests first&amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;drafting-a-unit-test-class:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Drafting a unit test class&lt;/h2&gt;
+
+&lt;p&gt;Here&amp;rsquo;s how the setup of the unit tests file for &lt;code&gt;unwrap()&lt;/code&gt; looked like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;import XCTest
+
+import RxSwift
+import RxSwift_Ext
+import RxTests
+
+class UnwrapTests: XCTestCase {
+    private var observer: TestableObserver&amp;lt;Int&amp;gt;!
+    let numbers: Array&amp;lt;Int?&amp;gt; = [1, nil, Int?(3), 4]
+    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The class itself is a normal &lt;code&gt;XCTestCase&lt;/code&gt; test but it features a &lt;code&gt;TestableObserver&lt;/code&gt;. You have to specify what kind of values it will observe so that you can have compile time checks if your &lt;code&gt;Observable&lt;/code&gt; is emitting the data type you expect to have.&lt;/p&gt;
+
+&lt;p&gt;For my tests I chose to test with an array of &lt;code&gt;Int?&lt;/code&gt; values since &lt;code&gt;unwrap()&lt;/code&gt; takes in a &lt;code&gt;Type?&lt;/code&gt; and returns &lt;code&gt;Type&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;numbers&lt;/code&gt; array is the sequence of values I&amp;rsquo;d use to feed into &lt;code&gt;unwrap()&lt;/code&gt; - it includes integers, a &lt;code&gt;nil&lt;/code&gt; value, and an Optional integer number.&lt;/p&gt;
+
+&lt;h2 id=&#34;setup:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;setUp()&lt;/h2&gt;
+
+&lt;p&gt;Next I needed to add a &lt;code&gt;setUp()&lt;/code&gt; method in the unit test class to prepare everything before the actual test methods run.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;override func setUp() {
+    super.setUp()
+        
+    let scheduler = TestScheduler(initialClock: 0)
+    observer = scheduler.createObserver(Int)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;At this point I dug multiple times through the RxExample app included in the RxSwift repo in order to figure out how to use a test scheduler.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;First of all my tests didn&amp;rsquo;t need to happen asynchronously so I didn&amp;rsquo;t have to use virtual time for my test scheduler. I set the initial clock at time &lt;code&gt;0&lt;/code&gt; and didn&amp;rsquo;t bother with time any further.&lt;/p&gt;
+
+&lt;p&gt;After creating a test scheduler I created a test observer by calling &lt;code&gt;TestScheduler.createObserver(Type)&lt;/code&gt;. &lt;code&gt;Type&lt;/code&gt; is the type of values I expected the observer to capture from my &lt;code&gt;Observable&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;At this point my code was ready to emit some values, I added:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;numbers.toObservable()
+     .unwrap()
+     .subscribe(observer)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That code turned the initial array I had to an observable, fed it through &lt;code&gt;unwrap()&lt;/code&gt;, and finally sent it off to the test observer.&lt;/p&gt;
+
+&lt;p&gt;The final line I added to &lt;code&gt;setUp()&lt;/code&gt; was:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;scheduler.start()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That would make the scheduler start running, have the observer consume all values from the sequence, and wrap-up.&lt;/p&gt;
+
+&lt;h2 id=&#34;simple-checks-on-the-recorded-events:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Simple checks on the recorded events&lt;/h2&gt;
+
+&lt;p&gt;I decided to start easy by checking if the list of recorded events matched some general expectations.&lt;/p&gt;
+
+&lt;p&gt;First I wanted to check if &lt;code&gt;unwrap()&lt;/code&gt; filtered all &lt;code&gt;nil&lt;/code&gt; elements:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func testUnwrapFilterNil() {
+    XCTAssertFalse(observer.events.contains {event in
+        event.value == nil
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The code just checks if none of the recorded events in &lt;code&gt;observer.events&lt;/code&gt; contains a &lt;code&gt;nil&lt;/code&gt; value. Done!&lt;/p&gt;
+
+&lt;p&gt;Ok, what next? I wanted to see if the number of the output values is the one I expect: the number of the input values minus the amount of &lt;code&gt;nil&lt;/code&gt; values plus the &lt;code&gt;Complete&lt;/code&gt; event. I just added it to the same test method:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;XCTAssertEqual(
+    observer.events.count,
+    numbers.count - 1/* the nr. of nil elements*/ + 1 /* complete event*/
+)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also done! Sweet.&lt;/p&gt;
+
+&lt;h2 id=&#34;check-the-recorded-events:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Check the recorded events&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;TestObserver&lt;/code&gt; not only records the events that your &lt;code&gt;Observable&lt;/code&gt; emits but also the values they carried and the time marks they happened at.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s really easy to check if the events you expected were the ones recorded. Let&amp;rsquo;s have a look at what I did (again, how to do all of this I found in the RxSwift repo sources):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func testUnwrapResultValues() {
+    //test elements values and type
+    let correctValues = [
+        next(0, 1),
+        next(0, 3),
+        next(0, 4),
+        completed(0)
+    ]
+}    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;First I defined an array of expected events - 3 &lt;code&gt;.Next&lt;/code&gt; events all happening at virtual time &lt;code&gt;0&lt;/code&gt; and  &lt;code&gt;.Completed&lt;/code&gt; event emitted when the input values are over.&lt;/p&gt;
+
+&lt;p&gt;Now I just needed to compare the &lt;code&gt;correctValues&lt;/code&gt; array to the list of events &lt;code&gt;TestObserver&lt;/code&gt; has recorded:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;XCTAssertEqual(observer.events, correctValues)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that&amp;rsquo;s a wrap!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion:ff7ff9c32e5286bddf9ff8fc9585d185&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It was easy and quite simple to write unit tests for &lt;code&gt;unwrap()&lt;/code&gt; because I could run all tests synchronously over the values of my input array. But &lt;code&gt;TestObserver&lt;/code&gt; and &lt;code&gt;TestScheduler&lt;/code&gt; allow for more complex unit tests as well. In part 2 I&amp;rsquo;ll look into writing simple asynchronous unit tests with RxSwift. Till then!&lt;/p&gt;
+
+&lt;p&gt;If you want to have a look at the finished unit test class for &lt;code&gt;unwrap()&lt;/code&gt; you can find it here: &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxSwift-Ext/blob/master/Demo/RxSwiftExtDemoTests/UnwrapTests.swift#L9&#34;&gt;UnwrapTests.swift&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;icanzilb&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

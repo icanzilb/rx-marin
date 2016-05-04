@@ -3,8 +3,13 @@
   
   <url>
     <loc>http://rx-marin.com/</loc>
-    <lastmod>2016-04-18T00:00:00+00:00</lastmod>
+    <lastmod>2016-05-03T00:00:00+00:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</loc>
+    <lastmod>2016-05-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
