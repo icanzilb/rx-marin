@@ -6,8 +6,184 @@
     <description>Recent content in Rxswift on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 May 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 May 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/tags/rxswift/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Testing your RxSwift code, part 2</title>
+      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</link>
+      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</guid>
+      <description>
+
+&lt;p&gt;In &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxtests-unit-tests/&#34;&gt;part 1&lt;/a&gt; I looked into writing very basic tests with RxSwift and life was good. But then I wanted to do more and moved on to writing asynchronous tests&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I contributed the code for RxRealm - the Rx extension for RealmSwift owned by the RxSwiftCommunity. For RxRealm I needed some asynchronous tests because Realm&amp;rsquo;s collections emit notifications (which RxRealm wraps) when the underlaying data changes.&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s have a look at some of the unit tests I wrote&amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;asynchronous-tests:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Asynchronous tests&lt;/h2&gt;
+
+&lt;p&gt;First of all I needed to look into writing asynchronous tests - luckily this is quite easy. The basic structure of such a test is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func testSomething() {
+  let expectation1 = expectationWithDescription(&amp;quot;First event&amp;quot;)
+  let expectation2 = expectationWithDescription(&amp;quot;Second event&amp;quot;)
+
+  ... whatever code you need to perform the test ... 
+  
+  someAsyncAPI(didComplete: {
+    expectation1.fulfill()
+  })
+
+  someOtherAsyncAPI(didComplete: {
+    expectation2.fulfill()
+  })
+  
+  waitForExpectationsWithTimeout(1.0) {error in
+     XCTAssertTrue(error == nil)
+     ... more asserts ... 
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at what this code does:
+ * you need to define all the expectations you&amp;rsquo;d like this test to wait for before it completes; the string argument is decorative,
+ * whenever the events you are waiting for complete you call &lt;code&gt;fulfill()&lt;/code&gt; on your expectations,
+ * finally you need to define a block to be executed when &lt;strong&gt;ALL&lt;/strong&gt; the expectations are fulfilled; &lt;code&gt;waitForExpectationsWithTimeout&lt;/code&gt; &amp;rsquo;s first parameter is a timeout, which will force the block to execute if the expectations do not fulfill in time.&lt;/p&gt;
+
+&lt;h2 id=&#34;combine-testscheduler-and-async-tests:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Combine TestScheduler and async tests&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at a complete test from the RxRealm test suite.&lt;/p&gt;
+
+&lt;p&gt;First I start by defining a single expectation - my expectation will be that a precise number of events were emitted by the observable.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;    
+func testResultsTypeChangeset() {
+    let expectation1 = expectationWithDescription(&amp;quot;Results&amp;quot;)
+
+    let realm = realmInMemory(#function)
+    clearRealm(realm)
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Additionally I use two of my helper methods to grab a reference to an in-memory realm and clear all objects that might&amp;rsquo;ve been stored inside by other tests in the suite.&lt;/p&gt;
+
+&lt;p&gt;Now just like in Part 1 I define a dispose bag and a test scheduler:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let bag = DisposeBag()
+        
+let scheduler = TestScheduler(initialClock: 0)
+let observer = scheduler.createObserver(String)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that I&amp;rsquo;ll be observing a sequence of &lt;code&gt;String&lt;/code&gt;s - you&amp;rsquo;ll see why in a minute.&lt;/p&gt;
+
+&lt;h2 id=&#34;fulfilling-expectations:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Fulfilling expectations&lt;/h2&gt;
+
+&lt;p&gt;Next I need to create a &lt;code&gt;Results&lt;/code&gt; object since I&amp;rsquo;m going to be testing &lt;code&gt;Results.asObservable()&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let messages$ = realm.objects(Message).asObservableChangeset().shareReplay(1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m observing all &lt;code&gt;Message&lt;/code&gt; objects stored in my realm.&lt;/p&gt;
+
+&lt;p&gt;Now comes the interesting part - first I&amp;rsquo;ll define when my expectation is fulfilled:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;messages$
+  .scan(0, accumulator: {acc, _ in return acc+1})
+  .filter { $0 == 3 }
+  .map {_ in ()}
+  .subscribeNext(expectation1.fulfill)
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I use &lt;code&gt;scan&lt;/code&gt; to count the emitted values from my observable, &lt;code&gt;filter&lt;/code&gt; helps me to pinpoint in which value I&amp;rsquo;m interested (the 3rd event), I map the value to &lt;code&gt;Void&lt;/code&gt; and subscribe to &lt;code&gt;expectation1.fulfill()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Long story short - when &lt;code&gt;messages$&lt;/code&gt; emits its 3rd event my expectation will fulfill. Neat!&lt;/p&gt;
+
+&lt;p&gt;Since I&amp;rsquo;m not interested in just how many events are emitted but also which events were emitted, I need yet another subscription:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;messages$
+  .map {results, changes in
+    if let changes = changes {
+      return &amp;quot;i:\(changes.inserted) d:\(changes.deleted) u:\(changes.updated)&amp;quot;
+    } else {
+      return &amp;quot;initial&amp;quot;
+    }
+  }
+  .subscribe(observer)
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If it&amp;rsquo;s an update event I return a string with the collection indexes that were deleted or inserted, it looks like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;i:[0] u:[] d:[1,2,4]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This logs all the information about the particular change-set that I&amp;rsquo;m interested in (and need to verify if the observable emitted the information I expected).&lt;/p&gt;
+
+&lt;p&gt;If it&amp;rsquo;s the initial event for that collection I just return &amp;ldquo;initial&amp;rdquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;triggering-some-observable-values:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Triggering some Observable values&lt;/h2&gt;
+
+&lt;p&gt;Now I can start the test scheduler:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;scheduler.start()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And, ultimately, perform some operations on my Realm to produce change notifications:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;delay(0.1) {
+  try! realm.write {
+    realm.add(Message(&amp;quot;first&amp;quot;))
+  }
+}
+delay(0.2) {
+  try! realm.write {
+    realm.delete(realm.objects(Message).first!)
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The code above adds a new object and after a bit of delay deletes it again. This should produce the 3 events I&amp;rsquo;m expecting: the initial data, the insert notification and the deletion notification.&lt;/p&gt;
+
+&lt;h2 id=&#34;verifying-the-recorded-events-with-asserts:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Verifying the recorded events with asserts&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s time to (finally) add my asserts:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;waitForExpectationsWithTimeout(0.5) {error in
+    //do tests here
+    
+    XCTAssertTrue(error == nil)
+    XCTAssertEqual(observer.events.count, 3)
+    XCTAssertEqual(observer.events[0].value.element!, &amp;quot;initial&amp;quot;)
+    XCTAssertEqual(observer.events[1].value.element!, &amp;quot;i:[0] d:[] u:[]&amp;quot;)
+    XCTAssertEqual(observer.events[2].value.element!, &amp;quot;i:[] d:[0] u:[]&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the block I perform a number of asserts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;no error happened while fulfilling my expectations&lt;/li&gt;
+&lt;li&gt;the test observer logged exactly 3 events&lt;/li&gt;
+&lt;li&gt;the first emitted value is &amp;ldquo;initial&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;the second value is about inserting a value at index 0&lt;/li&gt;
+&lt;li&gt;the third value is about deleting a value at index 0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;conclusion:5067dfc287a0dc48087ee659edca0c51&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It&amp;rsquo;s amazing how easy writing tests is even when testing two completely de-coupled libraries working together like RealmSwift and RxSwift. As you saw it&amp;rsquo;s a matter of 10-20 lines of code depending on your setup and I&amp;rsquo;m sure the code can be simplified even more.&lt;/p&gt;
+
+&lt;p&gt;If you want to read through the complete test suite for RxRealm head to the GitHub repo test folder: &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxRealm/tree/master/Example/RxRealm_Tests&#34;&gt;RxRealm_Tests&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;icanzilb&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Testing your RxSwift code, part 1</title>

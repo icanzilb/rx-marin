@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Testing your RxSwift code, part 2 // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Part two of my basic intro to writing tests with RxSwift and RxTests">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="Testing your RxSwift code, part 2" />
+<meta property="og:description" content="Part two of my basic intro to writing tests with RxSwift and RxTests" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#asynchronous-tests:5067dfc287a0dc48087ee659edca0c51">Asynchronous tests</a></li>
+<li><a href="#combine-testscheduler-and-async-tests:5067dfc287a0dc48087ee659edca0c51">Combine TestScheduler and async tests</a></li>
+<li><a href="#fulfilling-expectations:5067dfc287a0dc48087ee659edca0c51">Fulfilling expectations</a></li>
+<li><a href="#triggering-some-observable-values:5067dfc287a0dc48087ee659edca0c51">Triggering some Observable values</a></li>
+<li><a href="#verifying-the-recorded-events-with-asserts:5067dfc287a0dc48087ee659edca0c51">Verifying the recorded events with asserts</a></li>
+<li><a href="#conclusion:5067dfc287a0dc48087ee659edca0c51">Conclusion</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>In <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">part 1</a> I looked into writing very basic tests with RxSwift and life was good. But then I wanted to do more and moved on to writing asynchronous tests&hellip;</p>
+
+<p>I contributed the code for RxRealm - the Rx extension for RealmSwift owned by the RxSwiftCommunity. For RxRealm I needed some asynchronous tests because Realm&rsquo;s collections emit notifications (which RxRealm wraps) when the underlaying data changes.</p>
+
+<p>So let&rsquo;s have a look at some of the unit tests I wrote&hellip;</p>
+
+<h2 id="asynchronous-tests:5067dfc287a0dc48087ee659edca0c51">Asynchronous tests</h2>
+
+<p>First of all I needed to look into writing asynchronous tests - luckily this is quite easy. The basic structure of such a test is:</p>
+
+<pre><code class="language-swift">func testSomething() {
+  let expectation1 = expectationWithDescription(&quot;First event&quot;)
+  let expectation2 = expectationWithDescription(&quot;Second event&quot;)
+
+  ... whatever code you need to perform the test ... 
+  
+  someAsyncAPI(didComplete: {
+    expectation1.fulfill()
+  })
+
+  someOtherAsyncAPI(didComplete: {
+    expectation2.fulfill()
+  })
+  
+  waitForExpectationsWithTimeout(1.0) {error in
+     XCTAssertTrue(error == nil)
+     ... more asserts ... 
+  }
+}
+</code></pre>
+
+<p>Let&rsquo;s look at what this code does:
+ * you need to define all the expectations you&rsquo;d like this test to wait for before it completes; the string argument is decorative,
+ * whenever the events you are waiting for complete you call <code>fulfill()</code> on your expectations,
+ * finally you need to define a block to be executed when <strong>ALL</strong> the expectations are fulfilled; <code>waitForExpectationsWithTimeout</code> &rsquo;s first parameter is a timeout, which will force the block to execute if the expectations do not fulfill in time.</p>
+
+<h2 id="combine-testscheduler-and-async-tests:5067dfc287a0dc48087ee659edca0c51">Combine TestScheduler and async tests</h2>
+
+<p>Let&rsquo;s look at a complete test from the RxRealm test suite.</p>
+
+<p>First I start by defining a single expectation - my expectation will be that a precise number of events were emitted by the observable.</p>
+
+<pre><code class="language-swift">    
+func testResultsTypeChangeset() {
+    let expectation1 = expectationWithDescription(&quot;Results&quot;)
+
+    let realm = realmInMemory(#function)
+    clearRealm(realm)
+
+}
+</code></pre>
+
+<p>Additionally I use two of my helper methods to grab a reference to an in-memory realm and clear all objects that might&rsquo;ve been stored inside by other tests in the suite.</p>
+
+<p>Now just like in Part 1 I define a dispose bag and a test scheduler:</p>
+
+<pre><code class="language-swift">let bag = DisposeBag()
+        
+let scheduler = TestScheduler(initialClock: 0)
+let observer = scheduler.createObserver(String)
+</code></pre>
+
+<p>Note that I&rsquo;ll be observing a sequence of <code>String</code>s - you&rsquo;ll see why in a minute.</p>
+
+<h2 id="fulfilling-expectations:5067dfc287a0dc48087ee659edca0c51">Fulfilling expectations</h2>
+
+<p>Next I need to create a <code>Results</code> object since I&rsquo;m going to be testing <code>Results.asObservable()</code>:</p>
+
+<pre><code class="language-swift">let messages$ = realm.objects(Message).asObservableChangeset().shareReplay(1)
+</code></pre>
+
+<p>I&rsquo;m observing all <code>Message</code> objects stored in my realm.</p>
+
+<p>Now comes the interesting part - first I&rsquo;ll define when my expectation is fulfilled:</p>
+
+<pre><code class="language-swift">messages$
+  .scan(0, accumulator: {acc, _ in return acc+1})
+  .filter { $0 == 3 }
+  .map {_ in ()}
+  .subscribeNext(expectation1.fulfill)
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>I use <code>scan</code> to count the emitted values from my observable, <code>filter</code> helps me to pinpoint in which value I&rsquo;m interested (the 3rd event), I map the value to <code>Void</code> and subscribe to <code>expectation1.fulfill()</code>.</p>
+
+<p>Long story short - when <code>messages$</code> emits its 3rd event my expectation will fulfill. Neat!</p>
+
+<p>Since I&rsquo;m not interested in just how many events are emitted but also which events were emitted, I need yet another subscription:</p>
+
+<pre><code class="language-swift">messages$
+  .map {results, changes in
+    if let changes = changes {
+      return &quot;i:\(changes.inserted) d:\(changes.deleted) u:\(changes.updated)&quot;
+    } else {
+      return &quot;initial&quot;
+    }
+  }
+  .subscribe(observer)
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>If it&rsquo;s an update event I return a string with the collection indexes that were deleted or inserted, it looks like so:</p>
+
+<pre><code>i:[0] u:[] d:[1,2,4]
+</code></pre>
+
+<p>This logs all the information about the particular change-set that I&rsquo;m interested in (and need to verify if the observable emitted the information I expected).</p>
+
+<p>If it&rsquo;s the initial event for that collection I just return &ldquo;initial&rdquo;.</p>
+
+<h2 id="triggering-some-observable-values:5067dfc287a0dc48087ee659edca0c51">Triggering some Observable values</h2>
+
+<p>Now I can start the test scheduler:</p>
+
+<pre><code class="language-swift">scheduler.start()
+</code></pre>
+
+<p>And, ultimately, perform some operations on my Realm to produce change notifications:</p>
+
+<pre><code class="language-swift">delay(0.1) {
+  try! realm.write {
+    realm.add(Message(&quot;first&quot;))
+  }
+}
+delay(0.2) {
+  try! realm.write {
+    realm.delete(realm.objects(Message).first!)
+  }
+}
+</code></pre>
+
+<p>The code above adds a new object and after a bit of delay deletes it again. This should produce the 3 events I&rsquo;m expecting: the initial data, the insert notification and the deletion notification.</p>
+
+<h2 id="verifying-the-recorded-events-with-asserts:5067dfc287a0dc48087ee659edca0c51">Verifying the recorded events with asserts</h2>
+
+<p>It&rsquo;s time to (finally) add my asserts:</p>
+
+<pre><code class="language-swift">waitForExpectationsWithTimeout(0.5) {error in
+    //do tests here
+    
+    XCTAssertTrue(error == nil)
+    XCTAssertEqual(observer.events.count, 3)
+    XCTAssertEqual(observer.events[0].value.element!, &quot;initial&quot;)
+    XCTAssertEqual(observer.events[1].value.element!, &quot;i:[0] d:[] u:[]&quot;)
+    XCTAssertEqual(observer.events[2].value.element!, &quot;i:[] d:[0] u:[]&quot;)
+}
+</code></pre>
+
+<p>In the block I perform a number of asserts:</p>
+
+<ul>
+<li>no error happened while fulfilling my expectations</li>
+<li>the test observer logged exactly 3 events</li>
+<li>the first emitted value is &ldquo;initial&rdquo;</li>
+<li>the second value is about inserting a value at index 0</li>
+<li>the third value is about deleting a value at index 0</li>
+</ul>
+
+<h2 id="conclusion:5067dfc287a0dc48087ee659edca0c51">Conclusion</h2>
+
+<p>It&rsquo;s amazing how easy writing tests is even when testing two completely de-coupled libraries working together like RealmSwift and RxSwift. As you saw it&rsquo;s a matter of 10-20 lines of code depending on your setup and I&rsquo;m sure the code can be simplified even more.</p>
+
+<p>If you want to read through the complete test suite for RxRealm head to the GitHub repo test folder: <a href="https://github.com/RxSwiftCommunity/RxRealm/tree/master/Example/RxRealm_Tests">RxRealm_Tests</a>.</p>
+
+<p>I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at <a href="https://twitter.com/icanzilb">icanzilb</a></p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-tests" href="http://rx-marin.com//tags/tests">tests</a>,
+	                
+	                <a class="post-tag post-tag-unit-tests" href="http://rx-marin.com//tags/unit-tests">unit tests</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part 1</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2016. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
