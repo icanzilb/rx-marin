@@ -100,6 +100,10 @@
 	    Latest posts:
         
           <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
               <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
           </li>
         
@@ -155,6 +159,42 @@
       
 
       <div class="posts">
+        
+          <section  class="post">
+            <header class="post-header">
+            
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">A smarter Retry with RxSwiftExt</a>
+            </h1>
+            </header>
+            <p class="post-meta">
+            	
+		          <span class="post-date">
+		            <span class="post-date-day"><sup>8</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
+		          </span>
+      				
+      				
+      					By <a class="post-author" >Marin Todorov</a>
+      				
+              
+                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
+              
+      				
+      					<div class="post-categories">
+				        
+      					
+					        <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+      					
+      					</div>
+      				
+            </p>
+            <article class="post-summary">
+            	Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail. RxSwift offers a special operator called retry, which allows you to try another time the observable subscription upon error.
+            </article>
+			<div class="read-more-link">
+				<a href="http://rx-marin.com/post/rxswift-retry-with-delay/"><span class="read-more-slashes">//</span>Read More...</a>
+			</div>
+          </section>
         
           <section  class="post">
             <header class="post-header">
@@ -457,7 +497,7 @@
 		</ul>
 	</div>
 
-	<p>&copy; 2016. All rights reserved.</p>
+	<p>&copy; 2017. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>
@@ -472,6 +512,24 @@
   ga('send', 'pageview');
 
 </script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
     </div>
   </div>
   

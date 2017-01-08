@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Custom bindings with RxSwift // rx_marin&lt;blog&gt;
+    A smarter Retry with RxSwiftExt // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="Some custom bindings I made while learning about RxSwift and RxCocoa">
+<meta name="description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
 <meta name="generator" content="Hugo 0.15" />
 
-  <meta property="og:title" content="Custom bindings with RxSwift" />
-<meta property="og:description" content="Some custom bindings I made while learning about RxSwift and RxCocoa" />
+  <meta property="og:title" content="A smarter Retry with RxSwiftExt" />
+<meta property="og:description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-retry-with-delay/" />
 
 
   
@@ -170,10 +170,13 @@
 <ul>
 <li>
 <ul>
-<li><a href="#intro:d4dcb38b814640de6df8a9df2675e24b">Intro</a></li>
-<li><a href="#binding-to-make-a-view-visible:d4dcb38b814640de6df8a9df2675e24b">Binding to make a view visible</a></li>
-<li><a href="#binding-for-becoming-and-resigning-first-responder:d4dcb38b814640de6df8a9df2675e24b">Binding for becoming and resigning first responder</a></li>
-<li><a href="#conclusion:d4dcb38b814640de6df8a9df2675e24b">Conclusion</a></li>
+<li>
+<ul>
+<li><a href="#retrying-at-equal-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying at equal intervals</a></li>
+<li><a href="#retrying-in-increasing-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying in increasing intervals</a></li>
+<li><a href="#calculating-the-delay:0d2f3d508498ad2374296c16265dc39a">Calculating the delay</a></li>
+<li><a href="#a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a">A non RxSwift retry</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -182,14 +185,14 @@
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">Custom bindings with RxSwift</a>
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">A smarter Retry with RxSwiftExt</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>31</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>8</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -217,95 +220,102 @@
 			
 
 <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=Custom%20bindings%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-custom-bindings%2f"
+  href="https://twitter.com/intent/tweet?text=A%20smarter%20Retry%20with%20RxSwiftExt&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-retry-with-delay%2f"
   data-size="large">
 Tweet</a>
 
             
 
-<h2 id="intro:d4dcb38b814640de6df8a9df2675e24b">Intro</h2>
+<p>Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.</p>
 
-<p>After I did some convenience operators of my own, which really made things easier while writing code I thought I&rsquo;d be a good idea to look into building more stuff on my own.</p>
+<p>RxSwift offers a special operator called <code>retry</code>, which allows you to try another time the observable subscription upon error.</p>
 
-<p>It helps learning and it&rsquo;s healthy :)</p>
+<p>You can even tell <code>retry</code> how many times to keep trying, which is very useful. The code looks like this:</p>
 
-<h2 id="binding-to-make-a-view-visible:d4dcb38b814640de6df8a9df2675e24b">Binding to make a view visible</h2>
+<pre><code class="language-swift">responseObservable.retry(3)
+  .subscribe(onNext: {next in
+    print(&quot;next: \(next)&quot;)
+  }, onError: { error in
+    print(&quot;error: &quot;)
+  })
+</code></pre>
 
-<p>I noticed there is a binding on the <code>hidden</code> property of <code>UIView</code> but sometimes the code just reads better when you don&rsquo;t have to think of <em>hiding something</em> but rather <strong>showing something</strong>.</p>
+<p>In case <code>responseObservable</code> fails, the subscription will &ldquo;<em>restart</em>&rdquo; up to 3 times and in case it fails all 3 times, it will error out.</p>
 
-<p>So I thought since I can check out the source code for <code>rx_hidden</code> how hard could it be to make my own <code>rx_visible</code>?</p>
+<p>As useful as the built-in operator is - you rarely can solve a real problem by retrying immediately.</p>
 
-<p>So I just copied over the code and made my first bindable sink:</p>
+<p>Especially in problems caused by lack of connectivity (and others of course) it&rsquo;s much more useful to wait a little and then retry, hoping that meanwhile the problem was resolved.</p>
 
-<pre><code class="language-swift">extension UIView {
-    public var rx_visible: AnyObserver&lt;Bool&gt; {
-        return UIBindingObserver(UIElement: self) { view, visible in
-            view.hidden = !visible
-        }.asObserver()
-    }
+<p>Sometimes it even makes sense to first wait a short interval of time, and after few fails wait longer and longer before retrying.</p>
+
+<p>There is no built-in <code>retry</code> operator that will allow you to do that, but you could give a try to <code>RxSwiftExt</code> - an extra set of operators developed by the community (maintainer of the library is <a href="https://github.com/fpillet">fpillet</a> ).</p>
+
+<p>You can have a look at all of the operators included in RxSwiftExt in its README: <a href="https://github.com/RxSwiftCommunity/RxSwiftExt">https://github.com/RxSwiftCommunity/RxSwiftExt</a>.</p>
+
+<p>After you include (via CocoaPods or Carthage) RxSwiftExt in your project you have few options how to use the smarter <code>retry</code> operator.</p>
+
+<p>The smarter <code>retry</code> takes in a parameter of the <code>RepeatBehavior</code> enum, which can be one of these four types:</p>
+
+<ul>
+<li><code>immediate (maxCount:)</code> - similar to the built-in behavior</li>
+<li><code>delayed (maxCount:time:)</code> - retries up to <code>maxCount</code> times, but with <code>time</code> amount of seconds between retries</li>
+<li><code>exponentialDelayed (maxCount:initial:multiplier:)</code> - retries up to <code>maxCount</code> times, starts with <code>initial</code> amount of seconds but uses <code>multiplier</code> to increase the delay between retries.</li>
+<li><code>customTimerDelayed(max:delayCalculator:)</code> - retries up to <code>max</code> times. <code>delayCalculator</code> is a closure that gets as input the number of retries so far, and returns how much seconds to wait before trying again.</li>
+</ul>
+
+<p>As an extra functionality you can add a closure that evaluates on each retry whether the operator shoud keep trying at all.</p>
+
+<h3 id="retrying-at-equal-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying at equal intervals</h3>
+
+<pre><code class="language-swift">responseObservable.retry(.delayed(maxCount: 3, time: 5.0),
+ shouldRetry: {error in
+  return 50..&lt;80 ~= (error as NSError).code
+})
+</code></pre>
+
+<p>This is a more elaborate example so let&rsquo;s have a look. If <code>responseObservable</code> emits an error <code>retry</code> will try up to 3 times, with 5 second intervals between the retries.</p>
+
+<p>Additionally between retries <code>retry</code> will consult with the <code>shouldRetry</code> closure if it should keep going. Once the code casts <code>error</code> as an <code>NSError</code>, it checks the code of the error. It lets <code>retry</code> keep trying if the error code is between 50 and 80, and stops retrying if the code is not in that range.</p>
+
+<p>In your own app return <code>true</code> or <code>false</code> depending on your business logic.</p>
+
+<h3 id="retrying-in-increasing-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying in increasing intervals</h3>
+
+<p>The formula calculting the delay between retries is <code>initial * pow(1 + multiplier, Double(currentRepetition - 1))</code>.</p>
+
+<p>Let&rsquo;s have a look at an example:</p>
+
+<pre><code class="language-swift">retry(.exponentialDelayed(maxCount: 3, initial: 2.0, multiplier: 1.5))
+</code></pre>
+
+<p>The delay between first and second tries is 2.0 seconds (the value of <code>initial</code> parameter). Then between second and third tries is 5.0 seconds - <code>2.0 * 2.5</code> seconds.</p>
+
+<h3 id="calculating-the-delay:0d2f3d508498ad2374296c16265dc39a">Calculating the delay</h3>
+
+<p>In the end  - if you go for a custom calculator you can simply return any value based on any kind of custom business logic so sky is pretty much the limit.</p>
+
+<p>As an example here is a piece of code that implements decreasing delays between tries: 10, 9, 8, 7, 6, etc.</p>
+
+<pre><code class="language-swift">let speedUp: (UInt) -&gt; Double = {retries in
+  return max(0.0, 10 - Double(retries))
 }
+
+responseObservable.retry(.customTimerDelayed(maxCount: 10,
+  delayCalculator: speedUp))
+    .subscribe()
 </code></pre>
 
-<p>I know that isn&rsquo;t a great departure from <code>rx_hidden</code> but sometimes it really makes more sense (and it&rsquo;s more readable) to use <code>rx_visible</code>. Let&rsquo;s look:</p>
+<h3 id="a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a">A non RxSwift retry</h3>
 
-<pre><code class="language-swift">//longer, logic is reversed
-isEnabled.map {enabled in !enabled}.bindTo(messageView.rx_hidden)
+<p>As a fun bonus, I&rsquo;ve made a <code>retry</code> library which doesn&rsquo;t use RxSwift at all as I find a custom-delay <code>retry</code> very useful in all kinds of apps. You can use the pure Swift <code>retry</code> in a very similar manner: <a href="https://github.com/icanzilb/retry">https://github.com/icanzilb/retry</a></p>
 
-//short and sweet
-isEnabled.bindTo(messageView.rx_visible)
-</code></pre>
-
-<p>I really like the latter a bit better! So far so good :)</p>
-
-<h2 id="binding-for-becoming-and-resigning-first-responder:d4dcb38b814640de6df8a9df2675e24b">Binding for becoming and resigning first responder</h2>
-
-<p>Next - I felt like building something that would actually add functionality it isn&rsquo;t already in.</p>
-
-<p>In the project I&rsquo;m currently working on I have a search bar and I have few buttons that show and hide the search bar depending on what the user wants to do.</p>
-
-<p>Therefore I thought it&rsquo;d be great to make my own bindable sink for being a first responder.</p>
-
-<pre><code class="language-swift">extension UIResponder {
-    public var rx_firstResponder: AnyObserver&lt;Bool&gt; {
-        return UIBindingObserver(UIElement: self) {control, shouldRespond in
-            shouldRespond ? control.becomeFirstResponder() : control.resignFirstResponder()
-        }.asObserver()
-    }
-}
-</code></pre>
-
-<p>The example isn&rsquo;t more complex than the previous one. It&rsquo;s a bindable <code>Bool</code> property, which either makes the control become or resign first responder.</p>
-
-<p>Now I could group the show and hide buttons into one observable:</p>
-
-<pre><code class="language-swift">let searchBarActive = [btnSearch.rx_tap.replaceWith(true), searchBarBtnCancel.replaceWith(false)].toObservable()
-  .merge()
-  .startWith(false)
-  .shareReplay(1)
-</code></pre>
-
-<p>And besides all the other changes in the UI make the search bar active or force it to lose focus:</p>
-
-<pre><code class="language-swift">searchBarActive.bindTo(searchController.searchBar.rx_firstResponder)
-</code></pre>
-
-<p>Neat! Since I started writing rx code I&rsquo;ve really grown to dislike having <code>if</code> operators (also <code>var</code> but that&rsquo;s a whole other story)</p>
-
-<h2 id="conclusion:d4dcb38b814640de6df8a9df2675e24b">Conclusion</h2>
-
-<p>Okay so creating simple on-the-fly cocoa bindings is easy. But is it worth it if it&rsquo;s so easy?</p>
-
-<p>I like bindings better than writing code to update the UI. No <code>if</code> and no closures to update the UI - no problem. I know other people prefer to not use RxCocoa at all and just use RxSwift and update the UI themselves.</p>
-
-<p>I guess either is okay :)</p>
-
-<p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a href="https://twitter.com/icanzilb">https://twitter.com/icanzilb</a>.</p>
 
 	
 			
 
 <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=Custom%20bindings%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-custom-bindings%2f"
+  href="https://twitter.com/intent/tweet?text=A%20smarter%20Retry%20with%20RxSwiftExt&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-retry-with-delay%2f"
   data-size="large">
 Tweet</a>
 
@@ -313,9 +323,15 @@ Tweet</a>
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-bindings" href="http://rx-marin.com//tags/bindings">bindings</a>,
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
 	                
 	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+	                <a class="post-tag post-tag-rxswiftext" href="http://rx-marin.com//tags/rxswiftext">rxswiftext</a>,
+	                
+	                <a class="post-tag post-tag-repeat" href="http://rx-marin.com//tags/repeat">repeat</a>,
+	                
+	                <a class="post-tag post-tag-retry" href="http://rx-marin.com//tags/retry">retry</a>,
 	                
 				</div>
 			
@@ -324,16 +340,11 @@ Tweet</a>
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.com/post/rxswift-state-with-scan/">Implementing state with scan in RxSwift</a>
-		            </div>
-		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">Custom convenience operators with RxSwift, Part 2</a>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a>
 		            </div>
 		            
 	            </div>

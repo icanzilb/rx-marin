@@ -6,8 +6,103 @@
     <description>Recent content in Code on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 23 May 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 Jan 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/categories/code/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A smarter Retry with RxSwiftExt</title>
+      <link>http://rx-marin.com/post/rxswift-retry-with-delay/</link>
+      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-retry-with-delay/</guid>
+      <description>
+
+&lt;p&gt;Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.&lt;/p&gt;
+
+&lt;p&gt;RxSwift offers a special operator called &lt;code&gt;retry&lt;/code&gt;, which allows you to try another time the observable subscription upon error.&lt;/p&gt;
+
+&lt;p&gt;You can even tell &lt;code&gt;retry&lt;/code&gt; how many times to keep trying, which is very useful. The code looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;responseObservable.retry(3)
+  .subscribe(onNext: {next in
+    print(&amp;quot;next: \(next)&amp;quot;)
+  }, onError: { error in
+    print(&amp;quot;error: &amp;quot;)
+  })
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In case &lt;code&gt;responseObservable&lt;/code&gt; fails, the subscription will &amp;ldquo;&lt;em&gt;restart&lt;/em&gt;&amp;rdquo; up to 3 times and in case it fails all 3 times, it will error out.&lt;/p&gt;
+
+&lt;p&gt;As useful as the built-in operator is - you rarely can solve a real problem by retrying immediately.&lt;/p&gt;
+
+&lt;p&gt;Especially in problems caused by lack of connectivity (and others of course) it&amp;rsquo;s much more useful to wait a little and then retry, hoping that meanwhile the problem was resolved.&lt;/p&gt;
+
+&lt;p&gt;Sometimes it even makes sense to first wait a short interval of time, and after few fails wait longer and longer before retrying.&lt;/p&gt;
+
+&lt;p&gt;There is no built-in &lt;code&gt;retry&lt;/code&gt; operator that will allow you to do that, but you could give a try to &lt;code&gt;RxSwiftExt&lt;/code&gt; - an extra set of operators developed by the community (maintainer of the library is &lt;a href=&#34;https://github.com/fpillet&#34;&gt;fpillet&lt;/a&gt; ).&lt;/p&gt;
+
+&lt;p&gt;You can have a look at all of the operators included in RxSwiftExt in its README: &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxSwiftExt&#34;&gt;https://github.com/RxSwiftCommunity/RxSwiftExt&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;After you include (via CocoaPods or Carthage) RxSwiftExt in your project you have few options how to use the smarter &lt;code&gt;retry&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;p&gt;The smarter &lt;code&gt;retry&lt;/code&gt; takes in a parameter of the &lt;code&gt;RepeatBehavior&lt;/code&gt; enum, which can be one of these four types:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;immediate (maxCount:)&lt;/code&gt; - similar to the built-in behavior&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delayed (maxCount:time:)&lt;/code&gt; - retries up to &lt;code&gt;maxCount&lt;/code&gt; times, but with &lt;code&gt;time&lt;/code&gt; amount of seconds between retries&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;exponentialDelayed (maxCount:initial:multiplier:)&lt;/code&gt; - retries up to &lt;code&gt;maxCount&lt;/code&gt; times, starts with &lt;code&gt;initial&lt;/code&gt; amount of seconds but uses &lt;code&gt;multiplier&lt;/code&gt; to increase the delay between retries.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;customTimerDelayed(max:delayCalculator:)&lt;/code&gt; - retries up to &lt;code&gt;max&lt;/code&gt; times. &lt;code&gt;delayCalculator&lt;/code&gt; is a closure that gets as input the number of retries so far, and returns how much seconds to wait before trying again.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;As an extra functionality you can add a closure that evaluates on each retry whether the operator shoud keep trying at all.&lt;/p&gt;
+
+&lt;h3 id=&#34;retrying-at-equal-intervals:0d2f3d508498ad2374296c16265dc39a&#34;&gt;Retrying at equal intervals&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;responseObservable.retry(.delayed(maxCount: 3, time: 5.0),
+ shouldRetry: {error in
+  return 50..&amp;lt;80 ~= (error as NSError).code
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is a more elaborate example so let&amp;rsquo;s have a look. If &lt;code&gt;responseObservable&lt;/code&gt; emits an error &lt;code&gt;retry&lt;/code&gt; will try up to 3 times, with 5 second intervals between the retries.&lt;/p&gt;
+
+&lt;p&gt;Additionally between retries &lt;code&gt;retry&lt;/code&gt; will consult with the &lt;code&gt;shouldRetry&lt;/code&gt; closure if it should keep going. Once the code casts &lt;code&gt;error&lt;/code&gt; as an &lt;code&gt;NSError&lt;/code&gt;, it checks the code of the error. It lets &lt;code&gt;retry&lt;/code&gt; keep trying if the error code is between 50 and 80, and stops retrying if the code is not in that range.&lt;/p&gt;
+
+&lt;p&gt;In your own app return &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt; depending on your business logic.&lt;/p&gt;
+
+&lt;h3 id=&#34;retrying-in-increasing-intervals:0d2f3d508498ad2374296c16265dc39a&#34;&gt;Retrying in increasing intervals&lt;/h3&gt;
+
+&lt;p&gt;The formula calculting the delay between retries is &lt;code&gt;initial * pow(1 + multiplier, Double(currentRepetition - 1))&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s have a look at an example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;retry(.exponentialDelayed(maxCount: 3, initial: 2.0, multiplier: 1.5))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The delay between first and second tries is 2.0 seconds (the value of &lt;code&gt;initial&lt;/code&gt; parameter). Then between second and third tries is 5.0 seconds - &lt;code&gt;2.0 * 2.5&lt;/code&gt; seconds.&lt;/p&gt;
+
+&lt;h3 id=&#34;calculating-the-delay:0d2f3d508498ad2374296c16265dc39a&#34;&gt;Calculating the delay&lt;/h3&gt;
+
+&lt;p&gt;In the end  - if you go for a custom calculator you can simply return any value based on any kind of custom business logic so sky is pretty much the limit.&lt;/p&gt;
+
+&lt;p&gt;As an example here is a piece of code that implements decreasing delays between tries: 10, 9, 8, 7, 6, etc.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let speedUp: (UInt) -&amp;gt; Double = {retries in
+  return max(0.0, 10 - Double(retries))
+}
+
+responseObservable.retry(.customTimerDelayed(maxCount: 10,
+  delayCalculator: speedUp))
+    .subscribe()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a&#34;&gt;A non RxSwift retry&lt;/h3&gt;
+
+&lt;p&gt;As a fun bonus, I&amp;rsquo;ve made a &lt;code&gt;retry&lt;/code&gt; library which doesn&amp;rsquo;t use RxSwift at all as I find a custom-delay &lt;code&gt;retry&lt;/code&gt; very useful in all kinds of apps. You can use the pure Swift &lt;code&gt;retry&lt;/code&gt; in a very similar manner: &lt;a href=&#34;https://github.com/icanzilb/retry&#34;&gt;https://github.com/icanzilb/retry&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hope that post was helpful, and if you want to get in touch you can find me here &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;https://twitter.com/icanzilb&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Testing your RxSwift code, part 2</title>
