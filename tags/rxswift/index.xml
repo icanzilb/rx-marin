@@ -99,8 +99,6 @@ responseObservable.retry(.customTimerDelayed(maxCount: 10,
 &lt;h3 id=&#34;a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a&#34;&gt;A non RxSwift retry&lt;/h3&gt;
 
 &lt;p&gt;As a fun bonus, I&amp;rsquo;ve made a &lt;code&gt;retry&lt;/code&gt; library which doesn&amp;rsquo;t use RxSwift at all as I find a custom-delay &lt;code&gt;retry&lt;/code&gt; very useful in all kinds of apps. You can use the pure Swift &lt;code&gt;retry&lt;/code&gt; in a very similar manner: &lt;a href=&#34;https://github.com/icanzilb/retry&#34;&gt;https://github.com/icanzilb/retry&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Hope that post was helpful, and if you want to get in touch you can find me here &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;https://twitter.com/icanzilb&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
