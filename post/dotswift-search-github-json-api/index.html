@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    (dotSwift) Search GitHub with RxSwift // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Search GitHub with RxSwift. Sample code from my talk at dotSwift conference.">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="(dotSwift) Search GitHub with RxSwift" />
+<meta property="og:description" content="Search GitHub with RxSwift. Sample code from my talk at dotSwift conference." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/dotswift-search-github-json-api/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">27/Jan &middot; (dotSwift) Search GitHub with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#searching-for-github-repositories-with-rxswift:12a67f24277565fb21fc7919261596a9">Searching for GitHub repositories with RxSwift</a>
+<ul>
+<li><a href="#why-i-chose-this-example:12a67f24277565fb21fc7919261596a9">Why I chose this example?</a></li>
+<li><a href="#the-sample-code:12a67f24277565fb21fc7919261596a9">The sample code</a></li>
+<li><a href="#the-complete-example:12a67f24277565fb21fc7919261596a9">The complete example</a></li>
+<li><a href="#discussion:12a67f24277565fb21fc7919261596a9">Discussion</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">(dotSwift) Search GitHub with RxSwift</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=%28dotSwift%29%20Search%20GitHub%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2fdotswift-search-github-json-api%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples. Let&rsquo;s start with number one.</p>
+
+<h2 id="searching-for-github-repositories-with-rxswift:12a67f24277565fb21fc7919261596a9">Searching for GitHub repositories with RxSwift</h2>
+
+<p>The first example in the talk is a simple single-screen application that allows the user to enter a repository name (or part of it) and search GitHub for matching results.</p>
+
+<p>The completed application looks like this:</p>
+
+<p><img src="http://rx-marin.com/images/github-search.png" alt="" /></p>
+
+<h3 id="why-i-chose-this-example:12a67f24277565fb21fc7919261596a9">Why I chose this example?</h3>
+
+<p>One of the main points I make in my talk is that Rx and RxSwift in particular solves in big part the pains of asynchronous programming. Cocoa and the iOS SDK offers us a lot of different tools to battle asynchronos flows but there is no standard and we end up using many different (if not all) of these APIs. It&rsquo;s not rare in complex app to use all of NotificationCenter, Grand Central Dispatch, closures, delegates, and more.</p>
+
+<p>RxSwift solves this by offering a single standard protocol for asynchronous communication between any classes in the app - <code>Observable</code>. And this is what I wanted to demonstrate with the first example - how a rather diverse workflow that would usually be very complex, involving delegates and closures, becomes very simple to read, and sequential to write.</p>
+
+<h3 id="the-sample-code:12a67f24277565fb21fc7919261596a9">The sample code</h3>
+
+<p>The example starts with observing the text of a <code>UITextField</code>:</p>
+
+<pre><code class="language-swift">searchBar.rx.text
+</code></pre>
+
+<p>The issue with <code>rx.text</code> is that it emits <code>String?</code> since the field value is <code>nil</code> when there&rsquo;s no text inside (Thanks, Obama). Luckily there&rsquo;s an operator called <code>orEmpty</code>, which converts an optional <code>nil</code> to unwrapped default value. So for <code>String?</code> it returns <code>&quot;&quot;</code> (a non-optional empty string).</p>
+
+<p>Chained to the previous code:</p>
+
+<pre><code class="language-swift">.orEmpty
+</code></pre>
+
+<p>This maps the observable to <code>Observable&lt;String&gt;</code>. Neat!</p>
+
+<p>Next we want to filter search queries too short to be useful that will produce too many and rather irrelevant results. We chain:</p>
+
+<pre><code class="language-swift">.filter { query in
+  return query.characters.count &gt; 2
+}
+</code></pre>
+
+<p>This will discard any searches for less than three characters. Next let&rsquo;s discard any values emitted too fast, we don&rsquo;t need to send all the network requests to GitHub&rsquo;s server on each typed character if the user is typing fast. Chain to the previous code:</p>
+
+<pre><code class="language-swift">.debounce(0.5, scheduler: MainScheduler.instance)
+</code></pre>
+
+<p>If the user types and then stops for more than half a second, <code>debounce</code> will let through only the latest value before the user stopped typing. Ok it&rsquo;s time to convert the search query into a web request:</p>
+
+<pre><code class="language-swift">.map { query in
+  let apiUrl = URL(string: &quot;https://api.github.com/search/repositories?q=&quot; + query)!
+  return URLRequest(url: apiUrl)
+}
+</code></pre>
+
+<p>We build a <code>URL</code> and a <code>URLRequest</code>, which is ready to be sent to GitHub&rsquo;s server. This <code>map</code> converts the observable to an <code>Observable&lt;URLRequest&gt;</code>.</p>
+
+<p>Now by using the built-in reactive extension on <code>URLSession</code> we can get back the server response in JSON form:</p>
+
+<pre><code class="language-swift">.flatMapLatest { request in
+  return URLSession.shared.rx.json(request: request)
+    .catchErrorJustReturn([])
+}
+</code></pre>
+
+<p>In case there was an error reaching out to the server, <code>catchErrorJustReturn</code> will make <code>flatMapLatest</code> return an empty array <code>[]</code> instead of erroring out. This converts the observable type to <code>Observable&lt;Any&gt;</code>. So we got the JSON &hellip; What next? Dig inside, find any returned repos and convert the data into objects:</p>
+
+<pre><code class="language-swift">.map { json -&gt; [Repo] in
+  guard let json = json as? [String: Any],
+    let items = json[&quot;items&quot;] as? [[String: Any]]  else {
+      return []
+  }
+  return items.flatMap(Repo.init)
+}
+</code></pre>
+
+<p>Using <code>flatMap</code> on the <code>items</code> collection will discard any objects that didn&rsquo;t convert propertly to <code>Repo</code> objects. This final map converts the reponse to an <code>Observable&lt;[Repo]&gt;</code>.</p>
+
+<p>We now have the desired outcome - a list of <code>Repo</code> objects. It&rsquo;s time to show them in the view controller&rsquo;s table view. Using <code>RxCocoa</code>&rsquo;s <code>bindTo</code> binding the repos is a matter of few more lines:</p>
+
+<pre><code class="language-swift">.bindTo(tableView.rx.items) { tableView, row, repo in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+}
+</code></pre>
+
+<p>The operator binds the list of <code>Repo</code> objects to the table&rsquo;s <code>rx.items</code>. In the closure parameter you provide the code to deque and configure cells for the table.</p>
+
+<p>If you want more advanced table binding (e.g. using animations, sections, and more) check out the <a href="https://github.com/RxSwiftCommunity/RxDataSources"><code>RxDataSources</code></a> library, which provides many different choices. If you&rsquo;re working with Realm objects, there is a special library that allows you to use row animations and more automatically called <a href="https://github.com/RxSwiftCommunity/RxRealmDataSources"><code>RxRealmDataSources</code></a>.</p>
+
+<h3 id="the-complete-example:12a67f24277565fb21fc7919261596a9">The complete example</h3>
+
+<pre><code class="language-swift">searchBar.rx.text
+  .orEmpty
+  .filter { query in
+    return query.characters.count &gt; 2
+  }
+  .debounce(0.5, scheduler: MainScheduler.instance)
+  .map { query in
+    let apiUrl = URL(string: &quot;https://api.github.com/search/repositories?q=&quot; + query)!
+    return URLRequest(url: apiUrl)
+  }
+  .flatMapLatest { request in
+    return URLSession.shared.rx.json(request: request)
+      .catchErrorJustReturn([])
+  }
+  .map { json -&gt; [Repo] in
+    guard let json = json as? [String: Any],
+      let items = json[&quot;items&quot;] as? [[String: Any]]  else {
+        return []
+    }
+    return items.flatMap(Repo.init)
+  }
+  .bindTo(tableView.rx.items) { tableView, row, repo in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+  }
+</code></pre>
+
+<h3 id="discussion:12a67f24277565fb21fc7919261596a9">Discussion</h3>
+
+<p>In real life you will probably never have the app&rsquo;s logic layed out like this in one single line of code. (You might if you so desire; of course)</p>
+
+<p>In a full-blown app you will have a networking layer, data layer, etc. You are likely to split this long chain of operators in two or three parts depending on what architecture you use.</p>
+
+<p>In any case, following the Cocoa patterns you will have one delegate for the text field, one data source for the table, and <code>URLSession</code> will work with an asynchronous callback closure. The code is split into chunks, and you as the developer need to  always keep in mind the sequence in which these methods will get called as to not corrupt the app state.</p>
+
+<p>With RxSwift the code is easier to understand because it reads sequentially. Further it&rsquo;s very easy to argue about the order in which code is executed even if it&rsquo;s being executed asynchronously.</p>
+
+<p><strong>Links</strong></p>
+
+<p>The complete demo app from my talk: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a></p>
+
+<p>The talk slides: <a href="https://speakerdeck.com/icanzilb/rxswift-on-ios">https://speakerdeck.com/icanzilb/rxswift-on-ios</a></p>
+
+	
+			
+
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=%28dotSwift%29%20Search%20GitHub%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2fdotswift-search-github-json-api%2f">
+Tweet</a></p>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+	                <a class="post-tag post-tag-json" href="http://rx-marin.com//tags/json">json</a>,
+	                
+	                <a class="post-tag post-tag-api" href="http://rx-marin.com//tags/api">api</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-retry-with-delay/">A smarter Retry with RxSwiftExt</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

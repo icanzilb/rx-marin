@@ -6,8 +6,154 @@
     <description>Recent content in Rxswift on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 27 Jan 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/tags/rxswift/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>(dotSwift) Search GitHub with RxSwift</title>
+      <link>http://rx-marin.com/post/dotswift-search-github-json-api/</link>
+      <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/dotswift-search-github-json-api/</guid>
+      <description>
+
+&lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples. Let&amp;rsquo;s start with number one.&lt;/p&gt;
+
+&lt;h2 id=&#34;searching-for-github-repositories-with-rxswift:12a67f24277565fb21fc7919261596a9&#34;&gt;Searching for GitHub repositories with RxSwift&lt;/h2&gt;
+
+&lt;p&gt;The first example in the talk is a simple single-screen application that allows the user to enter a repository name (or part of it) and search GitHub for matching results.&lt;/p&gt;
+
+&lt;p&gt;The completed application looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/github-search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;why-i-chose-this-example:12a67f24277565fb21fc7919261596a9&#34;&gt;Why I chose this example?&lt;/h3&gt;
+
+&lt;p&gt;One of the main points I make in my talk is that Rx and RxSwift in particular solves in big part the pains of asynchronous programming. Cocoa and the iOS SDK offers us a lot of different tools to battle asynchronos flows but there is no standard and we end up using many different (if not all) of these APIs. It&amp;rsquo;s not rare in complex app to use all of NotificationCenter, Grand Central Dispatch, closures, delegates, and more.&lt;/p&gt;
+
+&lt;p&gt;RxSwift solves this by offering a single standard protocol for asynchronous communication between any classes in the app - &lt;code&gt;Observable&lt;/code&gt;. And this is what I wanted to demonstrate with the first example - how a rather diverse workflow that would usually be very complex, involving delegates and closures, becomes very simple to read, and sequential to write.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-sample-code:12a67f24277565fb21fc7919261596a9&#34;&gt;The sample code&lt;/h3&gt;
+
+&lt;p&gt;The example starts with observing the text of a &lt;code&gt;UITextField&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;searchBar.rx.text
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The issue with &lt;code&gt;rx.text&lt;/code&gt; is that it emits &lt;code&gt;String?&lt;/code&gt; since the field value is &lt;code&gt;nil&lt;/code&gt; when there&amp;rsquo;s no text inside (Thanks, Obama). Luckily there&amp;rsquo;s an operator called &lt;code&gt;orEmpty&lt;/code&gt;, which converts an optional &lt;code&gt;nil&lt;/code&gt; to unwrapped default value. So for &lt;code&gt;String?&lt;/code&gt; it returns &lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt; (a non-optional empty string).&lt;/p&gt;
+
+&lt;p&gt;Chained to the previous code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.orEmpty
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This maps the observable to &lt;code&gt;Observable&amp;lt;String&amp;gt;&lt;/code&gt;. Neat!&lt;/p&gt;
+
+&lt;p&gt;Next we want to filter search queries too short to be useful that will produce too many and rather irrelevant results. We chain:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.filter { query in
+  return query.characters.count &amp;gt; 2
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will discard any searches for less than three characters. Next let&amp;rsquo;s discard any values emitted too fast, we don&amp;rsquo;t need to send all the network requests to GitHub&amp;rsquo;s server on each typed character if the user is typing fast. Chain to the previous code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.debounce(0.5, scheduler: MainScheduler.instance)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the user types and then stops for more than half a second, &lt;code&gt;debounce&lt;/code&gt; will let through only the latest value before the user stopped typing. Ok it&amp;rsquo;s time to convert the search query into a web request:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.map { query in
+  let apiUrl = URL(string: &amp;quot;https://api.github.com/search/repositories?q=&amp;quot; + query)!
+  return URLRequest(url: apiUrl)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We build a &lt;code&gt;URL&lt;/code&gt; and a &lt;code&gt;URLRequest&lt;/code&gt;, which is ready to be sent to GitHub&amp;rsquo;s server. This &lt;code&gt;map&lt;/code&gt; converts the observable to an &lt;code&gt;Observable&amp;lt;URLRequest&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now by using the built-in reactive extension on &lt;code&gt;URLSession&lt;/code&gt; we can get back the server response in JSON form:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.flatMapLatest { request in
+  return URLSession.shared.rx.json(request: request)
+    .catchErrorJustReturn([])
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In case there was an error reaching out to the server, &lt;code&gt;catchErrorJustReturn&lt;/code&gt; will make &lt;code&gt;flatMapLatest&lt;/code&gt; return an empty array &lt;code&gt;[]&lt;/code&gt; instead of erroring out. This converts the observable type to &lt;code&gt;Observable&amp;lt;Any&amp;gt;&lt;/code&gt;. So we got the JSON &amp;hellip; What next? Dig inside, find any returned repos and convert the data into objects:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.map { json -&amp;gt; [Repo] in
+  guard let json = json as? [String: Any],
+    let items = json[&amp;quot;items&amp;quot;] as? [[String: Any]]  else {
+      return []
+  }
+  return items.flatMap(Repo.init)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Using &lt;code&gt;flatMap&lt;/code&gt; on the &lt;code&gt;items&lt;/code&gt; collection will discard any objects that didn&amp;rsquo;t convert propertly to &lt;code&gt;Repo&lt;/code&gt; objects. This final map converts the reponse to an &lt;code&gt;Observable&amp;lt;[Repo]&amp;gt;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;We now have the desired outcome - a list of &lt;code&gt;Repo&lt;/code&gt; objects. It&amp;rsquo;s time to show them in the view controller&amp;rsquo;s table view. Using &lt;code&gt;RxCocoa&lt;/code&gt;&amp;rsquo;s &lt;code&gt;bindTo&lt;/code&gt; binding the repos is a matter of few more lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.bindTo(tableView.rx.items) { tableView, row, repo in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &amp;quot;Cell&amp;quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The operator binds the list of &lt;code&gt;Repo&lt;/code&gt; objects to the table&amp;rsquo;s &lt;code&gt;rx.items&lt;/code&gt;. In the closure parameter you provide the code to deque and configure cells for the table.&lt;/p&gt;
+
+&lt;p&gt;If you want more advanced table binding (e.g. using animations, sections, and more) check out the &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxDataSources&#34;&gt;&lt;code&gt;RxDataSources&lt;/code&gt;&lt;/a&gt; library, which provides many different choices. If you&amp;rsquo;re working with Realm objects, there is a special library that allows you to use row animations and more automatically called &lt;a href=&#34;https://github.com/RxSwiftCommunity/RxRealmDataSources&#34;&gt;&lt;code&gt;RxRealmDataSources&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-complete-example:12a67f24277565fb21fc7919261596a9&#34;&gt;The complete example&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;searchBar.rx.text
+  .orEmpty
+  .filter { query in
+    return query.characters.count &amp;gt; 2
+  }
+  .debounce(0.5, scheduler: MainScheduler.instance)
+  .map { query in
+    let apiUrl = URL(string: &amp;quot;https://api.github.com/search/repositories?q=&amp;quot; + query)!
+    return URLRequest(url: apiUrl)
+  }
+  .flatMapLatest { request in
+    return URLSession.shared.rx.json(request: request)
+      .catchErrorJustReturn([])
+  }
+  .map { json -&amp;gt; [Repo] in
+    guard let json = json as? [String: Any],
+      let items = json[&amp;quot;items&amp;quot;] as? [[String: Any]]  else {
+        return []
+    }
+    return items.flatMap(Repo.init)
+  }
+  .bindTo(tableView.rx.items) { tableView, row, repo in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &amp;quot;Cell&amp;quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;discussion:12a67f24277565fb21fc7919261596a9&#34;&gt;Discussion&lt;/h3&gt;
+
+&lt;p&gt;In real life you will probably never have the app&amp;rsquo;s logic layed out like this in one single line of code. (You might if you so desire; of course)&lt;/p&gt;
+
+&lt;p&gt;In a full-blown app you will have a networking layer, data layer, etc. You are likely to split this long chain of operators in two or three parts depending on what architecture you use.&lt;/p&gt;
+
+&lt;p&gt;In any case, following the Cocoa patterns you will have one delegate for the text field, one data source for the table, and &lt;code&gt;URLSession&lt;/code&gt; will work with an asynchronous callback closure. The code is split into chunks, and you as the developer need to  always keep in mind the sequence in which these methods will get called as to not corrupt the app state.&lt;/p&gt;
+
+&lt;p&gt;With RxSwift the code is easier to understand because it reads sequentially. Further it&amp;rsquo;s very easy to argue about the order in which code is executed even if it&amp;rsquo;s being executed asynchronously.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Links&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The complete demo app from my talk: &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The talk slides: &lt;a href=&#34;https://speakerdeck.com/icanzilb/rxswift-on-ios&#34;&gt;https://speakerdeck.com/icanzilb/rxswift-on-ios&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>A smarter Retry with RxSwiftExt</title>
