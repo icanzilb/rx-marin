@@ -277,8 +277,9 @@ Tweet</a><p>
 <p>If the user types and then stops for more than half a second, <code>debounce</code> will let through only the latest value before the user stopped typing. Ok it&rsquo;s time to convert the search query into a web request:</p>
 
 <pre><code class="language-swift">.map { query in
-  let apiUrl = URL(string: &quot;https://api.github.com/search/repositories?q=&quot; + query)!
-  return URLRequest(url: apiUrl)
+  var apiUrl = URLComponents(string: &quot;https://api.github.com/search/repositories&quot;)!
+  apiUrl.queryItems = [URLQueryItem(name: &quot;q&quot;, value: query)]
+  return URLRequest(url: apiUrl.url!)
 }
 </code></pre>
 
