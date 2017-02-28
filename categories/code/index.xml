@@ -6,8 +6,241 @@
     <description>Recent content in Code on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 28 Feb 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/categories/code/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>(dotSwift) Presenting View Controllers with RxSwift</title>
+      <link>http://rx-marin.com/post/dotswift-rxswift-view-controller/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/dotswift-rxswift-view-controller/</guid>
+      <description>
+
+&lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;
+
+&lt;p&gt;I already posted a write up on the GitHub API search example here: &lt;a href=&#34;http://rx-marin.com/post/dotswift-search-github-json-api/&#34;&gt;http://rx-marin.com/post/dotswift-search-github-json-api/&lt;/a&gt;. Let&amp;rsquo;s continue with example number two.&lt;/p&gt;
+
+&lt;h2 id=&#34;presenting-a-view-controller-from-rxswift:cf33baac886ac7ae000310d0f0e5995d&#34;&gt;Presenting a View Controller from RxSwift&lt;/h2&gt;
+
+&lt;p&gt;RxSwift doesn&amp;rsquo;t neccessarily force you into one architecture or another, it&amp;rsquo;s really up to you to chose how are you going to structure your application. Same goes for navigation and how you move the user between your app&amp;rsquo;s screens and different view controllers.&lt;/p&gt;
+
+&lt;h3 id=&#34;why-i-chose-this-example:cf33baac886ac7ae000310d0f0e5995d&#34;&gt;Why I chose this example?&lt;/h3&gt;
+
+&lt;p&gt;To make a point, namely that RxSwift plays very nicely with UIKit when neccessary, I chose to demo a simple code to present a view controller, get data back from that view controller, and navigate back to the presenting controller.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s a simple demo but demonstrates well one of the biggest benefits of using RxSwift - obliterating the need to deal with delegate to simply communicate between classes.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-sample-code:cf33baac886ac7ae000310d0f0e5995d&#34;&gt;The sample code&lt;/h3&gt;
+
+&lt;p&gt;In this post I can go in a bit more detail about the complete code than it was reasonable in the talk at the conference. Still keep in mind this was written with the goal to fit in a single slide, so corners were cut big time :) And so let&amp;rsquo;s get started.&lt;/p&gt;
+
+&lt;p&gt;The example is ultimately about an app featuring two view controllers:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;A list of GitHub repos (stored in an array), displayed in a table view.&lt;/li&gt;
+&lt;li&gt;A modal view controller, which allows the user to add a new repo to the list.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let&amp;rsquo;s first have a look at the list view controller. The repos are stored in a variable (for the purpose to simplify the example):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;private let repos = Variable&amp;lt;[Repo]&amp;gt;(initialRepos)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the initial values are just a list of &lt;code&gt;Repo&lt;/code&gt; objects:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;private let initialRepos = [
+    Repo(1, &amp;quot;EasyAnimation&amp;quot;, &amp;quot;Swift&amp;quot;),
+    Repo(2, &amp;quot;Unbox&amp;quot;, &amp;quot;Swift&amp;quot;),
+    Repo(3, &amp;quot;RxSwift&amp;quot;, &amp;quot;Swift&amp;quot;)
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;repos&lt;/code&gt; are bound to the table view as usual via RxDataSources:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;repos.asObservable()
+  .bindTo(tableView.rx.items) { (tableView, row, repo) in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &amp;quot;Cell&amp;quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+  }
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next, to present a view controller with RxSwift, we&amp;rsquo;ll react to navigation item taps and, once pushed the view controller to the navigation stack, we&amp;rsquo;ll subscribe an observable on the presented controller. That observable will emit a next event and complete once the user has finished working with it.&lt;/p&gt;
+
+&lt;p&gt;We start with subscribing for taps:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;navigationItem.rightBarButtonItem!.rx.tap
+  .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bu using &lt;code&gt;throttle&lt;/code&gt; we&amp;rsquo;ll ignore any unintentional double taps (and avoid presenting more than one copy of the view controller one over each other).&lt;/p&gt;
+
+&lt;p&gt;Next we need to &amp;ldquo;kind of wait&amp;rdquo; until the observable of the view controller completes and get the data it emitted:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.flatMapFirst {[weak self] _ -&amp;gt; Observable&amp;lt;Repo&amp;gt; in
+  if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &amp;quot;NewRepoViewController&amp;quot;) 
+  as? NewRepoViewController {
+    self?.navigationController?.pushViewController(addVC, animated: true)
+    return addVC.repoObservable
+  }
+  return Observable.never()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The block we provide to &lt;code&gt;flatMap&lt;/code&gt; fetches the view controller from a storyboard and pushes it onto the navigation stack. Once presented, we return the &lt;code&gt;repoObservable&lt;/code&gt; public property of the presented view controller.&lt;/p&gt;
+
+&lt;p&gt;That observable is going to give us back a &lt;code&gt;Repo&lt;/code&gt; object in case the user has successfully created a new one. Once we have a &lt;code&gt;Repo&lt;/code&gt; we can add it to the list and let the Rx binding from earlier update the table view.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll subscribe the result and update the list:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.subscribe(onNext: {[weak self] repo in
+  self?.repos.value.append(repo)
+  _ = self?.navigationController?.popViewController(animated: true)
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Since we know the observable is going to emit exactly one event, we also pop the view controller from the navigation stack. And that&amp;rsquo;s pretty much it! We present the controller, it gives us back data via a next event, and when it completes we discard it. Neat!&lt;/p&gt;
+
+&lt;p&gt;Now just for kicks have a look also at the code of the presented controller. The new repo controller exposes the user data via an observable like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;private let repo = PublishSubject&amp;lt;Repo&amp;gt;()
+
+lazy var repoObservable: Observable&amp;lt;Repo&amp;gt; = {
+  return self.repo.asObservable()
+}()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The controller itself can use the private &lt;code&gt;repo&lt;/code&gt; subject to emit events, and other classes can subscribe to the &lt;code&gt;repoObservable&lt;/code&gt; and react to events.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s firstly combine all text values and make a &lt;code&gt;Repo&lt;/code&gt; of them:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// current repo data
+let currentRepo = Observable.combineLatest(
+  id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&amp;gt; Repo? in
+
+  guard let id = id, let idInt = Int(id),
+    let name = name, name.characters.count &amp;gt; 1,
+    let lang = lang, lang.characters.count &amp;gt; 0 else {
+      return nil
+    }
+    return Repo(idInt, name, lang)
+  }
+  .shareReplay(1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We combine the sequence of values from the text fields &lt;code&gt;id&lt;/code&gt;, &lt;code&gt;name&lt;/code&gt;, and &lt;code&gt;language&lt;/code&gt; and after a simple validation routine we emit a &lt;code&gt;Repo&lt;/code&gt; object. The first subscription to &lt;code&gt;currentRepo&lt;/code&gt; will update the UI:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// toggle save button
+currentRepo
+  .map { $0 != nil }
+  .bindTo(saveButton.rx.isEnabled)
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If the user&amp;rsquo;s input produces a valid &lt;code&gt;Repo&lt;/code&gt; object, the save button is enabled so the user can add it to the list of existing repos. Next we&amp;rsquo;ll observe for taps on the Save bar item:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// emit repo when saved
+saveButton.rx.tap
+  .withLatestFrom(currentRepo)
+  .subscribe(onNext: {[weak self] repo in
+    if let repo = repo {
+      self?.repo.onNext(repo)
+      self?.repo.onCompleted()
+    }
+  })
+  .addDisposableTo(bag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Whenever the user taps the save button we grab the latest value of &lt;code&gt;currentRepo&lt;/code&gt; and in the subscribe block, we emit it from the &lt;code&gt;repo&lt;/code&gt; subjects. Any subscribers to &lt;code&gt;repoObservable&lt;/code&gt; will get the event and dispose afterwards.&lt;/p&gt;
+
+&lt;p&gt;And there you go - with few lines of code in both view controllers you move away from the delegate pattern, which could be useful in some cases but your code ends up defining and implementing tons of protocols and as always it&amp;rsquo;s very hard to argue about the sequence in which methods are executed.&lt;/p&gt;
+
+&lt;p&gt;Through the use of the &lt;code&gt;Observable&lt;/code&gt; class, you saw that the two view controllers can talk to each without the need of creating extra entities, protocols, etc.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-complete-example:cf33baac886ac7ae000310d0f0e5995d&#34;&gt;The complete example&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;PresentViewController.swift&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func bindUI() {
+  // display data
+  repos.asObservable()
+    .bindTo(tableView.rx.items) { (tableView, row, repo) in
+      let cell = tableView.dequeueReusableCell(withIdentifier: &amp;quot;Cell&amp;quot;)!
+      cell.textLabel!.text = repo.name
+      cell.detailTextLabel?.text = repo.language
+      return cell
+    }
+    .addDisposableTo(bag)
+
+  // present view controller, observe output
+  navigationItem.rightBarButtonItem!.rx.tap
+    .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
+    .flatMapFirst {[weak self] _ -&amp;gt; Observable&amp;lt;Repo&amp;gt; in
+      if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &amp;quot;NewRepoViewController&amp;quot;) as? NewRepoViewController {
+        self?.navigationController?.pushViewController(addVC, animated: true)
+        return addVC.repoObservable
+      }
+      return Observable.never()
+    }
+    .subscribe(onNext: {[weak self] repo in
+      self?.repos.value.append(repo)
+      _ = self?.navigationController?.popViewController(animated: true)
+    })
+    .addDisposableTo(bag)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;NewRepoViewController.swift&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func bindUI() {
+  // current repo data
+  let currentRepo = Observable.combineLatest(id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&amp;gt; Repo? in
+    guard let id = id, let idInt = Int(id),
+      let name = name, name.characters.count &amp;gt; 1,
+      let lang = lang, lang.characters.count &amp;gt; 0 else {
+        return nil
+    }
+    return Repo(idInt, name, lang)
+    }
+    .shareReplay(1)
+
+  // toggle save button
+  currentRepo
+    .map { $0 != nil }
+    .bindTo(saveButton.rx.isEnabled)
+    .addDisposableTo(bag)
+
+  // emit repo when saved
+  saveButton.rx.tap
+    .withLatestFrom(currentRepo)
+    .subscribe(onNext: {[weak self] repo in
+      if let repo = repo {
+        self?.repo.onNext(repo)
+        self?.repo.onCompleted()
+      }
+    })
+    .addDisposableTo(bag)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;discussion:cf33baac886ac7ae000310d0f0e5995d&#34;&gt;Discussion&lt;/h3&gt;
+
+&lt;p&gt;In real life you will probably never have the the whole presentation logic in one code chain like this. As said the idea above was to fit the code in a single slide and the audience to understand what&amp;rsquo;s happening without previous RxSwift knowledge.&lt;/p&gt;
+
+&lt;p&gt;But hey - it&amp;rsquo;s nice to know you can do that :) And once you know how the code works you can go about splitting the responsibilities of digging through the storyboard, presenting, and making use of the returned data into separate classes.&lt;/p&gt;
+
+&lt;p&gt;Hope that was an inspiration read! You can dig into more details below&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Links&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The complete demo app from my talk: &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The talk slides: &lt;a href=&#34;https://speakerdeck.com/icanzilb/rxswift-on-ios&#34;&gt;https://speakerdeck.com/icanzilb/rxswift-on-ios&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>(dotSwift) Search GitHub with RxSwift</title>

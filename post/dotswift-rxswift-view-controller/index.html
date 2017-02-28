@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    (dotSwift) Presenting View Controllers with RxSwift // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Presenting view controllers on iOS with RxSwift. Sample code from my talk at dotSwift conference.">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="(dotSwift) Presenting View Controllers with RxSwift" />
+<meta property="og:description" content="Presenting view controllers on iOS with RxSwift. Sample code from my talk at dotSwift conference." />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/dotswift-rxswift-view-controller/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i></a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i></a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">28/Feb &middot; (dotSwift) Presenting View Controllers with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">27/Jan &middot; (dotSwift) Search GitHub with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#presenting-a-view-controller-from-rxswift:cf33baac886ac7ae000310d0f0e5995d">Presenting a View Controller from RxSwift</a>
+<ul>
+<li><a href="#why-i-chose-this-example:cf33baac886ac7ae000310d0f0e5995d">Why I chose this example?</a></li>
+<li><a href="#the-sample-code:cf33baac886ac7ae000310d0f0e5995d">The sample code</a></li>
+<li><a href="#the-complete-example:cf33baac886ac7ae000310d0f0e5995d">The complete example</a></li>
+<li><a href="#discussion:cf33baac886ac7ae000310d0f0e5995d">Discussion</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">(dotSwift) Presenting View Controllers with RxSwift</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>28</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=%28dotSwift%29%20Presenting%20View%20Controllers%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2fdotswift-rxswift-view-controller%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.</p>
+
+<p>I already posted a write up on the GitHub API search example here: <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">http://rx-marin.com/post/dotswift-search-github-json-api/</a>. Let&rsquo;s continue with example number two.</p>
+
+<h2 id="presenting-a-view-controller-from-rxswift:cf33baac886ac7ae000310d0f0e5995d">Presenting a View Controller from RxSwift</h2>
+
+<p>RxSwift doesn&rsquo;t neccessarily force you into one architecture or another, it&rsquo;s really up to you to chose how are you going to structure your application. Same goes for navigation and how you move the user between your app&rsquo;s screens and different view controllers.</p>
+
+<h3 id="why-i-chose-this-example:cf33baac886ac7ae000310d0f0e5995d">Why I chose this example?</h3>
+
+<p>To make a point, namely that RxSwift plays very nicely with UIKit when neccessary, I chose to demo a simple code to present a view controller, get data back from that view controller, and navigate back to the presenting controller.</p>
+
+<p>It&rsquo;s a simple demo but demonstrates well one of the biggest benefits of using RxSwift - obliterating the need to deal with delegate to simply communicate between classes.</p>
+
+<h3 id="the-sample-code:cf33baac886ac7ae000310d0f0e5995d">The sample code</h3>
+
+<p>In this post I can go in a bit more detail about the complete code than it was reasonable in the talk at the conference. Still keep in mind this was written with the goal to fit in a single slide, so corners were cut big time :) And so let&rsquo;s get started.</p>
+
+<p>The example is ultimately about an app featuring two view controllers:</p>
+
+<ol>
+<li>A list of GitHub repos (stored in an array), displayed in a table view.</li>
+<li>A modal view controller, which allows the user to add a new repo to the list.</li>
+</ol>
+
+<p>Let&rsquo;s first have a look at the list view controller. The repos are stored in a variable (for the purpose to simplify the example):</p>
+
+<pre><code class="language-swift">private let repos = Variable&lt;[Repo]&gt;(initialRepos)
+</code></pre>
+
+<p>And the initial values are just a list of <code>Repo</code> objects:</p>
+
+<pre><code class="language-swift">private let initialRepos = [
+    Repo(1, &quot;EasyAnimation&quot;, &quot;Swift&quot;),
+    Repo(2, &quot;Unbox&quot;, &quot;Swift&quot;),
+    Repo(3, &quot;RxSwift&quot;, &quot;Swift&quot;)
+]
+</code></pre>
+
+<p><code>repos</code> are bound to the table view as usual via RxDataSources:</p>
+
+<pre><code class="language-swift">repos.asObservable()
+  .bindTo(tableView.rx.items) { (tableView, row, repo) in
+    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+    cell.textLabel!.text = repo.name
+    cell.detailTextLabel?.text = repo.language
+    return cell
+  }
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>Next, to present a view controller with RxSwift, we&rsquo;ll react to navigation item taps and, once pushed the view controller to the navigation stack, we&rsquo;ll subscribe an observable on the presented controller. That observable will emit a next event and complete once the user has finished working with it.</p>
+
+<p>We start with subscribing for taps:</p>
+
+<pre><code class="language-swift">navigationItem.rightBarButtonItem!.rx.tap
+  .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
+</code></pre>
+
+<p>Bu using <code>throttle</code> we&rsquo;ll ignore any unintentional double taps (and avoid presenting more than one copy of the view controller one over each other).</p>
+
+<p>Next we need to &ldquo;kind of wait&rdquo; until the observable of the view controller completes and get the data it emitted:</p>
+
+<pre><code class="language-swift">.flatMapFirst {[weak self] _ -&gt; Observable&lt;Repo&gt; in
+  if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &quot;NewRepoViewController&quot;) 
+  as? NewRepoViewController {
+    self?.navigationController?.pushViewController(addVC, animated: true)
+    return addVC.repoObservable
+  }
+  return Observable.never()
+}
+</code></pre>
+
+<p>The block we provide to <code>flatMap</code> fetches the view controller from a storyboard and pushes it onto the navigation stack. Once presented, we return the <code>repoObservable</code> public property of the presented view controller.</p>
+
+<p>That observable is going to give us back a <code>Repo</code> object in case the user has successfully created a new one. Once we have a <code>Repo</code> we can add it to the list and let the Rx binding from earlier update the table view.</p>
+
+<p>We&rsquo;ll subscribe the result and update the list:</p>
+
+<pre><code class="language-swift">.subscribe(onNext: {[weak self] repo in
+  self?.repos.value.append(repo)
+  _ = self?.navigationController?.popViewController(animated: true)
+})
+</code></pre>
+
+<p>Since we know the observable is going to emit exactly one event, we also pop the view controller from the navigation stack. And that&rsquo;s pretty much it! We present the controller, it gives us back data via a next event, and when it completes we discard it. Neat!</p>
+
+<p>Now just for kicks have a look also at the code of the presented controller. The new repo controller exposes the user data via an observable like so:</p>
+
+<pre><code class="language-swift">private let repo = PublishSubject&lt;Repo&gt;()
+
+lazy var repoObservable: Observable&lt;Repo&gt; = {
+  return self.repo.asObservable()
+}()
+</code></pre>
+
+<p>The controller itself can use the private <code>repo</code> subject to emit events, and other classes can subscribe to the <code>repoObservable</code> and react to events.</p>
+
+<p>Let&rsquo;s firstly combine all text values and make a <code>Repo</code> of them:</p>
+
+<pre><code class="language-swift">// current repo data
+let currentRepo = Observable.combineLatest(
+  id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? in
+
+  guard let id = id, let idInt = Int(id),
+    let name = name, name.characters.count &gt; 1,
+    let lang = lang, lang.characters.count &gt; 0 else {
+      return nil
+    }
+    return Repo(idInt, name, lang)
+  }
+  .shareReplay(1)
+</code></pre>
+
+<p>We combine the sequence of values from the text fields <code>id</code>, <code>name</code>, and <code>language</code> and after a simple validation routine we emit a <code>Repo</code> object. The first subscription to <code>currentRepo</code> will update the UI:</p>
+
+<pre><code class="language-swift">// toggle save button
+currentRepo
+  .map { $0 != nil }
+  .bindTo(saveButton.rx.isEnabled)
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>If the user&rsquo;s input produces a valid <code>Repo</code> object, the save button is enabled so the user can add it to the list of existing repos. Next we&rsquo;ll observe for taps on the Save bar item:</p>
+
+<pre><code class="language-swift">// emit repo when saved
+saveButton.rx.tap
+  .withLatestFrom(currentRepo)
+  .subscribe(onNext: {[weak self] repo in
+    if let repo = repo {
+      self?.repo.onNext(repo)
+      self?.repo.onCompleted()
+    }
+  })
+  .addDisposableTo(bag)
+</code></pre>
+
+<p>Whenever the user taps the save button we grab the latest value of <code>currentRepo</code> and in the subscribe block, we emit it from the <code>repo</code> subjects. Any subscribers to <code>repoObservable</code> will get the event and dispose afterwards.</p>
+
+<p>And there you go - with few lines of code in both view controllers you move away from the delegate pattern, which could be useful in some cases but your code ends up defining and implementing tons of protocols and as always it&rsquo;s very hard to argue about the sequence in which methods are executed.</p>
+
+<p>Through the use of the <code>Observable</code> class, you saw that the two view controllers can talk to each without the need of creating extra entities, protocols, etc.</p>
+
+<h3 id="the-complete-example:cf33baac886ac7ae000310d0f0e5995d">The complete example</h3>
+
+<p><strong>PresentViewController.swift</strong></p>
+
+<pre><code class="language-swift">func bindUI() {
+  // display data
+  repos.asObservable()
+    .bindTo(tableView.rx.items) { (tableView, row, repo) in
+      let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+      cell.textLabel!.text = repo.name
+      cell.detailTextLabel?.text = repo.language
+      return cell
+    }
+    .addDisposableTo(bag)
+
+  // present view controller, observe output
+  navigationItem.rightBarButtonItem!.rx.tap
+    .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
+    .flatMapFirst {[weak self] _ -&gt; Observable&lt;Repo&gt; in
+      if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &quot;NewRepoViewController&quot;) as? NewRepoViewController {
+        self?.navigationController?.pushViewController(addVC, animated: true)
+        return addVC.repoObservable
+      }
+      return Observable.never()
+    }
+    .subscribe(onNext: {[weak self] repo in
+      self?.repos.value.append(repo)
+      _ = self?.navigationController?.popViewController(animated: true)
+    })
+    .addDisposableTo(bag)
+}
+</code></pre>
+
+<p><strong>NewRepoViewController.swift</strong></p>
+
+<pre><code class="language-swift">func bindUI() {
+  // current repo data
+  let currentRepo = Observable.combineLatest(id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? in
+    guard let id = id, let idInt = Int(id),
+      let name = name, name.characters.count &gt; 1,
+      let lang = lang, lang.characters.count &gt; 0 else {
+        return nil
+    }
+    return Repo(idInt, name, lang)
+    }
+    .shareReplay(1)
+
+  // toggle save button
+  currentRepo
+    .map { $0 != nil }
+    .bindTo(saveButton.rx.isEnabled)
+    .addDisposableTo(bag)
+
+  // emit repo when saved
+  saveButton.rx.tap
+    .withLatestFrom(currentRepo)
+    .subscribe(onNext: {[weak self] repo in
+      if let repo = repo {
+        self?.repo.onNext(repo)
+        self?.repo.onCompleted()
+      }
+    })
+    .addDisposableTo(bag)
+}
+</code></pre>
+
+<h3 id="discussion:cf33baac886ac7ae000310d0f0e5995d">Discussion</h3>
+
+<p>In real life you will probably never have the the whole presentation logic in one code chain like this. As said the idea above was to fit the code in a single slide and the audience to understand what&rsquo;s happening without previous RxSwift knowledge.</p>
+
+<p>But hey - it&rsquo;s nice to know you can do that :) And once you know how the code works you can go about splitting the responsibilities of digging through the storyboard, presenting, and making use of the returned data into separate classes.</p>
+
+<p>Hope that was an inspiration read! You can dig into more details below&hellip;</p>
+
+<p><strong>Links</strong></p>
+
+<p>The complete demo app from my talk: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a></p>
+
+<p>The talk slides: <a href="https://speakerdeck.com/icanzilb/rxswift-on-ios">https://speakerdeck.com/icanzilb/rxswift-on-ios</a></p>
+
+	
+			
+
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=%28dotSwift%29%20Presenting%20View%20Controllers%20with%20RxSwift&url=http%3a%2f%2frx-marin.com%2fpost%2fdotswift-rxswift-view-controller%2f">
+Tweet</a></p>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                
+	                <a class="post-tag post-tag-uikit" href="http://rx-marin.com//tags/uikit">uikit</a>,
+	                
+	                <a class="post-tag post-tag-uiviewcontroller" href="http://rx-marin.com//tags/uiviewcontroller">uiviewcontroller</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/dotswift-search-github-json-api/">(dotSwift) Search GitHub with RxSwift</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
