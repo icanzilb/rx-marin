@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Settings on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/tags/settings/</link>
+    <link>http://rx-marin.local:8888/tags/settings/</link>
     <description>Recent content in Settings on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 18 Apr 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/settings/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/tags/settings/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>App state with Realm and RxSwift</title>
-      <link>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/</link>
       <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Intro&lt;/h2&gt;

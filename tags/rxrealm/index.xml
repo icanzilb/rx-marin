@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Rxrealm on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/tags/rxrealm/</link>
+    <link>http://rx-marin.local:8888/tags/rxrealm/</link>
     <description>Recent content in Rxrealm on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 24 Mar 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/rxrealm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/tags/rxrealm/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>(dotSwift) Unidirectional data flow with RxSwift and RxRealm</title>
-      <link>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</link>
+      <link>http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</link>
       <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</guid>
+      <guid>http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;
@@ -45,7 +45,7 @@
 
 &lt;p&gt;The completed project shows a table view, which updates any time new objects are added in the background. The table view displays a list of mocked repository activity items, like so:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-completed.png&#34; alt=&#34;completed unidirectional dataflow project&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/unidirectional-completed.png&#34; alt=&#34;completed unidirectional dataflow project&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;In the simple example included in the talk, all code is added in the view controller but of course in real-life this could be split across different classes, frameworks, etc.&lt;/p&gt;
 
@@ -118,7 +118,7 @@ let updates = realm
 
 &lt;p&gt;This lets RxRealmDataSources piece everything together and drive the UI:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-animation.gif&#34; alt=&#34;table animation&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/unidirectional-animation.gif&#34; alt=&#34;table animation&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;the-complete-example:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;The complete example&lt;/h3&gt;
 

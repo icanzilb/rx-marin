@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Replacewithdate on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/tags/replacewithdate/</link>
+    <link>http://rx-marin.local:8888/tags/replacewithdate/</link>
     <description>Recent content in Replacewithdate on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/replacewithdate/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/tags/replacewithdate/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 1</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/</link>
       <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:00ee3dba4704e83677ebf533fee4350e&#34;&gt;Intro&lt;/h2&gt;
@@ -120,7 +120,7 @@ count.replaceWithDate()
 
 &lt;p&gt;And here&amp;rsquo;s the result (wait few seconds to see the increments):&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latest-date.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/latest-date.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;negate-negate-the-value-of-the-element:00ee3dba4704e83677ebf533fee4350e&#34;&gt;negate(): Negate the value of the element&lt;/h2&gt;
 

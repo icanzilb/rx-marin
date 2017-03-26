@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Repeat on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/tags/repeat/</link>
+    <link>http://rx-marin.local:8888/tags/repeat/</link>
     <description>Recent content in Repeat on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 08 Jan 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/repeat/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/tags/repeat/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>A smarter Retry with RxSwiftExt</title>
-      <link>http://rx-marin.com/post/rxswift-retry-with-delay/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-retry-with-delay/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-retry-with-delay/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-retry-with-delay/</guid>
       <description>
 
 &lt;p&gt;Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.&lt;/p&gt;

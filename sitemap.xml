@@ -2,78 +2,78 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://rx-marin.com/</loc>
+    <loc>http://rx-marin.local:8888/</loc>
     <lastmod>2017-03-24T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</loc>
+    <loc>http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</loc>
     <lastmod>2017-03-24T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/dotswift-rxswift-view-controller/</loc>
+    <loc>http://rx-marin.local:8888/post/dotswift-rxswift-view-controller/</loc>
     <lastmod>2017-02-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/dotswift-search-github-json-api/</loc>
+    <loc>http://rx-marin.local:8888/post/dotswift-search-github-json-api/</loc>
     <lastmod>2017-01-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-retry-with-delay/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-retry-with-delay/</loc>
     <lastmod>2017-01-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests-part-2/</loc>
     <lastmod>2016-05-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/</loc>
     <lastmod>2016-05-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/</loc>
     <lastmod>2016-04-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-state-with-scan/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-state-with-scan/</loc>
     <lastmod>2016-04-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-bindings/</loc>
     <lastmod>2016-03-31T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part2/</loc>
     <lastmod>2016-03-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/</loc>
     <lastmod>2016-02-29T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</loc>
     <lastmod>2016-02-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</loc>
     <lastmod>2016-02-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</loc>
+    <loc>http://rx-marin.local:8888/post/rxswift-timer-sequence-manual-dispose-bag/</loc>
     <lastmod>2016-01-17T00:00:00+00:00</lastmod>
   </url>
   

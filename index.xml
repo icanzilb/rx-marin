@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/</link>
+    <link>http://rx-marin.local:8888/</link>
     <description>Recent content on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 24 Mar 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>(dotSwift) Unidirectional data flow with RxSwift and RxRealm</title>
-      <link>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</link>
+      <link>http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</link>
       <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</guid>
+      <guid>http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;
@@ -45,7 +45,7 @@
 
 &lt;p&gt;The completed project shows a table view, which updates any time new objects are added in the background. The table view displays a list of mocked repository activity items, like so:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-completed.png&#34; alt=&#34;completed unidirectional dataflow project&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/unidirectional-completed.png&#34; alt=&#34;completed unidirectional dataflow project&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;In the simple example included in the talk, all code is added in the view controller but of course in real-life this could be split across different classes, frameworks, etc.&lt;/p&gt;
 
@@ -118,7 +118,7 @@ let updates = realm
 
 &lt;p&gt;This lets RxRealmDataSources piece everything together and drive the UI:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-animation.gif&#34; alt=&#34;table animation&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/unidirectional-animation.gif&#34; alt=&#34;table animation&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;the-complete-example:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;The complete example&lt;/h3&gt;
 
@@ -160,10 +160,10 @@ Observable.changeset(from: updates)
     
     <item>
       <title>(dotSwift) Presenting View Controllers with RxSwift</title>
-      <link>http://rx-marin.com/post/dotswift-rxswift-view-controller/</link>
+      <link>http://rx-marin.local:8888/post/dotswift-rxswift-view-controller/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/dotswift-rxswift-view-controller/</guid>
+      <guid>http://rx-marin.local:8888/post/dotswift-rxswift-view-controller/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;
@@ -393,10 +393,10 @@ saveButton.rx.tap
     
     <item>
       <title>(dotSwift) Search GitHub with RxSwift</title>
-      <link>http://rx-marin.com/post/dotswift-search-github-json-api/</link>
+      <link>http://rx-marin.local:8888/post/dotswift-search-github-json-api/</link>
       <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/dotswift-search-github-json-api/</guid>
+      <guid>http://rx-marin.local:8888/post/dotswift-search-github-json-api/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples. Let&amp;rsquo;s start with number one.&lt;/p&gt;
@@ -407,7 +407,7 @@ saveButton.rx.tap
 
 &lt;p&gt;The completed application looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/github-search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/github-search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;why-i-chose-this-example:12a67f24277565fb21fc7919261596a9&#34;&gt;Why I chose this example?&lt;/h3&gt;
 
@@ -540,10 +540,10 @@ saveButton.rx.tap
     
     <item>
       <title>A smarter Retry with RxSwiftExt</title>
-      <link>http://rx-marin.com/post/rxswift-retry-with-delay/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-retry-with-delay/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-retry-with-delay/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-retry-with-delay/</guid>
       <description>
 
 &lt;p&gt;Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.&lt;/p&gt;
@@ -633,10 +633,10 @@ responseObservable.retry(.customTimerDelayed(maxCount: 10,
     
     <item>
       <title>Testing your RxSwift code, part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests-part-2/</link>
       <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests-part-2/</guid>
       <description>
 
 &lt;p&gt;In &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxtests-unit-tests/&#34;&gt;part 1&lt;/a&gt; I looked into writing very basic tests with RxSwift and life was good. But then I wanted to do more and moved on to writing asynchronous tests&amp;hellip;&lt;/p&gt;
@@ -809,10 +809,10 @@ delay(0.2) {
     
     <item>
       <title>Testing your RxSwift code, part 1</title>
-      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/</link>
       <pubDate>Tue, 03 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/</guid>
       <description>
 
 &lt;p&gt;I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&amp;rsquo;s why I&amp;rsquo;d like to show few of the tests I got to write.&lt;/p&gt;
@@ -972,10 +972,10 @@ class UnwrapTests: XCTestCase {
     
     <item>
       <title>App state with Realm and RxSwift</title>
-      <link>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/</link>
       <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Intro&lt;/h2&gt;
@@ -1106,10 +1106,10 @@ class AppState: Object {
     
     <item>
       <title>Implementing state with scan in RxSwift</title>
-      <link>http://rx-marin.com/post/rxswift-state-with-scan/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-state-with-scan/</link>
       <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-state-with-scan/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-state-with-scan/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:af2be6c694d253c59ac4efd5a73d0daf&#34;&gt;Intro&lt;/h2&gt;
@@ -1308,10 +1308,10 @@ pts: 1350
     
     <item>
       <title>Custom bindings with RxSwift</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-bindings/</link>
       <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-bindings/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:d4dcb38b814640de6df8a9df2675e24b&#34;&gt;Intro&lt;/h2&gt;
@@ -1396,15 +1396,15 @@ isEnabled.bindTo(messageView.rx_visible)
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part2/</link>
       <pubDate>Mon, 07 Mar 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part2/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:46ffa07f8102997fe7674832bad6bc33&#34;&gt;Intro&lt;/h2&gt;
 
-&lt;p&gt;I got some great feedback on last week&amp;rsquo;s post on convenience operators &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/&#34;&gt;part 1&lt;/a&gt; so I&amp;rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.&lt;/p&gt;
+&lt;p&gt;I got some great feedback on last week&amp;rsquo;s post on convenience operators &lt;a href=&#34;http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/&#34;&gt;part 1&lt;/a&gt; so I&amp;rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.&lt;/p&gt;
 
 &lt;p&gt;Without further ado let&amp;rsquo;s dive in code&amp;hellip;&lt;/p&gt;
 
@@ -1440,7 +1440,7 @@ isEnabled.bindTo(messageView.rx_visible)
 
 &lt;p&gt;I was looking over my current project&amp;rsquo;s code and trying to identify repeating patterns I can easily &lt;em&gt;outsource&lt;/em&gt; to a convenience operator.&lt;/p&gt;
 
-&lt;p&gt;I noticed I have few &lt;code&gt;Bool&lt;/code&gt; observables that I am sometimes interested in only if they were emitting &lt;code&gt;true&lt;/code&gt; value. For example if we take the code from my &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/&#34;&gt;lap timer post&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;I noticed I have few &lt;code&gt;Bool&lt;/code&gt; observables that I am sometimes interested in only if they were emitting &lt;code&gt;true&lt;/code&gt; value. For example if we take the code from my &lt;a href=&#34;http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/&#34;&gt;lap timer post&lt;/a&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
   .toObservable()
@@ -1513,7 +1513,7 @@ isEnabled.bindTo(messageView.rx_visible)
 
 &lt;p&gt;Boy, was I &lt;strong&gt;totally&lt;/strong&gt; and &lt;strong&gt;completely&lt;/strong&gt; wrong&amp;hellip;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/fry-wrong.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/fry-wrong.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;My first realization was that &lt;code&gt;Optional&lt;/code&gt; is &lt;strong&gt;not&lt;/strong&gt; a protocol. Thus I couldn&amp;rsquo;t do any protocol black magic with it. Ugh!&lt;/p&gt;
 
@@ -1590,7 +1590,7 @@ func isEmpty() -&amp;gt; Bool {
 
 &lt;p&gt;So I had to take the hard way, I looked again through everything I can find in an &lt;code&gt;Optional&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/optional-docs.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/optional-docs.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;It&amp;rsquo;s not much. Not much &amp;hellip;&lt;/p&gt;
 
@@ -1680,7 +1680,7 @@ extension Observable where Element : Optionable {
 &lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;someOptionalSequence.unwrap()
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unwrap-doge.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/unwrap-doge.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;conclusion:46ffa07f8102997fe7674832bad6bc33&#34;&gt;Conclusion&lt;/h2&gt;
 
@@ -1694,10 +1694,10 @@ extension Observable where Element : Optionable {
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 1</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/</link>
       <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-custom-convenience-operators-part1/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:00ee3dba4704e83677ebf533fee4350e&#34;&gt;Intro&lt;/h2&gt;
@@ -1803,7 +1803,7 @@ count.replaceWithDate()
 
 &lt;p&gt;And here&amp;rsquo;s the result (wait few seconds to see the increments):&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latest-date.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/latest-date.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;negate-negate-the-value-of-the-element:00ee3dba4704e83677ebf533fee4350e&#34;&gt;negate(): Negate the value of the element&lt;/h2&gt;
 
@@ -1855,10 +1855,10 @@ active.negate().bindTo(btnStart.rx_hidden).addDisposableTo(bag)
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa: Part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
       <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
       <description>&lt;p&gt;In my post from last week I worked on creating a split lapse timer app (&lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt;). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.&lt;/p&gt;
 
 &lt;p&gt;Well this week I am implementing exactly this functionality.&lt;/p&gt;
@@ -1867,9 +1867,9 @@ active.negate().bindTo(btnStart.rx_hidden).addDisposableTo(bag)
 
 &lt;p&gt;If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&amp;rsquo;ve added a couple of buttons in the user interface:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
 
@@ -1916,7 +1916,7 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;The app started with the laps button hidden and only the play button enabled like so:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Further you could click play just once because it instantly became disabled. How cool :]&lt;/p&gt;
 
@@ -1974,9 +1974,9 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;And that&amp;rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single &lt;code&gt;if&lt;/code&gt;!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
 </description>
@@ -1984,15 +1984,15 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
       <description>
 
 &lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;At first I thought - &amp;ldquo;Hey, that second sequence is getting totally ignored!&amp;rdquo;. But after I read the description I figured it out:&lt;/p&gt;
 
@@ -2006,11 +2006,11 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;Here&amp;rsquo;s how the marble diagram looks like for the app setup:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;And this is how the app looks like when finished:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
 
@@ -2085,7 +2085,7 @@ timer.map(stringFromTimeInterval)
 
 &lt;p&gt;At this point the timer label already displayed the elapsed time:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;3-grab-the-split-time-when-the-user-taps-the-split-lap-button:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;3 Grab the split time when the user taps the &amp;ldquo;Split Lap&amp;rdquo; button&lt;/h3&gt;
 
@@ -2126,7 +2126,7 @@ lapsSequence.bindTo(tableView.rx_itemsWithCellIdentifier(&amp;quot;Cell&amp;quot
 
 &lt;p&gt;And my app was already working!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Each time I tap the &amp;ldquo;Split Lap&amp;rdquo; button I get a new split time added in the table view. Sweet!&lt;/p&gt;
 
@@ -2179,18 +2179,18 @@ lapsSequence.map({ laps -&amp;gt; String in
 
 &lt;p&gt;And that&amp;rsquo;s the complete working app!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Manually disposing a bag and creating a timer</title>
-      <link>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-timer-sequence-manual-dispose-bag/</link>
       <pubDate>Sun, 17 Jan 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-timer-sequence-manual-dispose-bag/</guid>
       <description>&lt;p&gt;I was reading through the &lt;a href=&#34;https://github.com/ReactiveX/RxSwift/tree/master/Documentation&#34;&gt;RxSwift docs&lt;/a&gt; and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&amp;rsquo;s not a bad idea to share it online.&lt;/p&gt;
 
 &lt;p&gt;So &lt;code&gt;DisposeBag&lt;/code&gt; kind of &lt;code&gt;retains&lt;/code&gt; all your observables that&amp;rsquo;s why you add them to a bag all the time when you create them. You probably never get to dispose them manually since the moment the bag gets disposed it also disposes all your observables (magic!).&lt;/p&gt;

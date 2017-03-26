@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tests on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.com/tags/tests/</link>
+    <link>http://rx-marin.local:8888/tags/tests/</link>
     <description>Recent content in Tests on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 May 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/tests/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.local:8888/tags/tests/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Testing your RxSwift code, part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests-part-2/</link>
       <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests-part-2/</guid>
       <description>
 
 &lt;p&gt;In &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxtests-unit-tests/&#34;&gt;part 1&lt;/a&gt; I looked into writing very basic tests with RxSwift and life was good. But then I wanted to do more and moved on to writing asynchronous tests&amp;hellip;&lt;/p&gt;
@@ -187,10 +187,10 @@ delay(0.2) {
     
     <item>
       <title>Testing your RxSwift code, part 1</title>
-      <link>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</link>
+      <link>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/</link>
       <pubDate>Tue, 03 May 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxtests-unit-tests/</guid>
+      <guid>http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/</guid>
       <description>
 
 &lt;p&gt;I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&amp;rsquo;s why I&amp;rsquo;d like to show few of the tests I got to write.&lt;/p&gt;
