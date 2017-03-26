@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    App state with Realm and RxSwift // rx_marin&lt;blog&gt;
+    RxSwift book - available now! // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="Easily create a reactive app settings data model to use across your app">
+<meta name="description" content="Introducing a brand new book about RxSwift">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
 <meta name="generator" content="Hugo 0.15" />
 
-  <meta property="og:title" content="App state with Realm and RxSwift" />
-<meta property="og:description" content="Easily create a reactive app settings data model to use across your app" />
+  <meta property="og:title" content="RxSwift book - available now!" />
+<meta property="og:description" content="Introducing a brand new book about RxSwift" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/" />
+<meta property="og:url" content="http://rx-marin.local:8888/post/rxswift-book-available-now/" />
 
 
   
@@ -186,14 +186,22 @@
 <ul>
 <li>
 <ul>
-<li><a href="#intro:9a83a773dd09ee7268ed7c858c5ba34a">Intro</a></li>
-<li><a href="#the-data-model-class:9a83a773dd09ee7268ed7c858c5ba34a">The data model class</a></li>
-<li><a href="#app-state-subject-in-app-controller:9a83a773dd09ee7268ed7c858c5ba34a">App state subject in app controller</a></li>
-<li><a href="#provide-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a">Provide app state updates</a></li>
-<li><a href="#observe-for-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a">Observe for app state updates</a></li>
-<li><a href="#updating-the-app-state:9a83a773dd09ee7268ed7c858c5ba34a">Updating the app state</a></li>
-<li><a href="#observing-for-buttons-taps-and-mutating-the-state:9a83a773dd09ee7268ed7c858c5ba34a">Observing for buttons taps and mutating the state</a></li>
-<li><a href="#conclusion:9a83a773dd09ee7268ed7c858c5ba34a">Conclusion</a></li>
+<li><a href="#how-it-came-to-be:a0d4785814e3d20a5250358d39666ba2">How it came to be?</a></li>
+<li><a href="#the-rxswift-book:a0d4785814e3d20a5250358d39666ba2">The RxSwift book</a>
+<ul>
+<li><a href="#the-book-concept:a0d4785814e3d20a5250358d39666ba2">The book concept</a></li>
+<li><a href="#table-of-contents:a0d4785814e3d20a5250358d39666ba2">Table of contents</a>
+<ul>
+<li><a href="#section-i-getting-started-with-rxswift:a0d4785814e3d20a5250358d39666ba2">Section I: Getting Started with RxSwift</a></li>
+<li><a href="#section-ii-operators-and-best-practices:a0d4785814e3d20a5250358d39666ba2">Section II: Operators and Best Practices</a></li>
+<li><a href="#section-iii-ios-apps-with-rxcocoa:a0d4785814e3d20a5250358d39666ba2">Section III: iOS Apps with RxCocoa</a></li>
+<li><a href="#section-iv-intermediate-rxswift-rxcocoa:a0d4785814e3d20a5250358d39666ba2">Section IV: Intermediate RxSwift/RxCocoa</a></li>
+<li><a href="#section-v-rxswift-community-cookbook:a0d4785814e3d20a5250358d39666ba2">Section V: RxSwift Community Cookbook</a></li>
+<li><a href="#section-vi-putting-it-all-together:a0d4785814e3d20a5250358d39666ba2">Section VI: Putting it All Together</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#what-s-included:a0d4785814e3d20a5250358d39666ba2">What&rsquo;s included?</a></li>
+<li><a href="#where-to-buy:a0d4785814e3d20a5250358d39666ba2">Where to buy?</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -208,14 +216,14 @@
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="http://rx-marin.local:8888/post/rxswift-realm-reactive-app-settings/">App state with Realm and RxSwift</a>
+              <a href="http://rx-marin.local:8888/post/rxswift-book-available-now/">RxSwift book - available now!</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -243,135 +251,93 @@
 			
 
 <p><a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=App%20state%20with%20Realm%20and%20RxSwift&url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-realm-reactive-app-settings%2f"
+  href="https://twitter.com/intent/tweet?text=RxSwift%20book%20-%20available%20now%21&url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-book-available-now%2f"
   data-size="medium">
 Tweet</a><p>
 
             
 
-<h2 id="intro:9a83a773dd09ee7268ed7c858c5ba34a">Intro</h2>
+<p>After a long time working on this project, I and my friends and colleagues <a href="https://twitter.com/fpillet">Florent Pillet</a>, <a href="https://twitter.com/bontoJR">Junior Bontognali</a>, <a href="https://twitter.com/scotteg">Scott Gardner</a>, <a href="https://twitter.com/ashfurrow">Ash Furrow</a>, <a href="https://twitter.com/crispytwit">Chris Belanger</a>, and <a href="https://twitter.com/rwenderlich">Ray</a> and <a href="https://twitter.com/vwenderlich">Vicki</a> Wenderlich are happy to announce that our new book about development with RxSwift is <a href="raywenderlich.com/store">available now</a>!</p>
 
-<p>This post isn&rsquo;t that much about operators but how to leverage the awesome technology that Realm is.</p>
+<h2 id="how-it-came-to-be:a0d4785814e3d20a5250358d39666ba2">How it came to be?</h2>
 
-<p>Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.</p>
+<p>When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&rsquo;t a single structured resource where people can learn systematically.</p>
 
-<p>So I sat down and wrote me a proper reactive app settings class to use around the app in some 10 minutes or so.</p>
+<p>Almost instantly I started dreaming about creating an RxSwift book that will make beginning development with Rx on iOS easier and more pleasant.</p>
 
-<h2 id="the-data-model-class:9a83a773dd09ee7268ed7c858c5ba34a">The data model class</h2>
+<p>I met with Junior, Scott, Florent, and Ash in different combinations over a number of conferences and it became clear all of us were working on some education materials in one form or another and the only sensible thing to do is to comibine our efforts!</p>
 
-<p>Since the app uses Realm I created a new <code>Object</code> sub-class for my app settings - this way my settings would always persist between app launches and can be observed on any thread. Here&rsquo;s the AppState class I ended up with:</p>
+<p>At the time Ray Wenderlich has already noticed that RxSwift and Rx are generating a lot of buzz and came with the idea of a book that will take the readers from complete beginner to a professinonal.</p>
 
-<pre><code class="language-swift">import Foundation
-import RealmSwift
+<p>And after some time of very hard work on this, I&rsquo;m proud to announce &hellip; (drumroll) &hellip;</p>
 
-class AppState: Object {
-    
-    dynamic var scheduleOnlyFavorites = false
-    dynamic var speakersOnlyFavorites = false
-    
-}
-</code></pre>
+<h2 id="the-rxswift-book:a0d4785814e3d20a5250358d39666ba2">The RxSwift book</h2>
 
-<p>For this version of the app I just want to persist whether the user has favorites-only toggled in the schedule screen and the speakers screen (it&rsquo;s an event app).</p>
+<p><img src="http://rx-marin.local:8888/images/RxSwift-cover.png" alt="https://raywenderlich.com/store?source=underplot" /></p>
 
-<p>The default values for both properties are <code>false</code>. When the app starts it checks whether there&rsquo;s an <code>AppState</code> object already stored in Realm and if not - creates one.</p>
+<h3 id="the-book-concept:a0d4785814e3d20a5250358d39666ba2">The book concept</h3>
 
-<h2 id="app-state-subject-in-app-controller:9a83a773dd09ee7268ed7c858c5ba34a">App state subject in app controller</h2>
+<p>The big idea behind this book is to start from the basics and explain how the foundational APIs work and can be used, therefore eliminating any &ldquo;<em>magic</em>&rdquo; behind using RxSwift.</p>
 
-<p>I have an app controller class that provides few generic services so I thought it&rsquo;s a good idea to add a <code>PublishSubject</code> to it that different view controllers (and other classes) can observe.</p>
+<p>We tackle introducing the RxSwift concepts by alterating between theory chapters and practice chapters:</p>
 
-<p>I added an <code>appState</code> subject and a property to retain the Realm updates subscription:</p>
+<ul>
+<li><p><strong>theory chapters</strong> introduce new APIs and operators and guide the readers through trying out code in an Xcode playground. This way the reader has the context to play with simple code and understand how things really work.</p></li>
 
-<pre><code class="language-swift">class AppController {
-    
-    private var stateNotification: NotificationToken?
-    let appState = PublishSubject&lt;AppState&gt;()
-    
-}
-</code></pre>
+<li><p><strong>practice chapters</strong> feature a starter project and guide the reader through adding RxSwift code in key places to Rx-ify the project, and excercise the newly learned skills in the relevant theory chapter.</p></li>
+</ul>
 
-<h2 id="provide-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a">Provide app state updates</h2>
+<p>Once we cover the basics like observables, subjects, and operators, the book moves onto more advanced topics like error handling, testing, RxCocoa, and creating custom reactive extensions.</p>
 
-<p>Wiring up the app settings subject was very easy thanks to the  <code>addNotificationBlock</code> method on Realm&rsquo;s <code>AnyRealmCollection</code>:</p>
+<p>The last section of the book walks the readers through two complete apps discussing app architecture (there is a separate chapter covering MVVM), app services, project navigation, and more.</p>
 
-<pre><code class="language-swift">init() {
-    stateNotification = RealmProvider.appRealm.objects(AppState).addNotificationBlock {[weak self]results, error in
-        if let state = results?.first, let `self` = self {
-            self.appState.onNext(state)
-        }
-    }
-}
-</code></pre>
+<h3 id="table-of-contents:a0d4785814e3d20a5250358d39666ba2">Table of contents</h3>
 
-<blockquote>
-<p><em><code>RealmProvider.appRealm</code> returns a Realm on the current thread that points to the particle realm file I want to use for the app state.</em></p>
-</blockquote>
+<p>The book is divided into six sections. Here’s a brief overview:</p>
 
-<p>What this code does is to fetch all objects of class <code>AppState</code> stored in Realm and any time any time those are updated call the closure provided to <code>addNotificationBlock</code>. The closure gets a reference to the results as its first parameter so it&rsquo;s pretty easy to just fetch the first result (the only <code>AppState</code> object in the Realm actually) and emit it as a <code>.Next</code> event from the <code>appState</code> subject of the app controller.</p>
+<h4 id="section-i-getting-started-with-rxswift:a0d4785814e3d20a5250358d39666ba2">Section I: Getting Started with RxSwift</h4>
 
-<p>That&rsquo;s really all there is to binding a <code>PublishSubject</code> to any Realm result. As long as anything retains <code>stateNotification</code> you will receive updates from Realm.</p>
+<p>The first section of the book covers RxSwift basics. Don’t skip this section, as you will be required to have a good understanding of how and why things work in the following sections.</p>
 
-<h2 id="observe-for-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a">Observe for app state updates</h2>
+<h4 id="section-ii-operators-and-best-practices:a0d4785814e3d20a5250358d39666ba2">Section II: Operators and Best Practices</h4>
 
-<p>Next - I wanted to observe for changes in the two settings in my persisted app settings object.</p>
+<p>In this section, once you&rsquo;ve mastered the basics, you will move on to building more complex Rx code by using operators. Operators allow you to chain and compose little pieces of functionality to build up complex logic.</p>
 
-<p>So in my view model, that shows the event schedule, I added:</p>
+<h4 id="section-iii-ios-apps-with-rxcocoa:a0d4785814e3d20a5250358d39666ba2">Section III: iOS Apps with RxCocoa</h4>
 
-<pre><code class="language-swift">UIApplication.controller.appState
-.map {state in
-    return state.scheduleOnlyFavorites
-}
-.bindTo(onlyFavorites)
-.addDisposableTo(bag)
-</code></pre>
+<p>Once you&rsquo;ve mastered RxSwift&rsquo;s basics and know how to use operators, you will move on to iOS specific APIs, which will allow you to use and integrate your RxSwift code with the existing iOS classes and UI controls.</p>
 
-<p>I observe <code>appState</code> and map the emitted value, which is of type <code>AppState</code>, to the value of <code>scheduleOnlyFavorites</code>. The result is a <code>Bool</code> value, which I just bind to another subject that I have called <code>onlyFavorites</code>.</p>
+<h4 id="section-iv-intermediate-rxswift-rxcocoa:a0d4785814e3d20a5250358d39666ba2">Section IV: Intermediate RxSwift/RxCocoa</h4>
 
-<p>Cool! Now any class could update my app settings and that&rsquo;ll reflect the bindings I have in this particular view model.</p>
+<p>In this section, you will look into more topics like building an error handling strategy for your app, handling your networking needs the reactive way, writing Rx tests, and more.</p>
 
-<h2 id="updating-the-app-state:9a83a773dd09ee7268ed7c858c5ba34a">Updating the app state</h2>
+<h4 id="section-v-rxswift-community-cookbook:a0d4785814e3d20a5250358d39666ba2">Section V: RxSwift Community Cookbook</h4>
 
-<p>The last piece of the puzzle was the code to run when the user toggles the favorites-only button. I went back to my app controller class and added a new method that would update my app state:</p>
+<p>Many of the available RxSwift based libraries are created and maintained by the community – by people just like you. In this section, we&rsquo;ll look into a few of these projects and how you can use them in your own apps.</p>
 
-<pre><code class="language-swift">func updateState(updates: (inout AppState)-&gt;Void) {
-    try! RealmProvider.appRealm.write {
-        var currentState = RealmProvider.appRealm.objects(AppState).first!
-        updates(&amp;currentState)
-    }
-}
-</code></pre>
+<h4 id="section-vi-putting-it-all-together:a0d4785814e3d20a5250358d39666ba2">Section VI: Putting it All Together</h4>
 
-<p><code>updateState</code> takes a closure inside which you can mutate the app state. This pattern let me create a Realm on the current thread, fetch the current app state and inject it to the user-defined updates closure.</p>
+<p>This part of the book deals with app architecture and strategies for building production-quality, full-blown iOS applications. You will learn how to structure your project and explore a couple of different approaches to designing your data streams and project navigation.</p>
 
-<p>I wrapped the whole thing in a <code>Realm.write</code> call so that it is actually allowed to mutate the state object from inside the closure.</p>
+<h2 id="what-s-included:a0d4785814e3d20a5250358d39666ba2">What&rsquo;s included?</h2>
 
-<h2 id="observing-for-buttons-taps-and-mutating-the-state:9a83a773dd09ee7268ed7c858c5ba34a">Observing for buttons taps and mutating the state</h2>
+<p>Like <em>any</em> raywenderlich.com book you can purchase either a <strong>PDF</strong> or a <strong>print</strong> version. Both come with full project source code, split in:</p>
 
-<p>It was finally time to wire everything together. In the view controller taking care of my navigation bar where the favorites button lives I added:</p>
+<ul>
+<li>starter projects - your starting point for each chapter.</li>
+<li>final projects - the completed chapter projects as you have them at the end of each chapter.</li>
+<li>challenge projects - the final + some extra excercises you are supposed to complete on your own.</li>
+</ul>
 
-<pre><code class="language-swift">btnFavorites.rx_tap
-    .subscribeNext {[weak self]_ in
-        guard let `self` = self else {return}
-        UIApplication.controller.updateState {state in
-            state.scheduleOnlyFavorites = self.btnFavorites.selected
-        }
-    }
-    .addDisposableTo(bag)
-</code></pre>
+<p>Like any other digital raywenderlich.com book - you get <strong>ANY</strong> further editions of the book <strong>for free</strong>. Thanks for supporting us!</p>
 
-<p>When the user taps the favorites button I call <code>updateState</code> and set the value of <code>scheduleOnlyFavorites</code> to the <code>selected</code> property of my button. <code>selected</code> toggles between <code>true</code> and <code>false</code> so that changes the app state property accordingly.</p>
+<p>Finally, of course you can use the code in any of your projects!</p>
 
-<p>As soon as my <code>updateState</code> closure executes, app controller gets a notification from Realm that one of the stored <code>AppState</code> objects was modified and that emits a new value from the <code>appState</code> subject.</p>
+<p>Thanks again for considering our book and spreading the word about it - we worked very hard on putting this together and it&rsquo;s a product of love, which we hope will be helpful to many who start developing with RxSwift.</p>
 
-<p>And finally since my view models throughout the app observe that subject they update their bindings and UI throughout the app gets updated accordingly.</p>
+<h2 id="where-to-buy:a0d4785814e3d20a5250358d39666ba2">Where to buy?</h2>
 
-<h2 id="conclusion:9a83a773dd09ee7268ed7c858c5ba34a">Conclusion</h2>
-
-<p>It took me very little time to add a persisted reactive app state to the project. Using Realm for the task made it very easy to have the app state reactive and accessible across classes and threads.</p>
-
-<p>The code in my app controller is 10-15 lines and I have another 5 lines in the data model class. How cool is that?</p>
-
-<p>I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at <a href="https://twitter.com/icanzilb">icanzilb</a></p>
+<p>The book is available at <a href="raywenderlich.com/store">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!</p>
 
 	
 			
@@ -382,7 +348,7 @@ class AppState: Object {
 Follow @icanzilb</a></p>
 
 <p>Share this post: <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=App%20state%20with%20Realm%20and%20RxSwift&url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-realm-reactive-app-settings%2f">
+  href="https://twitter.com/intent/tweet?text=RxSwift%20book%20-%20available%20now%21&url=http%3a%2f%2frx-marin.local%3a8888%2fpost%2frxswift-book-available-now%2f">
 Tweet</a></p>
 </div>
 
@@ -398,9 +364,13 @@ Tweet</a></p>
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-realm" href="http://rx-marin.local:8888//tags/realm">realm</a>,
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.local:8888//tags/rxswift">rxswift</a>,
 	                
-	                <a class="post-tag post-tag-settings" href="http://rx-marin.local:8888//tags/settings">settings</a>,
+	                <a class="post-tag post-tag-rxbook" href="http://rx-marin.local:8888//tags/rxbook">rxbook</a>,
+	                
+	                <a class="post-tag post-tag-book" href="http://rx-marin.local:8888//tags/book">book</a>,
+	                
+	                <a class="post-tag post-tag-authors" href="http://rx-marin.local:8888//tags/authors">authors</a>,
 	                
 				</div>
 			
@@ -409,16 +379,11 @@ Tweet</a></p>
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.local:8888/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part 1</a>
-		            </div>
-		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://rx-marin.local:8888/post/rxswift-state-with-scan/">Implementing state with scan in RxSwift</a>
+			            <a class="paging-link" href="http://rx-marin.local:8888/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">(dotSwift) Unidirectional data flow with RxSwift and RxRealm</a>
 		            </div>
 		            
 	            </div>
