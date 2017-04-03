@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Uiviewcontroller on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.local:8888/tags/uiviewcontroller/</link>
+    <link>http://rx-marin.com/tags/uiviewcontroller/</link>
     <description>Recent content in Uiviewcontroller on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 28 Feb 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.local:8888/tags/uiviewcontroller/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.com/tags/uiviewcontroller/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>(dotSwift) Presenting View Controllers with RxSwift</title>
-      <link>http://rx-marin.local:8888/post/dotswift-rxswift-view-controller/</link>
+      <link>http://rx-marin.com/post/dotswift-rxswift-view-controller/</link>
       <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/dotswift-rxswift-view-controller/</guid>
+      <guid>http://rx-marin.com/post/dotswift-rxswift-view-controller/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;

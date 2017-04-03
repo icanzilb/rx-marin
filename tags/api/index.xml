@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Api on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.local:8888/tags/api/</link>
+    <link>http://rx-marin.com/tags/api/</link>
     <description>Recent content in Api on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 27 Jan 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.local:8888/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.com/tags/api/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>(dotSwift) Search GitHub with RxSwift</title>
-      <link>http://rx-marin.local:8888/post/dotswift-search-github-json-api/</link>
+      <link>http://rx-marin.com/post/dotswift-search-github-json-api/</link>
       <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/dotswift-search-github-json-api/</guid>
+      <guid>http://rx-marin.com/post/dotswift-search-github-json-api/</guid>
       <description>
 
 &lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&amp;rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples. Let&amp;rsquo;s start with number one.&lt;/p&gt;
@@ -25,7 +25,7 @@
 
 &lt;p&gt;The completed application looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/github-search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/github-search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;why-i-chose-this-example:12a67f24277565fb21fc7919261596a9&#34;&gt;Why I chose this example?&lt;/h3&gt;
 

@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>State on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.local:8888/tags/state/</link>
+    <link>http://rx-marin.com/tags/state/</link>
     <description>Recent content in State on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 04 Apr 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.local:8888/tags/state/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.com/tags/state/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Implementing state with scan in RxSwift</title>
-      <link>http://rx-marin.local:8888/post/rxswift-state-with-scan/</link>
+      <link>http://rx-marin.com/post/rxswift-state-with-scan/</link>
       <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/rxswift-state-with-scan/</guid>
+      <guid>http://rx-marin.com/post/rxswift-state-with-scan/</guid>
       <description>
 
 &lt;h2 id=&#34;intro:af2be6c694d253c59ac4efd5a73d0daf&#34;&gt;Intro&lt;/h2&gt;

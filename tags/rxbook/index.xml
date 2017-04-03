@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Rxbook on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.local:8888/tags/rxbook/</link>
+    <link>http://rx-marin.com/tags/rxbook/</link>
     <description>Recent content in Rxbook on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 03 Apr 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.local:8888/tags/rxbook/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.com/tags/rxbook/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>RxSwift book - available now!</title>
-      <link>http://rx-marin.local:8888/post/rxswift-book-available-now/</link>
+      <link>http://rx-marin.com/post/rxswift-book-available-now/</link>
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/rxswift-book-available-now/</guid>
+      <guid>http://rx-marin.com/post/rxswift-book-available-now/</guid>
       <description>
 
 &lt;p&gt;After a long time working on this project, I and my friends and colleagues &lt;a href=&#34;https://twitter.com/fpillet&#34;&gt;Florent Pillet&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/bontoJR&#34;&gt;Junior Bontognali&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/scotteg&#34;&gt;Scott Gardner&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/ashfurrow&#34;&gt;Ash Furrow&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/crispytwit&#34;&gt;Chris Belanger&lt;/a&gt;, and &lt;a href=&#34;https://twitter.com/rwenderlich&#34;&gt;Ray&lt;/a&gt; and &lt;a href=&#34;https://twitter.com/vwenderlich&#34;&gt;Vicki&lt;/a&gt; Wenderlich are happy to announce that our new book about development with RxSwift is &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;available now&lt;/a&gt;!&lt;/p&gt;
@@ -33,7 +33,7 @@
 
 &lt;h2 id=&#34;the-rxswift-book:a0d4785814e3d20a5250358d39666ba2&#34;&gt;The RxSwift book&lt;/h2&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/RxSwift-cover.png&#34; alt=&#34;Rxbook cover&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;&lt;img src=&#34;http://rx-marin.com/images/RxSwift-cover.png&#34; alt=&#34;Rxbook cover&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;the-book-concept:a0d4785814e3d20a5250358d39666ba2&#34;&gt;The book concept&lt;/h3&gt;
 
@@ -83,7 +83,7 @@
 
 &lt;p&gt;You will get to experiment in Playgrounds but also build a number of projects throughout the book:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/rxbook-apps-1.png&#34; alt=&#34;RxSwift book projects&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/rxbook-apps-1.png&#34; alt=&#34;RxSwift book projects&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Like &lt;em&gt;any&lt;/em&gt; raywenderlich.com book you can purchase either a &lt;strong&gt;PDF&lt;/strong&gt; or a &lt;strong&gt;print&lt;/strong&gt; version. Both come with full project source code, split in:&lt;/p&gt;
 

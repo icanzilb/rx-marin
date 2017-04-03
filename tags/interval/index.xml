@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Interval on rx_marin&lt;blog&gt;</title>
-    <link>http://rx-marin.local:8888/tags/interval/</link>
+    <link>http://rx-marin.com/tags/interval/</link>
     <description>Recent content in Interval on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 22 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.local:8888/tags/interval/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://rx-marin.com/tags/interval/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa: Part 2</title>
-      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
       <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
       <description>&lt;p&gt;In my post from last week I worked on creating a split lapse timer app (&lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt;). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.&lt;/p&gt;
 
 &lt;p&gt;Well this week I am implementing exactly this functionality.&lt;/p&gt;
@@ -23,9 +23,9 @@
 
 &lt;p&gt;If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&amp;rsquo;ve added a couple of buttons in the user interface:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
 
@@ -72,7 +72,7 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;The app started with the laps button hidden and only the play button enabled like so:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Further you could click play just once because it instantly became disabled. How cool :]&lt;/p&gt;
 
@@ -130,9 +130,9 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;And that&amp;rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single &lt;code&gt;if&lt;/code&gt;!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
 </description>
@@ -140,15 +140,15 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa</title>
-      <link>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
       <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.local:8888/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
       <description>
 
 &lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;At first I thought - &amp;ldquo;Hey, that second sequence is getting totally ignored!&amp;rdquo;. But after I read the description I figured it out:&lt;/p&gt;
 
@@ -162,11 +162,11 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 
 &lt;p&gt;Here&amp;rsquo;s how the marble diagram looks like for the app setup:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;And this is how the app looks like when finished:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
 
@@ -241,7 +241,7 @@ timer.map(stringFromTimeInterval)
 
 &lt;p&gt;At this point the timer label already displayed the elapsed time:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;3-grab-the-split-time-when-the-user-taps-the-split-lap-button:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;3 Grab the split time when the user taps the &amp;ldquo;Split Lap&amp;rdquo; button&lt;/h3&gt;
 
@@ -282,7 +282,7 @@ lapsSequence.bindTo(tableView.rx_itemsWithCellIdentifier(&amp;quot;Cell&amp;quot
 
 &lt;p&gt;And my app was already working!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Each time I tap the &amp;ldquo;Split Lap&amp;rdquo; button I get a new split time added in the table view. Sweet!&lt;/p&gt;
 
@@ -335,9 +335,9 @@ lapsSequence.map({ laps -&amp;gt; String in
 
 &lt;p&gt;And that&amp;rsquo;s the complete working app!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.local:8888/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.local:8888/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
