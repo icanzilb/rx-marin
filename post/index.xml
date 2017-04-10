@@ -6,8 +6,62 @@
     <description>Recent content in Posts on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Apr 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 10 Apr 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Two free chapters from the RxSwift book!</title>
+      <link>http://rx-marin.com/post/rxswift-book-free-chapters/</link>
+      <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-book-free-chapters/</guid>
+      <description>
+
+&lt;p&gt;Last week we announced our brand new RxSwift book (&lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;available now&lt;/a&gt;)!&lt;/p&gt;
+
+&lt;p&gt;The book starts with the very basics in Chapter 1, &amp;ldquo;Hello, world!&amp;rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &amp;ldquo;MVVM&amp;rdquo; and Chapter 24, &amp;ldquo;Building a complete app with RxSwift&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&amp;rsquo;s written by four very active RxSwift community memebers and it&amp;rsquo;s polished by two more editors. All in all the quality (apart from some first edition errata, hehe) is very high.&lt;/p&gt;
+
+&lt;p&gt;But don&amp;rsquo;t take my word for it&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;As part of the launch celebration Ray Wenderlich (the publisher of the book) has released two of the book&amp;rsquo;s chapters for free on his website. So, if you&amp;rsquo;re still trying to make your mind about the quality of the content found inside the book - here&amp;rsquo;s your chance!&lt;/p&gt;
+
+&lt;h2 id=&#34;chapter-7-transforming-operators:a40446abe461214d278199604fa0bc59&#34;&gt;Chapter 7, Transforming Operators&lt;/h2&gt;
+
+&lt;p&gt;In the first half of the book where we cover foundational classes like &lt;code&gt;Observable&lt;/code&gt;, &lt;code&gt;PublishSubject&lt;/code&gt;, &lt;code&gt;Variable&lt;/code&gt;, and most of the operators found in RxSwift, we alternate between theory and &amp;ldquo;&amp;hellip; in practice&amp;rdquo; chapters.&lt;/p&gt;
+
+&lt;p&gt;In the theory chapters we introduce concepts and lead the reader through experimenting in an Xcode playground. This hands on approach to learning has proven to be more fun than just reading theory (I&amp;rsquo;ve worked on a number of books with raywenderlich.com).&lt;/p&gt;
+
+&lt;p&gt;Long story short, in Chapter 7 we&amp;rsquo;re introducing transforming operators and how to use them. The chapter is written by Scott Gardner and takes the readers on a journey through some of the most used operators like: &lt;code&gt;toArray()&lt;/code&gt;, &lt;code&gt;map(_)&lt;/code&gt;, &lt;code&gt;mapWithIndex(_)&lt;/code&gt;, &lt;code&gt;flatMap(_)&lt;/code&gt;, &lt;code&gt;flatMapFirst(_)&lt;/code&gt;, and &lt;code&gt;flatMapLatest(_)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;The chapter features some theory, solid explanations with diagrams, and code to try in the provided playground.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/to-array.png&#34; alt=&#34;to array&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find an abbreviated free version of that chapter here:
+&lt;a href=&#34;https://www.raywenderlich.com/158205/rxswift-transforming-operators&#34;&gt;https://www.raywenderlich.com/158205/rxswift-transforming-operators&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;chapter-8-transforming-operators-in-practice:a40446abe461214d278199604fa0bc59&#34;&gt;Chapter 8, Transforming Operators in Practice&lt;/h2&gt;
+
+&lt;p&gt;As with all &amp;ldquo;.. in practice&amp;rdquo; chapters in RxSwift: Reactive programming with Swift, the chapter that follows takes the introduced new concepts and/or operators and leads the reader through a step-by-step tutorial, building up a real iOS project to showcase some real-life usages of the newly introduced concepts.&lt;/p&gt;
+
+&lt;p&gt;Chapter 8, Transforming Operators in Practice leads the reader through building a GitHub activity app. This kind of app, which talks to an online JSON API, processes the response asynchronously, and displays results on screen is the perfect opportunity to use a bunch of transforming operators.&lt;/p&gt;
+
+&lt;p&gt;Even if a little tailored to showcase specifically transforming operators, the project in that chapter can serve as a base to any app that needs to fetch JSON and display the response data on screen, so it&amp;rsquo;s a great excercise in building RxSwift apps.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/github-activity.png&#34; alt=&#34;github activity&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find an abbreviated free version of that chapter here:
+&lt;a href=&#34;https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice&#34;&gt;https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;where-to-buy:a40446abe461214d278199604fa0bc59&#34;&gt;Where to buy?&lt;/h2&gt;
+
+&lt;p&gt;Enjoy those completely free chapters from the book, and we hope you&amp;rsquo;ll enjoy reading the book too!&lt;/p&gt;
+
+&lt;p&gt;The book is available at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>RxSwift book - available now!</title>
@@ -2278,75 +2332,6 @@ lapsSequence.map({ laps -&amp;gt; String in
 &lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Manually disposing a bag and creating a timer</title>
-      <link>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</link>
-      <pubDate>Sun, 17 Jan 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/</guid>
-      <description>&lt;p&gt;I was reading through the &lt;a href=&#34;https://github.com/ReactiveX/RxSwift/tree/master/Documentation&#34;&gt;RxSwift docs&lt;/a&gt; and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&amp;rsquo;s not a bad idea to share it online.&lt;/p&gt;
-
-&lt;p&gt;So &lt;code&gt;DisposeBag&lt;/code&gt; kind of &lt;code&gt;retains&lt;/code&gt; all your observables that&amp;rsquo;s why you add them to a bag all the time when you create them. You probably never get to dispose them manually since the moment the bag gets disposed it also disposes all your observables (magic!).&lt;/p&gt;
-
-&lt;p&gt;To test disposing I wrote this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;import UIKit
-
-import RxSwift
-import RxCocoa
-
-
-class ViewController: UIViewController {
-
-    var bag: DisposeBag! = DisposeBag()
-    var sig: Observable&amp;lt;Int&amp;gt;!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        sig = Observable&amp;lt;Int&amp;gt;.interval(1.0, scheduler: MainScheduler.instance)
-        
-        sig.map({num in
-            num * 10
-        }).subscribeNext({num in
-            print(num)
-        }).addDisposableTo(bag)
-        
-        
-        let tap = UITapGestureRecognizer(target: self, action: &amp;quot;didTap&amp;quot;)
-        view.addGestureRecognizer(tap)
-    }
-
-    func didTap() {
-        bag = nil
-    }
-    
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;Observable&amp;lt;Int&amp;gt;.interval(:scheduler:)&lt;/code&gt; creates a sequence that emits each time the timer fires - in the case of the example above each second the observable emits the next integer number.&lt;/p&gt;
-
-&lt;p&gt;I map the value and finally in &lt;code&gt;subscribeNext()&lt;/code&gt; I print to the console:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;0
-10
-20
-30
-40
-etc.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I attached a gesture recognizer to the view controller&amp;rsquo;s view and when the user taps on the view I destroy the bag:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;bag = nil
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If you give the code a try you will see that when you tap the view the observable stops emitting because the original bag get destroyed and it automatically disposes of all observables added to it.&lt;/p&gt;
-
-&lt;p&gt;Very nice and handy when you need to be sure when a resource is deallocated. Further - how cool is that you can create a timer by simply doing &lt;code&gt;Observable&amp;lt;Int&amp;gt;.interval(:scheduler:)&lt;/code&gt;?&lt;/p&gt;
 </description>
     </item>
     
