@@ -6,8 +6,185 @@
     <description>Recent content on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Apr 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 May 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Advanced combineLatest</title>
+      <link>http://rx-marin.com/post/rxswift-advanced-combine-latest/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-advanced-combine-latest/</guid>
+      <description>
+
+&lt;p&gt;In the last couple of weeks I got to talk to few people who were either still struggling to understand what exactly does &lt;code&gt;combineLatest&lt;/code&gt; do or didn&amp;rsquo;t know about a more recent power feature.&lt;/p&gt;
+
+&lt;p&gt;So here it is &amp;hellip; a post about &lt;code&gt;combineLatest&lt;/code&gt;!&lt;/p&gt;
+
+&lt;h2 id=&#34;what-does-the-combinelatest-operator-do:5c9f9259b42e6e7edba2de9c8047659b&#34;&gt;What does the combineLatest operator do?&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;combineLatest&lt;/code&gt; is super useful and it was the first thing in RxSwift that really made see how powerful Rx is and showed me what kind of problems can be easily solved with RxSwift.&lt;/p&gt;
+
+&lt;p&gt;So what does it do? Any time any of the source sequences emits an element, also &lt;code&gt;combineLatest&lt;/code&gt;&amp;rsquo;s result seqiemce emits an element, which contains all the latest values of each of the source sequences.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s look at a marble diagram (source: &lt;a href=&#34;http://rxmarbles.com/#combineLatest&#34;&gt;http://rxmarbles.com/#combineLatest&lt;/a&gt;):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/combineLatest.png&#34; alt=&#34;combineLatest schema&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We have two sequences S1 and S2, which emit values - the former emits numbers and the latter - letters.&lt;/p&gt;
+
+&lt;p&gt;After all source sequences emit for the first time (e.g. they do have a &lt;em&gt;latest&lt;/em&gt; value), when any of the sources emits an element &lt;code&gt;combineLatest&lt;/code&gt; grabs the latest values of all sources and emits the combined result.&lt;/p&gt;
+
+&lt;p&gt;So let&amp;rsquo;s have a look what happens on the diagam above:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;first, S1 emits &lt;code&gt;1&lt;/code&gt; - since not all sources have emitted at that time, the result does not emit&lt;/li&gt;
+&lt;li&gt;then, S1 emits &lt;code&gt;2&lt;/code&gt; - same thing happens since S2 still hasn&amp;rsquo;t emitted anything (e.g. has no latest value)&lt;/li&gt;
+&lt;li&gt;then S2 emits &lt;code&gt;A&lt;/code&gt; - at that point all sources have a &lt;em&gt;latest&lt;/em&gt; element so &lt;code&gt;combineLatest&lt;/code&gt; takes &lt;code&gt;A&lt;/code&gt; and combines it with the latest element from S1 &lt;code&gt;2&lt;/code&gt;. (&amp;ldquo;What about &lt;code&gt;1&lt;/code&gt;?&amp;rdquo; some of you are asking. Well - tough luck, &lt;code&gt;1&lt;/code&gt; didn&amp;rsquo;t make it.)&lt;/li&gt;
+&lt;li&gt;later S2 emits another element &lt;code&gt;B&lt;/code&gt;, again &lt;code&gt;combineLatest&lt;/code&gt; combines it with the latest element from S1, which is &lt;code&gt;2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;and so forth&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;combineLatest&lt;/code&gt; is particularly useful handling UI input (you can react to all changes in any of the UI&amp;rsquo;s text fields, switches, etc) or when you fire a number of networking requests and need to react when any of the http responses completes.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-combinelatest-with-a-dynamic-number-of-source-observables:5c9f9259b42e6e7edba2de9c8047659b&#34;&gt;Using combineLatest with a dynamic number of source observables&lt;/h2&gt;
+
+&lt;p&gt;I created a small example for this article, and added the code to my &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS&lt;/a&gt; repository. If you clone the repo and run it - it&amp;rsquo;s under number 4 in the main menu.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/rxoniosmenu.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re only interested in the code just peak inside here: &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;One of the lesser known features of &lt;code&gt;combineLatest&lt;/code&gt; is that you can either use it with a given number of sources (which can be two, three, four, or more but still a fixed number), like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;Observable.combineLatest(S1, S2, S3) { value1, value2, value3 in
+	print(&amp;quot;latest values: ...&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But if you don&amp;rsquo;t know how many sources you have in advance or in case you want to be able to easily map over the emitted values you can also provide a collection of source observables to &lt;code&gt;combineLatest&lt;/code&gt;. Like so:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;Observable.combineLatest(sources) { values in
+  print(values.map { &amp;quot;value: $0&amp;quot; })
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So in the example I wrote for this article I&amp;rsquo;m fetching JSON with the list of my followers from GitHub and show them in a collection view. For each follower object in the JSON response I fetch their avatar image and show it in a collection cell.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start with fetching the followers JSON:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;Observable.just(&amp;quot;https://api.github.com/users/icanzilb/followers&amp;quot;)
+  .map { url in
+    let apiUrl = URLComponents(string: url)!
+    return URLRequest(url: apiUrl.url!)
+  }
+  .flatMapLatest { request in
+    return URLSession.shared.rx.json(request: request)
+      .catchErrorJustReturn([])
+  }
+  .map { json -&amp;gt; [User] in
+    guard let users = json as? [JSONObject]  else { return [] }
+    return users.flatMap(User.init)
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This code makes a request to &lt;code&gt;https://api.github.com/users/icanzilb/followers&lt;/code&gt; and gets back a list of JSON objects, then it maps them to an array of &lt;code&gt;User&lt;/code&gt; objects. Each &lt;code&gt;User&lt;/code&gt; has a &lt;code&gt;login&lt;/code&gt; and an &lt;code&gt;avatarUrl&lt;/code&gt; properties.&lt;/p&gt;
+
+&lt;p&gt;I bind the users list to the &lt;code&gt;followers&lt;/code&gt; Variable and will map each user object to an HTTP request, which will fetch their avatar image from GitHub:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;followers.asObservable()
+  .map { users -&amp;gt; [Observable&amp;lt;Data&amp;gt;] in
+    return users.map { user in
+      let request = URLRequest(url: URL(string: user.avatarUrl)!)
+      return URLSession.shared.rx.data(request: request)
+        .catchErrorJustReturn(UIImage.blank)
+    }
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;map&lt;/code&gt; above takes in the list of user objects &lt;code&gt;[User]&lt;/code&gt; and maps those to &lt;code&gt;URLSession&lt;/code&gt; observable responses &lt;code&gt;[Observable&amp;lt;Data&amp;gt;]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Neat! I&amp;rsquo;m passing the array of observables directly to &lt;code&gt;combineLatest&lt;/code&gt; and convert the returned collection of &lt;code&gt;Data&lt;/code&gt; values into images:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.flatMap(Observable.combineLatest)
+.map { $0.map(UIImage.fromData) }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I had to add a quick extension to &lt;code&gt;UIImage&lt;/code&gt; to add a static method to make images out of data values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension UIImage {
+  static func fromData(data: Data) -&amp;gt; UIImage { return UIImage(data: data)! }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nice. Now when all my HTTP requests get their response &lt;code&gt;combineLatest&lt;/code&gt; gives me a list of data values, which I turn into images and can bind to a variable or otherwise make use of.&lt;/p&gt;
+
+&lt;p&gt;If you run the linked above demo project you will see that the code fetches all followers from GitHub, then fires off a bunch of requests, gets all their avatars and once that&amp;rsquo;s done it does a single data reload on the collection view and shows them all at once:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/followers-list-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Ok, that&amp;rsquo;s all about using &lt;code&gt;combineLatest&lt;/code&gt; with a collection of source sequences. But wait - there&amp;rsquo;s more to be said on the topic &amp;hellip;&lt;/p&gt;
+
+&lt;h2 id=&#34;all-at-once-vs-as-they-come:5c9f9259b42e6e7edba2de9c8047659b&#34;&gt;All at once vs. as they come&lt;/h2&gt;
+
+&lt;p&gt;When using &lt;code&gt;combineLatest&lt;/code&gt; (especially with network requests) you might want to have two very different use cases.&lt;/p&gt;
+
+&lt;p&gt;In the example above you saw how to fire simulatenously an arbitrary number of network requests and only once all of them have completed emit the result of all of them.&lt;/p&gt;
+
+&lt;p&gt;But how about if you didn&amp;rsquo;t want ot wait for all requests to complete? What if you preferred to update the UI as each of the requests receives a response?&lt;/p&gt;
+
+&lt;p&gt;Well, remember the discussion above? &lt;code&gt;combineLatest&lt;/code&gt; does emit for each element from the source sequences but &lt;strong&gt;only after all of them have a latest value&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So, I wanted to show that as well in the demo project so you will actually find two different methods in the view controller source code &lt;code&gt;getAllAtOnce()&lt;/code&gt; and &lt;code&gt;getAsTheyCome()&lt;/code&gt;. You can switch between those in the app UI by toggling the segment control at the top of the screen.&lt;/p&gt;
+
+&lt;p&gt;So the only difference in the code of the two methds (and I mean &lt;strong&gt;the only&lt;/strong&gt;) is that when I&amp;rsquo;m reloading the collection whenever each of the avatar requests completes I&amp;rsquo;m providing a default value for each observable.&lt;/p&gt;
+
+&lt;p&gt;So here&amp;rsquo;s the code to fetch &lt;strong&gt;all at once&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.map { users -&amp;gt; [Observable&amp;lt;Data&amp;gt;] in
+  return users.map { user in
+    let request = URLRequest(url: URL(string: user.avatarUrl)!)
+    return URLSession.shared.rx.data(request: request)
+      .catchErrorJustReturn(UIImage.blank)
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And here&amp;rsquo;s the code that makes &lt;code&gt;combineLatest&lt;/code&gt;&amp;rsquo;s result emit as each response comes in:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.map { users -&amp;gt; [Observable&amp;lt;Data&amp;gt;] in
+  return users.map { user in
+    let request = URLRequest(url: URL(string: user.avatarUrl)!)
+    return URLSession.shared.rx.data(request: request)
+      .startWith(UIImage.blank)
+      .catchErrorJustReturn(UIImage.blank)
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Yes, I&amp;rsquo;m sure you spotted the difference - the source has a default value (in my case it&amp;rsquo;s an empty avatar image). This way the collection starts out with a default image for each follower and then as the images are fetched one by one the collection reloads to display each new one. (Yes, not optimal but the point here is to discuss combineLatest.)&lt;/p&gt;
+
+&lt;p&gt;So the screen starts with all sources&amp;rsquo; latest values (at first those are the default images):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/followers-list-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;And then you can see how the collection keeps reloading to display each of the received images:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/followers-list-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;To try this in the app tap on the &lt;em&gt;As they come&lt;/em&gt; segment on top.&lt;/p&gt;
+
+&lt;p&gt;And that&amp;rsquo;s a wrap!&lt;/p&gt;
+
+&lt;h2 id=&#34;where-to-go-from-here:5c9f9259b42e6e7edba2de9c8047659b&#34;&gt;Where to go from here?&lt;/h2&gt;
+
+&lt;p&gt;Once more, the demo project for this article you will find on GitHub here: &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I hope this post has been helpful and has shown you a couple of nice &lt;code&gt;combineLatest&lt;/code&gt; features. Of course these few examples don&amp;rsquo;t cover everything - if you&amp;rsquo;d like to go deeper into combining operators you&amp;rsquo;re welcome to check Chapter 9, &amp;ldquo;Combining Operators&amp;rdquo; and Chapter 10, &amp;ldquo;Combining Operators in Practice&amp;rdquo;, which cover far more ground than this post.&lt;/p&gt;
+
+&lt;p&gt;The book is available at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you can see any updates, discuss in the website forums, etc.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Two free chapters from the RxSwift book!</title>
@@ -2129,209 +2306,6 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 &lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Split laps timer with RxSwift and RxCocoa</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</link>
-      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/</guid>
-      <description>
-
-&lt;p&gt;I was browsing through &lt;a href=&#34;http://rxmarbles.com/&#34;&gt;RxMarbles&lt;/a&gt; and was totally baffled by the &lt;code&gt;sample&lt;/code&gt; function. The marble diagram looks pretty random at first sight:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/marbles-sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;At first I thought - &amp;ldquo;Hey, that second sequence is getting totally ignored!&amp;rdquo;. But after I read the description I figured it out:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The first sequence&amp;rsquo;s elements is &lt;strong&gt;what&lt;/strong&gt; &lt;code&gt;sample&lt;/code&gt; emits, while the second sequence&amp;rsquo;s elements determine &lt;strong&gt;when&lt;/strong&gt; &lt;code&gt;sample&lt;/code&gt; emits. So in a way yes - the actual values A, B, C, D do get totally ignored.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;When it was clear to me what &lt;code&gt;sample&lt;/code&gt; does I started wondering if this function has any practical application :]&lt;/p&gt;
-
-&lt;p&gt;This brought me to creating a split lap timer app to test what &lt;code&gt;sample&lt;/code&gt; can do for me. In the finished project I have a timer emitting time values (aka the first sequence) and I want to grab (or sample) the values whenever the user taps a button (aka the second sequence).&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s how the marble diagram looks like for the app setup:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/sample-dia.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And this is how the app looks like when finished:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
-
-&lt;p&gt;Here are the specs I wanted for my split lap timer app:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;start the timer at launch&lt;/li&gt;
-&lt;li&gt;show the running time in format MM:SS.MS&lt;/li&gt;
-&lt;li&gt;when the user taps &amp;ldquo;Split Lap&amp;rdquo; add a split time&lt;/li&gt;
-&lt;li&gt;show a table of the split times&lt;/li&gt;
-&lt;li&gt;show a table head with the total of laps&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;1-start-a-timer:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;1 Start a timer&lt;/h3&gt;
-
-&lt;p&gt;Like in my &lt;a href=&#34;http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/&#34;&gt;previous post&lt;/a&gt; about manually disposing bag&amp;rsquo;s contents I added a timer:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var timer: Observable&amp;lt;NSInteger&amp;gt;!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And in &lt;code&gt;viewDidLoad&lt;/code&gt; let it run every &lt;code&gt;1/10&lt;/code&gt; of a second (I chose to show only 1 digit for milliseconds so no need to fire more often):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//create the timer
-timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
-
-timer.subscribeNext({ msecs -&amp;gt; Void in
-  print(&amp;quot;\(msecs)00ms&amp;quot;)
-}).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This got the timer running and filling up the console:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;000ms
-100ms
-200ms
-300ms
-400ms
-500ms
-600ms
-700ms
-800ms
-900ms
-1000ms
-1100ms
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Cool - that was easy (well, I already knew how to do that part, lol)&lt;/p&gt;
-
-&lt;h3 id=&#34;2-show-the-current-elapsed-time:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;2 Show the current elapsed time&lt;/h3&gt;
-
-&lt;p&gt;This was also a part I already knew how to do. First I put together a little function to take the elapsed time and return a nicely formatted string:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;func stringFromTimeInterval(ms: NSInteger) -&amp;gt; String {
-  return String(format: &amp;quot;%0.2d:%0.2d.%0.1d&amp;quot;,
-    arguments: [(ms / 600) % 600, (ms % 600 ) / 10, ms % 10])
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then back in &lt;code&gt;viewDidLoad&lt;/code&gt; I used it to bind the timer to a label I added via Interface Builder:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//wire the chrono
-timer.map(stringFromTimeInterval)
-  .bindTo(lblChrono.rx_text)
-  .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I really love how the code flows and tells the story of what should happen:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;timer -&amp;gt; 1,2,3 -&amp;gt; stringFromTimeInterval -&amp;gt; &amp;quot;string&amp;quot;, &amp;quot;string&amp;quot; -&amp;gt; lblChrono&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Functional code is awesome because I get 2 huge wins for free: I can easily reuse &lt;code&gt;stringFromTimeInterval&lt;/code&gt; and I can write very simple tests for it.&lt;/p&gt;
-
-&lt;p&gt;At this point the timer label already displayed the elapsed time:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-label.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;3-grab-the-split-time-when-the-user-taps-the-split-lap-button:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;3 Grab the split time when the user taps the &amp;ldquo;Split Lap&amp;rdquo; button&lt;/h3&gt;
-
-&lt;p&gt;Ok here I was supposed to have my ultimate win by using &lt;code&gt;sample&lt;/code&gt;. The first few tries didn&amp;rsquo;t get me far until I realized that the &lt;code&gt;rx_tap&lt;/code&gt; property on &lt;code&gt;UIButton&lt;/code&gt; is also an &lt;code&gt;Observable&lt;/code&gt;.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Duh, everything is an &lt;code&gt;Observable&lt;/code&gt; :]&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Then it was just a matter of calling &lt;code&gt;sample&lt;/code&gt; on my timer and providing as a control sequence the &lt;code&gt;rx_tap&lt;/code&gt; property of the button like so: &lt;code&gt;timer.sample(btnLap.rx_tap)&lt;/code&gt; Whaaaat?&lt;/p&gt;
-
-&lt;p&gt;Now each time I tapped the button &lt;code&gt;sample&lt;/code&gt; emitted the latest value produced by &lt;code&gt;timer&lt;/code&gt;. And since I wasn&amp;rsquo;t interested in the number but in the formatted string I again mapped the result with &lt;code&gt;stringFromTimeInterval&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;And since I needed to build a list of those split times I used &lt;code&gt;scan&lt;/code&gt;. Actually at first I came around &lt;code&gt;reduce&lt;/code&gt; because I was thinking of accumulating values in a list, but then realized I needed to produce a sequence that emits the list for each new value&amp;hellip; hence I kind of knew I got to use &lt;code&gt;scan&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let lapsSequence = timer.sample(btnLap.rx_tap)
-    .map(stringFromTimeInterval)
-    .scan([String](), accumulator: {lapTimes, newTime in
-        return lapTimes + [newTime]
-    })
-    .shareReplay(1)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So - each time &lt;code&gt;sample&lt;/code&gt; emits a new lap time &lt;code&gt;scan&lt;/code&gt; emits an array of all the split times so far.&lt;/p&gt;
-
-&lt;p&gt;Not sure how to explain &lt;code&gt;scan&lt;/code&gt; more simply but I&amp;rsquo;ll try: In RxSwift any time you&amp;rsquo;re thinking of using &lt;code&gt;reduce&lt;/code&gt; chances are you need &lt;code&gt;scan&lt;/code&gt; instead :]&lt;/p&gt;
-
-&lt;h3 id=&#34;4-show-a-table-of-the-split-times-so-far:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;4 Show a table of the split times so far&lt;/h3&gt;
-
-&lt;p&gt;Ok so I got &lt;code&gt;lapsSequence&lt;/code&gt; emit an array of split times. From there (after consulting RxExample) was a walk in the park to wire up the table view:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//show laps in table
-lapsSequence.bindTo(tableView.rx_itemsWithCellIdentifier(&amp;quot;Cell&amp;quot;, cellType: UITableViewCell.self)) { (row, element, cell) in
-    cell.textLabel!.text = &amp;quot;\(row+1)) \(element)&amp;quot;
-}
-.addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And my app was already working!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-table.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Each time I tap the &amp;ldquo;Split Lap&amp;rdquo; button I get a new split time added in the table view. Sweet!&lt;/p&gt;
-
-&lt;h3 id=&#34;5-show-a-table-header-with-the-number-of-laps:1db2c1bfd63c48e8c3c8b2b212141dce&#34;&gt;5 Show a table header with the number of laps&lt;/h3&gt;
-
-&lt;p&gt;This part was the one that tripped me the most. There wasn&amp;rsquo;t a binding I could use for the table header and I didn&amp;rsquo;t want to complicate the code unneccessarily by adding a section table data source.&lt;/p&gt;
-
-&lt;p&gt;What came to mind was to add a &lt;code&gt;UILabel&lt;/code&gt; property to my view controller and use it as the table header view. Then bind the count of split times to the &lt;code&gt;rx_text&lt;/code&gt; of that label.&lt;/p&gt;
-
-&lt;p&gt;So I added to the view controller class:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let tableHeaderView = UILabel()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then an extension to set this label as my table view header:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;extension ViewController: UITableViewDelegate {
-  func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -&amp;gt; UIView? {
-    return tableHeaderView
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I knew how to set my class as the proxy delegate to the table view (back in &lt;code&gt;viewDidLoad&lt;/code&gt;):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//set table delegate
-tableView
-  .rx_setDelegate(self)
-  .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And now came the coup d&amp;rsquo;etat - I had to map &lt;code&gt;lapsSequence&lt;/code&gt; from an array to a single string (e.g. &amp;ldquo;5 laps&amp;rdquo;) and bind that string to the table header.&lt;/p&gt;
-
-&lt;p&gt;I got overexcited about using &lt;code&gt;scan&lt;/code&gt; but the code did feel itchy so after asking around on the RxSwift slack &lt;a href=&#34;https://twitter.com/KrunoslavZaher&#34;&gt;KrunoslavZaher&lt;/a&gt; enlightened me that since I have one array I can turn it into one string by simply using &lt;code&gt;map&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the final code addition to &lt;code&gt;viewDidLoad&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//update the table header
-lapsSequence.map({ laps -&amp;gt; String in
-    return &amp;quot;\t\(laps.count) laps&amp;quot;
-})
-.startWith(&amp;quot;\tno laps&amp;quot;)
-.bindTo(tableHeaderView.rx_text)
-.addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Since &lt;code&gt;lapsSequence&lt;/code&gt; emits an array of &lt;em&gt;all&lt;/em&gt; split times each time a new split time is emitted I just take that array and return a string with the number of elements.&lt;/p&gt;
-
-&lt;p&gt;Additionally I set the initial value to &amp;ldquo;no laps&amp;rdquo; and that&amp;rsquo;s pretty much it - I bind everything directly to &lt;code&gt;tableHeaderView.rx_text&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;And that&amp;rsquo;s the complete working app!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can download the completed project and give it a try here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer.zip&#34;&gt;rx_laptimer.zip&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

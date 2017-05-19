@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Advanced combineLatest // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Dig a little deeper into combineLatest and learn about more advanced usages">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.15" />
+
+  <meta property="og:title" content="Advanced combineLatest" />
+<meta property="og:description" content="Dig a little deeper into combineLatest and learn about more advanced usages" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-advanced-combine-latest/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-advanced-combine-latest/">19/May &middot; Advanced combineLatest</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-free-chapters/">10/Apr &middot; Two free chapters from the RxSwift book!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-available-now/">3/Apr &middot; RxSwift book - available now!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">24/Mar &middot; (dotSwift) Unidirectional data flow with RxSwift and RxRealm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">28/Feb &middot; (dotSwift) Presenting View Controllers with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">27/Jan &middot; (dotSwift) Search GitHub with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#what-does-the-combinelatest-operator-do:5c9f9259b42e6e7edba2de9c8047659b">What does the combineLatest operator do?</a></li>
+<li><a href="#using-combinelatest-with-a-dynamic-number-of-source-observables:5c9f9259b42e6e7edba2de9c8047659b">Using combineLatest with a dynamic number of source observables</a></li>
+<li><a href="#all-at-once-vs-as-they-come:5c9f9259b42e6e7edba2de9c8047659b">All at once vs. as they come</a></li>
+<li><a href="#where-to-go-from-here:5c9f9259b42e6e7edba2de9c8047659b">Where to go from here?</a></li>
+</ul></li>
+</ul>
+</nav>
+					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;">
+				  <a href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rxbook.png"><br/><br/>
+					<small class="toc-label">&raquo; Authors: F. Pillet, J. Bontognali, M. Todorov, & S. Gardner <br/> &raquo; Tech Ed: Ash Furrow<br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+					</div>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-advanced-combine-latest/">Advanced combineLatest</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>19</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Advanced%20combineLatest&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-advanced-combine-latest%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>In the last couple of weeks I got to talk to few people who were either still struggling to understand what exactly does <code>combineLatest</code> do or didn&rsquo;t know about a more recent power feature.</p>
+
+<p>So here it is &hellip; a post about <code>combineLatest</code>!</p>
+
+<h2 id="what-does-the-combinelatest-operator-do:5c9f9259b42e6e7edba2de9c8047659b">What does the combineLatest operator do?</h2>
+
+<p><code>combineLatest</code> is super useful and it was the first thing in RxSwift that really made see how powerful Rx is and showed me what kind of problems can be easily solved with RxSwift.</p>
+
+<p>So what does it do? Any time any of the source sequences emits an element, also <code>combineLatest</code>&rsquo;s result seqiemce emits an element, which contains all the latest values of each of the source sequences.</p>
+
+<p>Let&rsquo;s look at a marble diagram (source: <a href="http://rxmarbles.com/#combineLatest">http://rxmarbles.com/#combineLatest</a>):</p>
+
+<p><img src="http://rx-marin.com/images/combineLatest.png" alt="combineLatest schema" /></p>
+
+<p>We have two sequences S1 and S2, which emit values - the former emits numbers and the latter - letters.</p>
+
+<p>After all source sequences emit for the first time (e.g. they do have a <em>latest</em> value), when any of the sources emits an element <code>combineLatest</code> grabs the latest values of all sources and emits the combined result.</p>
+
+<p>So let&rsquo;s have a look what happens on the diagam above:</p>
+
+<ul>
+<li>first, S1 emits <code>1</code> - since not all sources have emitted at that time, the result does not emit</li>
+<li>then, S1 emits <code>2</code> - same thing happens since S2 still hasn&rsquo;t emitted anything (e.g. has no latest value)</li>
+<li>then S2 emits <code>A</code> - at that point all sources have a <em>latest</em> element so <code>combineLatest</code> takes <code>A</code> and combines it with the latest element from S1 <code>2</code>. (&ldquo;What about <code>1</code>?&rdquo; some of you are asking. Well - tough luck, <code>1</code> didn&rsquo;t make it.)</li>
+<li>later S2 emits another element <code>B</code>, again <code>combineLatest</code> combines it with the latest element from S1, which is <code>2</code></li>
+<li>and so forth&hellip;</li>
+</ul>
+
+<p><code>combineLatest</code> is particularly useful handling UI input (you can react to all changes in any of the UI&rsquo;s text fields, switches, etc) or when you fire a number of networking requests and need to react when any of the http responses completes.</p>
+
+<h2 id="using-combinelatest-with-a-dynamic-number-of-source-observables:5c9f9259b42e6e7edba2de9c8047659b">Using combineLatest with a dynamic number of source observables</h2>
+
+<p>I created a small example for this article, and added the code to my <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a> repository. If you clone the repo and run it - it&rsquo;s under number 4 in the main menu.</p>
+
+<p><img src="http://rx-marin.com/images/rxoniosmenu.png" alt="" /></p>
+
+<p>If you&rsquo;re only interested in the code just peak inside here: <a href="https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift">https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift</a>.</p>
+
+<p>One of the lesser known features of <code>combineLatest</code> is that you can either use it with a given number of sources (which can be two, three, four, or more but still a fixed number), like so:</p>
+
+<pre><code class="language-swift">Observable.combineLatest(S1, S2, S3) { value1, value2, value3 in
+	print(&quot;latest values: ...&quot;)
+}
+</code></pre>
+
+<p>But if you don&rsquo;t know how many sources you have in advance or in case you want to be able to easily map over the emitted values you can also provide a collection of source observables to <code>combineLatest</code>. Like so:</p>
+
+<pre><code class="language-swift">Observable.combineLatest(sources) { values in
+  print(values.map { &quot;value: $0&quot; })
+}
+</code></pre>
+
+<p>So in the example I wrote for this article I&rsquo;m fetching JSON with the list of my followers from GitHub and show them in a collection view. For each follower object in the JSON response I fetch their avatar image and show it in a collection cell.</p>
+
+<p>Let&rsquo;s start with fetching the followers JSON:</p>
+
+<pre><code class="language-swift">Observable.just(&quot;https://api.github.com/users/icanzilb/followers&quot;)
+  .map { url in
+    let apiUrl = URLComponents(string: url)!
+    return URLRequest(url: apiUrl.url!)
+  }
+  .flatMapLatest { request in
+    return URLSession.shared.rx.json(request: request)
+      .catchErrorJustReturn([])
+  }
+  .map { json -&gt; [User] in
+    guard let users = json as? [JSONObject]  else { return [] }
+    return users.flatMap(User.init)
+  }
+</code></pre>
+
+<p>This code makes a request to <code>https://api.github.com/users/icanzilb/followers</code> and gets back a list of JSON objects, then it maps them to an array of <code>User</code> objects. Each <code>User</code> has a <code>login</code> and an <code>avatarUrl</code> properties.</p>
+
+<p>I bind the users list to the <code>followers</code> Variable and will map each user object to an HTTP request, which will fetch their avatar image from GitHub:</p>
+
+<pre><code class="language-swift">followers.asObservable()
+  .map { users -&gt; [Observable&lt;Data&gt;] in
+    return users.map { user in
+      let request = URLRequest(url: URL(string: user.avatarUrl)!)
+      return URLSession.shared.rx.data(request: request)
+        .catchErrorJustReturn(UIImage.blank)
+    }
+  }
+</code></pre>
+
+<p>The <code>map</code> above takes in the list of user objects <code>[User]</code> and maps those to <code>URLSession</code> observable responses <code>[Observable&lt;Data&gt;]</code>.</p>
+
+<p>Neat! I&rsquo;m passing the array of observables directly to <code>combineLatest</code> and convert the returned collection of <code>Data</code> values into images:</p>
+
+<pre><code class="language-swift">.flatMap(Observable.combineLatest)
+.map { $0.map(UIImage.fromData) }
+</code></pre>
+
+<p>I had to add a quick extension to <code>UIImage</code> to add a static method to make images out of data values:</p>
+
+<pre><code class="language-swift">extension UIImage {
+  static func fromData(data: Data) -&gt; UIImage { return UIImage(data: data)! }
+}
+</code></pre>
+
+<p>Nice. Now when all my HTTP requests get their response <code>combineLatest</code> gives me a list of data values, which I turn into images and can bind to a variable or otherwise make use of.</p>
+
+<p>If you run the linked above demo project you will see that the code fetches all followers from GitHub, then fires off a bunch of requests, gets all their avatars and once that&rsquo;s done it does a single data reload on the collection view and shows them all at once:</p>
+
+<p><img src="http://rx-marin.com/images/followers-list-1.png" alt="" /></p>
+
+<p>Ok, that&rsquo;s all about using <code>combineLatest</code> with a collection of source sequences. But wait - there&rsquo;s more to be said on the topic &hellip;</p>
+
+<h2 id="all-at-once-vs-as-they-come:5c9f9259b42e6e7edba2de9c8047659b">All at once vs. as they come</h2>
+
+<p>When using <code>combineLatest</code> (especially with network requests) you might want to have two very different use cases.</p>
+
+<p>In the example above you saw how to fire simulatenously an arbitrary number of network requests and only once all of them have completed emit the result of all of them.</p>
+
+<p>But how about if you didn&rsquo;t want ot wait for all requests to complete? What if you preferred to update the UI as each of the requests receives a response?</p>
+
+<p>Well, remember the discussion above? <code>combineLatest</code> does emit for each element from the source sequences but <strong>only after all of them have a latest value</strong>.</p>
+
+<p>So, I wanted to show that as well in the demo project so you will actually find two different methods in the view controller source code <code>getAllAtOnce()</code> and <code>getAsTheyCome()</code>. You can switch between those in the app UI by toggling the segment control at the top of the screen.</p>
+
+<p>So the only difference in the code of the two methds (and I mean <strong>the only</strong>) is that when I&rsquo;m reloading the collection whenever each of the avatar requests completes I&rsquo;m providing a default value for each observable.</p>
+
+<p>So here&rsquo;s the code to fetch <strong>all at once</strong>:</p>
+
+<pre><code class="language-swift">.map { users -&gt; [Observable&lt;Data&gt;] in
+  return users.map { user in
+    let request = URLRequest(url: URL(string: user.avatarUrl)!)
+    return URLSession.shared.rx.data(request: request)
+      .catchErrorJustReturn(UIImage.blank)
+  }
+}
+</code></pre>
+
+<p>And here&rsquo;s the code that makes <code>combineLatest</code>&rsquo;s result emit as each response comes in:</p>
+
+<pre><code class="language-swift">.map { users -&gt; [Observable&lt;Data&gt;] in
+  return users.map { user in
+    let request = URLRequest(url: URL(string: user.avatarUrl)!)
+    return URLSession.shared.rx.data(request: request)
+      .startWith(UIImage.blank)
+      .catchErrorJustReturn(UIImage.blank)
+  }
+}
+</code></pre>
+
+<p>Yes, I&rsquo;m sure you spotted the difference - the source has a default value (in my case it&rsquo;s an empty avatar image). This way the collection starts out with a default image for each follower and then as the images are fetched one by one the collection reloads to display each new one. (Yes, not optimal but the point here is to discuss combineLatest.)</p>
+
+<p>So the screen starts with all sources&rsquo; latest values (at first those are the default images):</p>
+
+<p><img src="http://rx-marin.com/images/followers-list-2.png" alt="" /></p>
+
+<p>And then you can see how the collection keeps reloading to display each of the received images:</p>
+
+<p><img src="http://rx-marin.com/images/followers-list-1.png" alt="" /></p>
+
+<p>To try this in the app tap on the <em>As they come</em> segment on top.</p>
+
+<p>And that&rsquo;s a wrap!</p>
+
+<h2 id="where-to-go-from-here:5c9f9259b42e6e7edba2de9c8047659b">Where to go from here?</h2>
+
+<p>Once more, the demo project for this article you will find on GitHub here: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a>.</p>
+
+<p>I hope this post has been helpful and has shown you a couple of nice <code>combineLatest</code> features. Of course these few examples don&rsquo;t cover everything - if you&rsquo;d like to go deeper into combining operators you&rsquo;re welcome to check Chapter 9, &ldquo;Combining Operators&rdquo; and Chapter 10, &ldquo;Combining Operators in Practice&rdquo;, which cover far more ground than this post.</p>
+
+<p>The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc.</p>
+
+	
+			
+
+<div style="padding:10px; border:1px solid silver; margin:10px;">
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Advanced%20combineLatest&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-advanced-combine-latest%2f">
+Tweet</a></p>
+</div>
+
+<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
+	<a style="display:block;float:left;margin-right:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rxbook.png" style="width:200px;"></a>
+	<br/>
+	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
+	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
+	Available from Ray Wenderlich: <a style="font-weight: bold;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank">&raquo; Learn more</a>.
+</div>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-combinelatest" href="http://rx-marin.com//tags/combinelatest">combineLatest</a>,
+	                
+	                <a class="post-tag post-tag-sequences" href="http://rx-marin.com//tags/sequences">sequences</a>,
+	                
+	                <a class="post-tag post-tag-dynamic" href="http://rx-marin.com//tags/dynamic">dynamic</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-book-free-chapters/">Two free chapters from the RxSwift book!</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories/">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
