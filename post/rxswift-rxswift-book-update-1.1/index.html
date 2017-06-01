@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    A smarter Retry with RxSwiftExt // rx_marin&lt;blog&gt;
+    First update to the RxSwift book with version 1.1 // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry">
+<meta name="description" content="Announcement about the first update released for the RxSwift book">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
 <meta name="generator" content="Hugo 0.15" />
 
-  <meta property="og:title" content="A smarter Retry with RxSwiftExt" />
-<meta property="og:description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry" />
+  <meta property="og:title" content="First update to the RxSwift book with version 1.1" />
+<meta property="og:description" content="Announcement about the first update released for the RxSwift book" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.com/post/rxswift-retry-with-delay/" />
+<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/" />
 
 
   
@@ -198,13 +198,8 @@
 <ul>
 <li>
 <ul>
-<li>
-<ul>
-<li><a href="#retrying-at-equal-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying at equal intervals</a></li>
-<li><a href="#retrying-in-increasing-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying in increasing intervals</a></li>
-<li><a href="#calculating-the-delay:0d2f3d508498ad2374296c16265dc39a">Calculating the delay</a></li>
-<li><a href="#a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a">A non RxSwift retry</a></li>
-</ul></li>
+<li><a href="#how-to-update:f6c2e1bea7467fd778e61928bf8f2f2b">How to update?</a></li>
+<li><a href="#where-to-go-from-here:f6c2e1bea7467fd778e61928bf8f2f2b">Where to go from here?</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -219,14 +214,14 @@
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">A smarter Retry with RxSwiftExt</a>
+              <a href="http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/">First update to the RxSwift book with version 1.1</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>8</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
+                	<span class="post-date-day"><sup>1</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jun</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -254,94 +249,54 @@
 			
 
 <p><a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=A%20smarter%20Retry%20with%20RxSwiftExt&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-retry-with-delay%2f"
+  href="https://twitter.com/intent/tweet?text=First%20update%20to%20the%20RxSwift%20book%20with%20version%201.1&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxswift-book-update-1.1%2f"
   data-size="medium">
 Tweet</a><p>
 
             
 
-<p>Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.</p>
+<p>This is a short update about the first update to our RxSwift book.</p>
 
-<p>RxSwift offers a special operator called <code>retry</code>, which allows you to try another time the observable subscription upon error.</p>
+<p><strong>First of all</strong>, we&rsquo;d like to thank all of you who posted to our book errata forum!  (and if you haven&rsquo;t hit the forums yet, check &lsquo;em out - it&rsquo;s the best place to report typos, bugs, and more: <a href="https://forums.raywenderlich.com/c/books/rxswift">https://forums.raywenderlich.com/c/books/rxswift</a> ).</p>
 
-<p>You can even tell <code>retry</code> how many times to keep trying, which is very useful. The code looks like this:</p>
+<p>I&rsquo;ve worked with the raywenderlich.com team on a number of books and I must say the RxSwift book has had, so far, the most enthusiastic feedback - we&rsquo;ve been drowned in questions, thank you messages, and typo/bugs reports. Again - <strong>thank you</strong>!</p>
 
-<pre><code class="language-swift">responseObservable.retry(3)
-  .subscribe(onNext: {next in
-    print(&quot;next: \(next)&quot;)
-  }, onError: { error in
-    print(&quot;error: &quot;)
-  })
-</code></pre>
+<p>We&rsquo;ve addressed the most part of the feedback, and are looking for more - so if you see something that doesn&rsquo;t feel or spell right, let us know.</p>
 
-<p>In case <code>responseObservable</code> fails, the subscription will &ldquo;<em>restart</em>&rdquo; up to 3 times and in case it fails all 3 times, it will error out.</p>
+<p><strong>Further</strong> we&rsquo;ve updated and tested the book projects on <strong>Xcode 8.3.2</strong> and with <strong>RxSwift 3.4</strong> - few APIs became deprecated since we published the book so to provide best experience for the readers we&rsquo;ve updated the code to the latest syntax. There were few changes touching almost all code in the book like changing <code>addDisposeableTo(_)</code> to <code>disposed(by:)</code>, and <code>bindTo(_)</code> to <code>bind(to:)</code>. If you use the code from the initial book version that&rsquo;ll still work fine but it will generate warnings asking you to change to the latest syntax.</p>
 
-<p>As useful as the built-in operator is - you rarely can solve a real problem by retrying immediately.</p>
+<p><strong>Last, but not least</strong>, we&rsquo;ve updated the text in few places - we&rsquo;ve noticed some repeating questions and figured that few spots needed more clarifications. So please keep asking us - it helps a lot!</p>
 
-<p>Especially in problems caused by lack of connectivity (and others of course) it&rsquo;s much more useful to wait a little and then retry, hoping that meanwhile the problem was resolved.</p>
+<h2 id="how-to-update:f6c2e1bea7467fd778e61928bf8f2f2b">How to update?</h2>
 
-<p>Sometimes it even makes sense to first wait a short interval of time, and after few fails wait longer and longer before retrying.</p>
+<p><strong>1) Head to your profile page on raywenderlich.com</strong></p>
 
-<p>There is no built-in <code>retry</code> operator that will allow you to do that, but you could give a try to <code>RxSwiftExt</code> - an extra set of operators developed by the community (maintainer of the library is <a href="https://github.com/fpillet">fpillet</a> ).</p>
+<p><img src="http://rx-marin.com/images/update-profile.png" alt="profile page" /></p>
 
-<p>You can have a look at all of the operators included in RxSwiftExt in its README: <a href="https://github.com/RxSwiftCommunity/RxSwiftExt">https://github.com/RxSwiftCommunity/RxSwiftExt</a>.</p>
+<p><strong>2) Click on &ldquo;My Products&rdquo; tab</strong></p>
 
-<p>After you include (via CocoaPods or Carthage) RxSwiftExt in your project you have few options how to use the smarter <code>retry</code> operator.</p>
+<p><img src="http://rx-marin.com/images/update-products.png" alt="my products" /></p>
 
-<p>The smarter <code>retry</code> takes in a parameter of the <code>RepeatBehavior</code> enum, which can be one of these four types:</p>
+<p><strong>3) You will see all your purchases; click on the RxSwift book</strong> (it has a &ldquo;new&rdquo; icon on top of it)</p>
+
+<p><img src="http://rx-marin.com/images/update-book.png" alt="updated book cover" /></p>
+
+<p><strong>4) Scroll down the book page and download the latest version</strong></p>
+
+<p><img src="http://rx-marin.com/images/update-download.png" alt="update download" /></p>
+
+<p>That&rsquo;s it - <strong>enjoy</strong>!</p>
+
+<h2 id="where-to-go-from-here:f6c2e1bea7467fd778e61928bf8f2f2b">Where to go from here?</h2>
 
 <ul>
-<li><code>immediate (maxCount:)</code> - similar to the built-in behavior</li>
-<li><code>delayed (maxCount:time:)</code> - retries up to <code>maxCount</code> times, but with <code>time</code> amount of seconds between retries</li>
-<li><code>exponentialDelayed (maxCount:initial:multiplier:)</code> - retries up to <code>maxCount</code> times, starts with <code>initial</code> amount of seconds but uses <code>multiplier</code> to increase the delay between retries.</li>
-<li><code>customTimerDelayed(max:delayCalculator:)</code> - retries up to <code>max</code> times. <code>delayCalculator</code> is a closure that gets as input the number of retries so far, and returns how much seconds to wait before trying again.</li>
+<li>if you&rsquo;ve found a typo, something is not clear, or you found a bug: head to the book forums <a href="https://forums.raywenderlich.com/c/books/rxswift">https://forums.raywenderlich.com/c/books/rxswift</a> and let us know!</li>
+<li>if you&rsquo;d like to chat about RxSwift in general: join over 3,000+ RxSwift developers in the RxSwift slack <a href="http://rxswift-slack.herokuapp.com/">http://rxswift-slack.herokuapp.com/</a>.</li>
 </ul>
 
-<p>As an extra functionality you can add a closure that evaluates on each retry whether the operator shoud keep trying at all.</p>
+<p>See you next time!</p>
 
-<h3 id="retrying-at-equal-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying at equal intervals</h3>
-
-<pre><code class="language-swift">responseObservable.retry(.delayed(maxCount: 3, time: 5.0),
- shouldRetry: {error in
-  return 50..&lt;80 ~= (error as NSError).code
-})
-</code></pre>
-
-<p>This is a more elaborate example so let&rsquo;s have a look. If <code>responseObservable</code> emits an error <code>retry</code> will try up to 3 times, with 5 second intervals between the retries.</p>
-
-<p>Additionally between retries <code>retry</code> will consult with the <code>shouldRetry</code> closure if it should keep going. Once the code casts <code>error</code> as an <code>NSError</code>, it checks the code of the error. It lets <code>retry</code> keep trying if the error code is between 50 and 80, and stops retrying if the code is not in that range.</p>
-
-<p>In your own app return <code>true</code> or <code>false</code> depending on your business logic.</p>
-
-<h3 id="retrying-in-increasing-intervals:0d2f3d508498ad2374296c16265dc39a">Retrying in increasing intervals</h3>
-
-<p>The formula calculting the delay between retries is <code>initial * pow(1 + multiplier, Double(currentRepetition - 1))</code>.</p>
-
-<p>Let&rsquo;s have a look at an example:</p>
-
-<pre><code class="language-swift">retry(.exponentialDelayed(maxCount: 3, initial: 2.0, multiplier: 1.5))
-</code></pre>
-
-<p>The delay between first and second tries is 2.0 seconds (the value of <code>initial</code> parameter). Then between second and third tries is 5.0 seconds - <code>2.0 * 2.5</code> seconds.</p>
-
-<h3 id="calculating-the-delay:0d2f3d508498ad2374296c16265dc39a">Calculating the delay</h3>
-
-<p>In the end  - if you go for a custom calculator you can simply return any value based on any kind of custom business logic so sky is pretty much the limit.</p>
-
-<p>As an example here is a piece of code that implements decreasing delays between tries: 10, 9, 8, 7, 6, etc.</p>
-
-<pre><code class="language-swift">let speedUp: (UInt) -&gt; Double = {retries in
-  return max(0.0, 10 - Double(retries))
-}
-
-responseObservable.retry(.customTimerDelayed(maxCount: 10,
-  delayCalculator: speedUp))
-    .subscribe()
-</code></pre>
-
-<h3 id="a-non-rxswift-retry:0d2f3d508498ad2374296c16265dc39a">A non RxSwift retry</h3>
-
-<p>As a fun bonus, I&rsquo;ve made a <code>retry</code> library which doesn&rsquo;t use RxSwift at all as I find a custom-delay <code>retry</code> very useful in all kinds of apps. You can use the pure Swift <code>retry</code> in a very similar manner: <a href="https://github.com/icanzilb/retry">https://github.com/icanzilb/retry</a></p>
+<p>The book is available <strong>ONLY</strong> at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you get free updates, discuss in the website forums, etc.</p>
 
 	
 			
@@ -352,7 +307,7 @@ responseObservable.retry(.customTimerDelayed(maxCount: 10,
 Follow @icanzilb</a></p>
 
 <p>Share this post: <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=A%20smarter%20Retry%20with%20RxSwiftExt&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-retry-with-delay%2f">
+  href="https://twitter.com/intent/tweet?text=First%20update%20to%20the%20RxSwift%20book%20with%20version%201.1&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxswift-book-update-1.1%2f">
 Tweet</a></p>
 </div>
 
@@ -370,13 +325,11 @@ Tweet</a></p>
 					
 	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
 	                
-	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
+	                <a class="post-tag post-tag-book" href="http://rx-marin.com//tags/book">book</a>,
 	                
-	                <a class="post-tag post-tag-rxswiftext" href="http://rx-marin.com//tags/rxswiftext">rxswiftext</a>,
+	                <a class="post-tag post-tag-update" href="http://rx-marin.com//tags/update">update</a>,
 	                
-	                <a class="post-tag post-tag-repeat" href="http://rx-marin.com//tags/repeat">repeat</a>,
-	                
-	                <a class="post-tag post-tag-retry" href="http://rx-marin.com//tags/retry">retry</a>,
+	                <a class="post-tag post-tag-release" href="http://rx-marin.com//tags/release">release</a>,
 	                
 				</div>
 			
@@ -385,16 +338,11 @@ Tweet</a></p>
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.com/post/dotswift-search-github-json-api/">(dotSwift) Search GitHub with RxSwift</a>
-		            </div>
-		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-advanced-combine-latest/">combineLatest beyond the basics</a>
 		            </div>
 		            
 	            </div>

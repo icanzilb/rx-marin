@@ -6,8 +6,61 @@
     <description>Recent content on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 May 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jun 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://rx-marin.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>First update to the RxSwift book with version 1.1</title>
+      <link>http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/</link>
+      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/</guid>
+      <description>
+
+&lt;p&gt;This is a short update about the first update to our RxSwift book.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;First of all&lt;/strong&gt;, we&amp;rsquo;d like to thank all of you who posted to our book errata forum!  (and if you haven&amp;rsquo;t hit the forums yet, check &amp;lsquo;em out - it&amp;rsquo;s the best place to report typos, bugs, and more: &lt;a href=&#34;https://forums.raywenderlich.com/c/books/rxswift&#34;&gt;https://forums.raywenderlich.com/c/books/rxswift&lt;/a&gt; ).&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve worked with the raywenderlich.com team on a number of books and I must say the RxSwift book has had, so far, the most enthusiastic feedback - we&amp;rsquo;ve been drowned in questions, thank you messages, and typo/bugs reports. Again - &lt;strong&gt;thank you&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ve addressed the most part of the feedback, and are looking for more - so if you see something that doesn&amp;rsquo;t feel or spell right, let us know.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Further&lt;/strong&gt; we&amp;rsquo;ve updated and tested the book projects on &lt;strong&gt;Xcode 8.3.2&lt;/strong&gt; and with &lt;strong&gt;RxSwift 3.4&lt;/strong&gt; - few APIs became deprecated since we published the book so to provide best experience for the readers we&amp;rsquo;ve updated the code to the latest syntax. There were few changes touching almost all code in the book like changing &lt;code&gt;addDisposeableTo(_)&lt;/code&gt; to &lt;code&gt;disposed(by:)&lt;/code&gt;, and &lt;code&gt;bindTo(_)&lt;/code&gt; to &lt;code&gt;bind(to:)&lt;/code&gt;. If you use the code from the initial book version that&amp;rsquo;ll still work fine but it will generate warnings asking you to change to the latest syntax.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Last, but not least&lt;/strong&gt;, we&amp;rsquo;ve updated the text in few places - we&amp;rsquo;ve noticed some repeating questions and figured that few spots needed more clarifications. So please keep asking us - it helps a lot!&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-update:f6c2e1bea7467fd778e61928bf8f2f2b&#34;&gt;How to update?&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;1) Head to your profile page on raywenderlich.com&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-profile.png&#34; alt=&#34;profile page&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2) Click on &amp;ldquo;My Products&amp;rdquo; tab&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-products.png&#34; alt=&#34;my products&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3) You will see all your purchases; click on the RxSwift book&lt;/strong&gt; (it has a &amp;ldquo;new&amp;rdquo; icon on top of it)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-book.png&#34; alt=&#34;updated book cover&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4) Scroll down the book page and download the latest version&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-download.png&#34; alt=&#34;update download&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s it - &lt;strong&gt;enjoy&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;h2 id=&#34;where-to-go-from-here:f6c2e1bea7467fd778e61928bf8f2f2b&#34;&gt;Where to go from here?&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;if you&amp;rsquo;ve found a typo, something is not clear, or you found a bug: head to the book forums &lt;a href=&#34;https://forums.raywenderlich.com/c/books/rxswift&#34;&gt;https://forums.raywenderlich.com/c/books/rxswift&lt;/a&gt; and let us know!&lt;/li&gt;
+&lt;li&gt;if you&amp;rsquo;d like to chat about RxSwift in general: join over 3,000+ RxSwift developers in the RxSwift slack &lt;a href=&#34;http://rxswift-slack.herokuapp.com/&#34;&gt;http://rxswift-slack.herokuapp.com/&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;See you next time!&lt;/p&gt;
+
+&lt;p&gt;The book is available &lt;strong&gt;ONLY&lt;/strong&gt; at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you get free updates, discuss in the website forums, etc.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>combineLatest beyond the basics</title>
@@ -2175,135 +2228,6 @@ active.negate().bindTo(btnStart.rx_hidden).addDisposableTo(bag)
 &lt;p&gt;Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&amp;rsquo;s nothing wrong with it.&lt;/p&gt;
 
 &lt;p&gt;In my next post I&amp;rsquo;ll look into few more operators I created along the way for myself. Do you want to share any of yours?&lt;/p&gt;
-
-&lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Split laps timer with RxSwift and RxCocoa: Part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
-      <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
-      <description>&lt;p&gt;In my post from last week I worked on creating a split lapse timer app (&lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt;). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.&lt;/p&gt;
-
-&lt;p&gt;Well this week I am implementing exactly this functionality.&lt;/p&gt;
-
-&lt;p&gt;The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.&lt;/p&gt;
-
-&lt;p&gt;If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&amp;rsquo;ve added a couple of buttons in the user interface:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
-
-&lt;p&gt;My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce &lt;code&gt;true&lt;/code&gt; values and the stop button will produce &lt;code&gt;false&lt;/code&gt; values. When merged I will get one sequence that emits every time the state changes:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;o---- (play tap) true--- (stop tap) false --- (play tap) true ---&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;So at the top of &lt;code&gt;viewDidLoad()&lt;/code&gt; I created a new Observable like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
-    .toObservable()
-    .merge()
-    .startWith(false)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;First I mapped the taps on &lt;code&gt;btnPlay&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt; and the taps on &lt;code&gt;btnStop&lt;/code&gt; to &lt;code&gt;false&lt;/code&gt; and merged them together.&lt;/p&gt;
-
-&lt;p&gt;The Observable starts with a &lt;code&gt;false&lt;/code&gt; value to give the user the opportunity to start the timer at their convenience.&lt;/p&gt;
-
-&lt;p&gt;I printed the values the new observable emits and was quite happy with the result:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;isRunning.subscribeNext({state in
-    print(state)
-}).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The code printed &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt; in the console each time I pressed play or stop. Neato!&lt;/p&gt;
-
-&lt;p&gt;Now it looked very easy to bind that Observable to the buttons&amp;rsquo; &lt;code&gt;rx_enabled&lt;/code&gt; property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&amp;rsquo;t running at all!&lt;/p&gt;
-
-&lt;p&gt;And since some of the controls needed to be enabled when the timer is running and others when it isn&amp;rsquo;t - I made myself yet another observable and bound the controls like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let isntRunning = isRunning.map({running in !running}).shareReplay(1)
-
-isRunning.bindTo(btnStop.rx_enabled).addDisposableTo(bag)
-isntRunning.bindTo(btnLap.rx_hidden).addDisposableTo(bag)
-isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The stop button is enabled while the timer is running. Play is enabled when the timer is paused.&lt;/p&gt;
-
-&lt;p&gt;I really love this kind of code. No &lt;code&gt;if&lt;/code&gt;s no &lt;code&gt;switch&lt;/code&gt;es; once you get the code running it&amp;rsquo;s very difficult to mess up and there&amp;rsquo;s simply no space for introducing bugs. Everything is air-tight.&lt;/p&gt;
-
-&lt;p&gt;The app started with the laps button hidden and only the play button enabled like so:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Further you could click play just once because it instantly became disabled. How cool :]&lt;/p&gt;
-
-&lt;p&gt;Now my problem was that even though the UI already reflected the different states of the timer - well &amp;hellip; the timer didn&amp;rsquo;t care at all about any of that :]&lt;/p&gt;
-
-&lt;p&gt;I looked into the &lt;code&gt;RxSwift&lt;/code&gt; implementation of a timer but didn&amp;rsquo;t find a way how to pause it (I guess that it couldn&amp;rsquo;t implement state, who knows &amp;hellip;). That&amp;rsquo;s why I thought I&amp;rsquo;d move away from directly binding the timer to the UI and implement my own counter.&lt;/p&gt;
-
-&lt;p&gt;At the time my timer looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Well, I thought, I just need to somehow combine &lt;code&gt;isRunning&lt;/code&gt; and &lt;code&gt;timer&lt;/code&gt; and filter the observable output when &lt;code&gt;isRunning&lt;/code&gt; is &lt;code&gt;false&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;So I did the following: I appended to the existing &lt;code&gt;timer&lt;/code&gt; an operator to combine it with the latest value from &lt;code&gt;isRunning&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.withLatestFrom(isRunning, resultSelector: {_, running in running})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You see that I just ignored the value emitted by &lt;code&gt;timer&lt;/code&gt; since I never use it for anything and return from &lt;code&gt;withLatestFrom&lt;/code&gt; the unchanged &lt;code&gt;running&lt;/code&gt; input parameter:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;(Int, Boolean) -&amp;gt; withLatestFrom -&amp;gt; Boolean&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Next I could simply use &lt;code&gt;filter&lt;/code&gt; to stop the observable from emitting when the timer is not running:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.filter({running in running})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And last but not least I had to attach a counter, but that was already something I knew how to do with &lt;code&gt;scan&lt;/code&gt; like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.scan(0, accumulator: {(acc, _) in
-    return acc+1
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;What &lt;code&gt;scan&lt;/code&gt; does above is to count how many times the timer fired while &lt;code&gt;isRunning&lt;/code&gt; was &lt;code&gt;true&lt;/code&gt; (which is exactly what I wanted).&lt;/p&gt;
-
-&lt;p&gt;Finally I had to set the initial value to show in the UI and to share the result between all observers:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; .startWith(0)
- .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The complete code of the enhanced timer observable looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
-    .withLatestFrom(isRunning, resultSelector: {_, running in running})
-    .filter({running in running})
-    .scan(0, accumulator: {(acc, _) in
-        return acc+1
-    })
-    .startWith(0)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that&amp;rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single &lt;code&gt;if&lt;/code&gt;!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
 </description>
