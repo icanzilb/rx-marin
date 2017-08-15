@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Split laps timer with RxSwift and RxCocoa: Part 2 // rx_marin&lt;blog&gt;
+    Raffling my ticket to NSSpain 2017 // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week">
+<meta name="description" content="I&#39;m raffling my ticket to NSSpain 2017, read on...">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
 <meta name="generator" content="Hugo 0.15" />
 
-  <meta property="og:title" content="Split laps timer with RxSwift and RxCocoa: Part 2" />
-<meta property="og:description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week" />
+  <meta property="og:title" content="Raffling my ticket to NSSpain 2017" />
+<meta property="og:description" content="I&#39;m raffling my ticket to NSSpain 2017, read on..." />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/" />
+<meta property="og:url" content="http://rx-marin.com/post/nsspain-ticket/" />
 
 
   
@@ -199,14 +199,14 @@
 	    
   		<section class="post">
             <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">Split laps timer with RxSwift and RxCocoa: Part 2</a>
+              <a href="http://rx-marin.com/post/nsspain-ticket/">Raffling my ticket to NSSpain 2017</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>22</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2016</span>
+                	<span class="post-date-day"><sup>15</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Aug</span> <span class="post-date-year">2017</span>
             	</span>
             	
             
@@ -234,130 +234,35 @@
 			
 
 <p><a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f"
+  href="https://twitter.com/intent/tweet?text=Raffling%20my%20ticket%20to%20NSSpain%202017&url=http%3a%2f%2frx-marin.com%2fpost%2fnsspain-ticket%2f"
   data-size="medium">
 Tweet</a><p>
 
-            <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
+            <p>This year is the 5th edition of <a href="https://2017.nsspain.com">NSSpain</a> - the only international iOS/macOS conference in Spain and one of the best in the world I&rsquo;ve been to. There are many reasons why I think NSSpain is the right way to do a conference, including but not limited to - single track, remote location, and best-in-business speakers&hellip; <em>(And that&rsquo;s why last year I sponsored a student-ticket to NSSpain.)</em></p>
 
-<p>Well this week I am implementing exactly this functionality.</p>
+<p>Speakers receive not only free entry to the full conference and free accomodation, but also tons of love from the organizers. (You will probably be surprised but not all iOS confs provide free entry/accomodation/travel to speakers even if speakers do speak for free.)</p>
 
-<p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
+<p>I will lead an RxSwift workshop and give a talk at NSSpain 2017, and therefore I will receive a refund for the ticket I already bought. <strong>HOWEVER</strong>&hellip;</p>
 
-<p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
+<p>&hellip; a bro in IT, a bro-ogler, decided to attack a huge group of our colleagues last week based on their gender and for literally everyone in the industry this ought to be unacceptable.</p>
 
-<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt="" /></p>
+<p>I&rsquo;d like to <em>manifest</em> (lol) that not all men in tech are like him, so I will raffle my NSSpain ticket instead of getting my money back.</p>
 
-<p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
+<p>In order to participate in the raffle you must be (aka the rules):</p>
 
-<p>Now let&rsquo;s put all those buttons to work!</p>
+<ol>
+<li>a woman in tech (no bros sorry - my ticket, my rules)</li>
+<li>maintain a repo or have successfully done a meaningful PR to a Swift/ObjC library, which I can publicly see</li>
+<li>ping me on twitter <a href="https://twitter.com/icanzilb">@icanzilb</a> with a link to a repo or PR, until 11PM GMT on Aug 20th.</li>
+</ol>
 
-<p>My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce <code>true</code> values and the stop button will produce <code>false</code> values. When merged I will get one sequence that emits every time the state changes:</p>
+<p>I will raffle the names and ping the one of you who gets the ticket on Aug 21st so you can arrange your travel.</p>
 
-<p><code>o---- (play tap) true--- (stop tap) false --- (play tap) true ---&gt;</code></p>
+<p>Additionally I will retweet all qualifying entries to give you more visibility and ask ppl I know to retweet as well. If you tag your submission with <code>#WITBragDay</code> probably even more people will pick it up and retweet.</p>
 
-<p>So at the top of <code>viewDidLoad()</code> I created a new Observable like so:</p>
+<p>That&rsquo;s the plan! :) Let&rsquo;s do it!</p>
 
-<pre><code>let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
-    .toObservable()
-    .merge()
-    .startWith(false)
-    .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>First I mapped the taps on <code>btnPlay</code> to <code>true</code> and the taps on <code>btnStop</code> to <code>false</code> and merged them together.</p>
-
-<p>The Observable starts with a <code>false</code> value to give the user the opportunity to start the timer at their convenience.</p>
-
-<p>I printed the values the new observable emits and was quite happy with the result:</p>
-
-<pre><code>isRunning.subscribeNext({state in
-    print(state)
-}).addDisposableTo(bag)
-</code></pre>
-
-<p>The code printed <code>true</code> or <code>false</code> in the console each time I pressed play or stop. Neato!</p>
-
-<p>Now it looked very easy to bind that Observable to the buttons&rsquo; <code>rx_enabled</code> property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&rsquo;t running at all!</p>
-
-<p>And since some of the controls needed to be enabled when the timer is running and others when it isn&rsquo;t - I made myself yet another observable and bound the controls like so:</p>
-
-<pre><code>let isntRunning = isRunning.map({running in !running}).shareReplay(1)
-
-isRunning.bindTo(btnStop.rx_enabled).addDisposableTo(bag)
-isntRunning.bindTo(btnLap.rx_hidden).addDisposableTo(bag)
-isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
-</code></pre>
-
-<p>The stop button is enabled while the timer is running. Play is enabled when the timer is paused.</p>
-
-<p>I really love this kind of code. No <code>if</code>s no <code>switch</code>es; once you get the code running it&rsquo;s very difficult to mess up and there&rsquo;s simply no space for introducing bugs. Everything is air-tight.</p>
-
-<p>The app started with the laps button hidden and only the play button enabled like so:</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-play.png" alt="" /></p>
-
-<p>Further you could click play just once because it instantly became disabled. How cool :]</p>
-
-<p>Now my problem was that even though the UI already reflected the different states of the timer - well &hellip; the timer didn&rsquo;t care at all about any of that :]</p>
-
-<p>I looked into the <code>RxSwift</code> implementation of a timer but didn&rsquo;t find a way how to pause it (I guess that it couldn&rsquo;t implement state, who knows &hellip;). That&rsquo;s why I thought I&rsquo;d move away from directly binding the timer to the UI and implement my own counter.</p>
-
-<p>At the time my timer looked like this:</p>
-
-<pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
-</code></pre>
-
-<p>Well, I thought, I just need to somehow combine <code>isRunning</code> and <code>timer</code> and filter the observable output when <code>isRunning</code> is <code>false</code>.</p>
-
-<p>So I did the following: I appended to the existing <code>timer</code> an operator to combine it with the latest value from <code>isRunning</code>:</p>
-
-<pre><code>.withLatestFrom(isRunning, resultSelector: {_, running in running})
-</code></pre>
-
-<p>You see that I just ignored the value emitted by <code>timer</code> since I never use it for anything and return from <code>withLatestFrom</code> the unchanged <code>running</code> input parameter:</p>
-
-<p><code>(Int, Boolean) -&gt; withLatestFrom -&gt; Boolean</code></p>
-
-<p>Next I could simply use <code>filter</code> to stop the observable from emitting when the timer is not running:</p>
-
-<pre><code>.filter({running in running})
-</code></pre>
-
-<p>And last but not least I had to attach a counter, but that was already something I knew how to do with <code>scan</code> like so:</p>
-
-<pre><code>.scan(0, accumulator: {(acc, _) in
-    return acc+1
-})
-</code></pre>
-
-<p>What <code>scan</code> does above is to count how many times the timer fired while <code>isRunning</code> was <code>true</code> (which is exactly what I wanted).</p>
-
-<p>Finally I had to set the initial value to show in the UI and to share the result between all observers:</p>
-
-<pre><code> .startWith(0)
- .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>The complete code of the enhanced timer observable looked like this:</p>
-
-<pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
-    .withLatestFrom(isRunning, resultSelector: {_, running in running})
-    .filter({running in running})
-    .scan(0, accumulator: {(acc, _) in
-        return acc+1
-    })
-    .startWith(0)
-    .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>And that&rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single <code>if</code>!</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-2-final.gif" alt="" /></p>
-
-<p>You can get the completed project from here: <a href="http://rx-marin.com/zip/rx_laptimer_finished.zip">rx_laptimer_finished.zip</a></p>
-
-<p>Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.</p>
+<p>I&rsquo;ll see you all at NSSpain.</p>
 
 	
 			
@@ -368,7 +273,7 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 Follow @icanzilb</a></p>
 
 <p>Share this post: <a class="twitter-share-button"
-  href="https://twitter.com/intent/tweet?text=Split%20laps%20timer%20with%20RxSwift%20and%20RxCocoa%3a%20Part%202&url=http%3a%2f%2frx-marin.com%2fpost%2frxswift-rxcocoa-timer-app-useWithLatest-bindings%2f">
+  href="https://twitter.com/intent/tweet?text=Raffling%20my%20ticket%20to%20NSSpain%202017&url=http%3a%2f%2frx-marin.com%2fpost%2fnsspain-ticket%2f">
 Tweet</a></p>
 </div>
 
@@ -384,15 +289,7 @@ Tweet</a></p>
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
-	                
-	                <a class="post-tag post-tag-rxcocoa" href="http://rx-marin.com//tags/rxcocoa">rxcocoa</a>,
-	                
-	                <a class="post-tag post-tag-usewithlatest" href="http://rx-marin.com//tags/usewithlatest">useWithLatest</a>,
-	                
-	                <a class="post-tag post-tag-bindings" href="http://rx-marin.com//tags/bindings">bindings</a>,
-	                
-	                <a class="post-tag post-tag-interval" href="http://rx-marin.com//tags/interval">interval</a>,
+	                <a class="post-tag post-tag-nsspain" href="http://rx-marin.com//tags/nsspain">nsspain</a>,
 	                
 				</div>
 			
@@ -401,16 +298,11 @@ Tweet</a></p>
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
-		            </div>
-		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/">First update to the RxSwift book with version 1.1</a>
 		            </div>
 		            
 	            </div>
