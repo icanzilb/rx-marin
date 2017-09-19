@@ -100,6 +100,10 @@
 	    Latest posts:
         
           <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-custom-bindings/">19/Sep &middot; Custom property bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
               <a href="http://rx-marin.com/post/nsspain-ticket/">15/Aug &middot; Raffling my ticket to NSSpain 2017</a>
           </li>
         
@@ -191,6 +195,42 @@
       
 
       <div class="posts">
+        
+          <section  class="post">
+            <header class="post-header">
+            
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxswift-custom-bindings/">Custom property bindings with RxSwift</a>
+            </h1>
+            </header>
+            <p class="post-meta">
+            	
+		          <span class="post-date">
+		            <span class="post-date-day"><sup>19</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2017</span>
+		          </span>
+      				
+      				
+      					By <a class="post-author" >Marin Todorov</a>
+      				
+              
+                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>3 min. read</em></span>
+              
+      				
+      					<div class="post-categories">
+				        
+      					
+					        <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
+      					
+      					</div>
+      				
+            </p>
+            <article class="post-summary">
+            	Recently, in one of the few meetups I&rsquo;ve been in person to, someone told me the didn&rsquo;t try RxSwift because somebody told them that RxSwift doesn&rsquo;t support custom views. While I&rsquo;m still baffled what that original person meant, I thought the best way to disagree is to write a short tutorial to prove them wrong. What are custom property sinks? When you use RxCocoa bindings you can easily bind the values an observable emits to some view on screen like so: myObservable .map { &quot;new value is \($0)&quot; } .bind(to: myLabel.rx.text ) .disposed(by: bag) But have you ever wondered what rx.text is and what so magical is there about it?
+            </article>
+			<div class="read-more-link">
+				<a href="http://rx-marin.com/post/rxswift-custom-bindings/"><span class="read-more-slashes">//</span>Read More...</a>
+			</div>
+          </section>
         
           <section  class="post">
             <header class="post-header">
