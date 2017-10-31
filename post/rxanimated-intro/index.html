@@ -399,8 +399,8 @@
 </ul></li>
 <li><a href="#api-design">API design</a>
 <ul>
-<li><a href="#animations-are-constrained-to-the-ui-component-type"><strong>Animations are constrained to the UI component type</strong></a></li>
-<li><a href="#you-can-easily-add-new-binding-sinks-via-protocols"><strong>You can easily add new binding sinks via protocols</strong></a></li>
+<li><a href="#animations-are-constrained-to-the-ui-component-type">Animations are constrained to the UI component type</a></li>
+<li><a href="#you-can-easily-add-new-binding-sinks-via-protocols">You can (easily) add new binding sinks via protocols</a></li>
 </ul></li>
 <li><a href="#what-comes-out-of-the-box">What comes out of the box?</a></li>
 <li><a href="#why-only-animated-bindings">Why only animated bindings?</a></li>
@@ -517,7 +517,7 @@ counterObservable
 
 <p>The API is designed to be very flexible and I&rsquo;m going to highlight just few points here:</p>
 
-<h4 id="animations-are-constrained-to-the-ui-component-type"><strong>Animations are constrained to the UI component type</strong></h4>
+<h4 id="animations-are-constrained-to-the-ui-component-type">Animations are constrained to the UI component type</h4>
 
 <p>The build-in animations like fade and flip are constrained to <code>UIView</code> so you can use them on all views. If we look at the previous example:</p>
 
@@ -539,7 +539,7 @@ counterObservable
 
 <p>If you do want however to create your own animation and restrict it only to <code>UILabel</code> and its sub-classes you can do that and the API will not make it available for bindings to any other types.</p>
 
-<h4 id="you-can-easily-add-new-binding-sinks-via-protocols"><strong>You can easily add new binding sinks via protocols</strong></h4>
+<h4 id="you-can-easily-add-new-binding-sinks-via-protocols">You can (easily) add new binding sinks via protocols</h4>
 
 <p>RxAnimated includes a list of bindings you can use out of the box but what if you have a custom view with its custom properties, which you bind to and want to animate?</p>
 
