@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 18 Apr 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/realm/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/realm/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>App state with Realm and RxSwift</title>
@@ -15,132 +17,8 @@
       <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-realm-reactive-app-settings/</guid>
-      <description>
-
-&lt;h2 id=&#34;intro:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Intro&lt;/h2&gt;
-
-&lt;p&gt;This post isn&amp;rsquo;t that much about operators but how to leverage the awesome technology that Realm is.&lt;/p&gt;
-
-&lt;p&gt;Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&amp;rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.&lt;/p&gt;
-
-&lt;p&gt;So I sat down and wrote me a proper reactive app settings class to use around the app in some 10 minutes or so.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-data-model-class:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;The data model class&lt;/h2&gt;
-
-&lt;p&gt;Since the app uses Realm I created a new &lt;code&gt;Object&lt;/code&gt; sub-class for my app settings - this way my settings would always persist between app launches and can be observed on any thread. Here&amp;rsquo;s the AppState class I ended up with:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;import Foundation
-import RealmSwift
-
-class AppState: Object {
-    
-    dynamic var scheduleOnlyFavorites = false
-    dynamic var speakersOnlyFavorites = false
-    
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;For this version of the app I just want to persist whether the user has favorites-only toggled in the schedule screen and the speakers screen (it&amp;rsquo;s an event app).&lt;/p&gt;
-
-&lt;p&gt;The default values for both properties are &lt;code&gt;false&lt;/code&gt;. When the app starts it checks whether there&amp;rsquo;s an &lt;code&gt;AppState&lt;/code&gt; object already stored in Realm and if not - creates one.&lt;/p&gt;
-
-&lt;h2 id=&#34;app-state-subject-in-app-controller:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;App state subject in app controller&lt;/h2&gt;
-
-&lt;p&gt;I have an app controller class that provides few generic services so I thought it&amp;rsquo;s a good idea to add a &lt;code&gt;PublishSubject&lt;/code&gt; to it that different view controllers (and other classes) can observe.&lt;/p&gt;
-
-&lt;p&gt;I added an &lt;code&gt;appState&lt;/code&gt; subject and a property to retain the Realm updates subscription:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;class AppController {
-    
-    private var stateNotification: NotificationToken?
-    let appState = PublishSubject&amp;lt;AppState&amp;gt;()
-    
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;provide-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Provide app state updates&lt;/h2&gt;
-
-&lt;p&gt;Wiring up the app settings subject was very easy thanks to the  &lt;code&gt;addNotificationBlock&lt;/code&gt; method on Realm&amp;rsquo;s &lt;code&gt;AnyRealmCollection&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;init() {
-    stateNotification = RealmProvider.appRealm.objects(AppState).addNotificationBlock {[weak self]results, error in
-        if let state = results?.first, let `self` = self {
-            self.appState.onNext(state)
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&lt;code&gt;RealmProvider.appRealm&lt;/code&gt; returns a Realm on the current thread that points to the particle realm file I want to use for the app state.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;What this code does is to fetch all objects of class &lt;code&gt;AppState&lt;/code&gt; stored in Realm and any time any time those are updated call the closure provided to &lt;code&gt;addNotificationBlock&lt;/code&gt;. The closure gets a reference to the results as its first parameter so it&amp;rsquo;s pretty easy to just fetch the first result (the only &lt;code&gt;AppState&lt;/code&gt; object in the Realm actually) and emit it as a &lt;code&gt;.Next&lt;/code&gt; event from the &lt;code&gt;appState&lt;/code&gt; subject of the app controller.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s really all there is to binding a &lt;code&gt;PublishSubject&lt;/code&gt; to any Realm result. As long as anything retains &lt;code&gt;stateNotification&lt;/code&gt; you will receive updates from Realm.&lt;/p&gt;
-
-&lt;h2 id=&#34;observe-for-app-state-updates:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Observe for app state updates&lt;/h2&gt;
-
-&lt;p&gt;Next - I wanted to observe for changes in the two settings in my persisted app settings object.&lt;/p&gt;
-
-&lt;p&gt;So in my view model, that shows the event schedule, I added:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;UIApplication.controller.appState
-.map {state in
-    return state.scheduleOnlyFavorites
-}
-.bindTo(onlyFavorites)
-.addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I observe &lt;code&gt;appState&lt;/code&gt; and map the emitted value, which is of type &lt;code&gt;AppState&lt;/code&gt;, to the value of &lt;code&gt;scheduleOnlyFavorites&lt;/code&gt;. The result is a &lt;code&gt;Bool&lt;/code&gt; value, which I just bind to another subject that I have called &lt;code&gt;onlyFavorites&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Cool! Now any class could update my app settings and that&amp;rsquo;ll reflect the bindings I have in this particular view model.&lt;/p&gt;
-
-&lt;h2 id=&#34;updating-the-app-state:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Updating the app state&lt;/h2&gt;
-
-&lt;p&gt;The last piece of the puzzle was the code to run when the user toggles the favorites-only button. I went back to my app controller class and added a new method that would update my app state:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func updateState(updates: (inout AppState)-&amp;gt;Void) {
-    try! RealmProvider.appRealm.write {
-        var currentState = RealmProvider.appRealm.objects(AppState).first!
-        updates(&amp;amp;currentState)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;updateState&lt;/code&gt; takes a closure inside which you can mutate the app state. This pattern let me create a Realm on the current thread, fetch the current app state and inject it to the user-defined updates closure.&lt;/p&gt;
-
-&lt;p&gt;I wrapped the whole thing in a &lt;code&gt;Realm.write&lt;/code&gt; call so that it is actually allowed to mutate the state object from inside the closure.&lt;/p&gt;
-
-&lt;h2 id=&#34;observing-for-buttons-taps-and-mutating-the-state:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Observing for buttons taps and mutating the state&lt;/h2&gt;
-
-&lt;p&gt;It was finally time to wire everything together. In the view controller taking care of my navigation bar where the favorites button lives I added:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;btnFavorites.rx_tap
-    .subscribeNext {[weak self]_ in
-        guard let `self` = self else {return}
-        UIApplication.controller.updateState {state in
-            state.scheduleOnlyFavorites = self.btnFavorites.selected
-        }
-    }
-    .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When the user taps the favorites button I call &lt;code&gt;updateState&lt;/code&gt; and set the value of &lt;code&gt;scheduleOnlyFavorites&lt;/code&gt; to the &lt;code&gt;selected&lt;/code&gt; property of my button. &lt;code&gt;selected&lt;/code&gt; toggles between &lt;code&gt;true&lt;/code&gt; and &lt;code&gt;false&lt;/code&gt; so that changes the app state property accordingly.&lt;/p&gt;
-
-&lt;p&gt;As soon as my &lt;code&gt;updateState&lt;/code&gt; closure executes, app controller gets a notification from Realm that one of the stored &lt;code&gt;AppState&lt;/code&gt; objects was modified and that emits a new value from the &lt;code&gt;appState&lt;/code&gt; subject.&lt;/p&gt;
-
-&lt;p&gt;And finally since my view models throughout the app observe that subject they update their bindings and UI throughout the app gets updated accordingly.&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:9a83a773dd09ee7268ed7c858c5ba34a&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;It took me very little time to add a persisted reactive app state to the project. Using Realm for the task made it very easy to have the app state reactive and accessible across classes and threads.&lt;/p&gt;
-
-&lt;p&gt;The code in my app controller is 10-15 lines and I have another 5 lines in the data model class. How cool is that?&lt;/p&gt;
-
-&lt;p&gt;I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;icanzilb&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>Intro This post isn&amp;rsquo;t that much about operators but how to leverage the awesome technology that Realm is.
+Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&amp;rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.</description>
     </item>
     
   </channel>

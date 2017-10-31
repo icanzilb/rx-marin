@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 24 Mar 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>(dotSwift) Unidirectional data flow with RxSwift and RxRealm</title>
@@ -15,147 +17,9 @@
       <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/</guid>
-      <description>
-
-&lt;p&gt;In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.&lt;/p&gt;
-
-&lt;p&gt;I already posted a write up on the GitHub API search example here: &lt;a href=&#34;http://rx-marin.com/post/dotswift-search-github-json-api/&#34;&gt;http://rx-marin.com/post/dotswift-search-github-json-api/&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The second post in the series, the one about presenting view controllers, is online here: &lt;a href=&#34;http://rx-marin.com/post/dotswift-rxswift-view-controller/&#34;&gt;http://rx-marin.com/post/dotswift-rxswift-view-controller/&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s continue with example number three.&lt;/p&gt;
-
-&lt;h2 id=&#34;modelling-unidirectional-data-flow-with-rxrealm:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;Modelling unidirectional data flow with RxRealm&lt;/h2&gt;
-
-&lt;p&gt;RxSwift doesn&amp;rsquo;t neccessarily force you into one architecture or another, but it really helps you keep flows of data separte. For example, one class working on a background thread will fetch data from a network API and save it to disk, another class will read from disk and bind the UI on screen.&lt;/p&gt;
-
-&lt;p&gt;The two are completely separate and shouldn&amp;rsquo;t intermix.&lt;/p&gt;
-
-&lt;p&gt;In this example I used RxRealm with an online JSON API to show how to fetch JSON, store data on disk, and display it on screen easily with RxSwift and Realm.&lt;/p&gt;
-
-&lt;h3 id=&#34;why-i-chose-this-example:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;Why I chose this example?&lt;/h3&gt;
-
-&lt;p&gt;To make a point, namely that RxSwift allows you to simplify incredibly not only the code but also the logic of your app by defining clean dataflows.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-sample-code:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;The sample code&lt;/h3&gt;
-
-&lt;p&gt;In this post I can go into a bit more detail about the complete code than it was reasonable in the talk at the conference. Still keep in mind this was written with the goal to fit in a single slide, so corners were cut big time :)&lt;/p&gt;
-
-&lt;p&gt;The sample uses both RxRealm and RxRealmDataSources (which is a simplified data source library to use with realm).&lt;/p&gt;
-
-&lt;p&gt;The completed project shows a table view, which updates any time new objects are added in the background. The table view displays a list of mocked repository activity items, like so:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-completed.png&#34; alt=&#34;completed unidirectional dataflow project&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;In the simple example included in the talk, all code is added in the view controller but of course in real-life this could be split across different classes, frameworks, etc.&lt;/p&gt;
-
-&lt;p&gt;The example defines two data flows:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;JSON from API, being converted to objects and stored on disk.&lt;/li&gt;
-&lt;li&gt;Objects loaded from disk and bound to a UI table.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&#34;1-converting-and-storing-json:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;1. Converting and storing JSON&lt;/h4&gt;
-
-&lt;p&gt;&lt;code&gt;SourceControlAPI&lt;/code&gt; is a mocked API class, which periodically provides updates in JSON format. &lt;code&gt;SourceControlAPI.updates()&lt;/code&gt; returns &lt;code&gt;Observable&amp;lt;[String: Any]&amp;gt;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The subscription begins like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;SourceControlAPI.updates()
-  .observeOn(SerialDispatchQueueScheduler(qos: .background))
-  .map(Update.fromOrEmpty)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Via &lt;code&gt;observeOn&lt;/code&gt; I switch the processing of the JSON data to a background thread, and map all the JSON objects to &lt;code&gt;Update&lt;/code&gt; realm objects. &lt;code&gt;fromOrEmpty&lt;/code&gt; is a static method, which takes in a dictionary and populates a new &lt;code&gt;Update&lt;/code&gt; object.&lt;/p&gt;
-
-&lt;p&gt;Once I have the objects, I can bind the list of newly created objects to &lt;code&gt;add()&lt;/code&gt;, which will add them to the default realm file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;.subscribe(Realm.rx.add())
-.addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The data flow is simple and linear:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;API -&amp;gt; JSON -&amp;gt; [Update] -&amp;gt; Realm
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This happens on a background thread and perisist the data for possible offline use.&lt;/p&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s move on to &amp;hellip;&lt;/p&gt;
-
-&lt;h4 id=&#34;2-binding-objects-from-disk-to-ui:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;2. Binding objects from disk to UI&lt;/h4&gt;
-
-&lt;p&gt;This one is even easier thanks to a simple helper library called RxRealmDataSources, which helps binding a Realm collection to a table or collection view on screen.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start by defining a data source object:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let dataSource = RxTableViewRealmDataSource&amp;lt;Update&amp;gt;(cellIdentifier: &amp;quot;Cell&amp;quot;, cellType: UITableViewCell.self) {cell, ip, update in
-    cell.detailTextLabel!.text = &amp;quot;[&amp;quot; + update.ago + &amp;quot;] &amp;quot; + update.name + &amp;quot; &amp;quot; + update.action
-    cell.textLabel?.text = &amp;quot;Repo: &amp;quot; + update.repo
-}
-dataSource.headerTitle = &amp;quot;Source Control Activity&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This defines a data source object for &lt;code&gt;Update&lt;/code&gt; objects, which is going to be producing table cells with identifier &amp;ldquo;Cell&amp;rdquo;. It also features a closure to configure each of the cells before it&amp;rsquo;s being used on screen.&lt;/p&gt;
-
-&lt;p&gt;Secondly, let&amp;rsquo;s create the Realm collection to bind:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let realm = try! Realm()
-let updates = realm
-  .objects(Update.self)
-  .sorted(byKeyPath: &amp;quot;date&amp;quot;, ascending: false)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;updates&lt;/code&gt; gives access to all &lt;code&gt;Update&lt;/code&gt; objects sorted in descending order by their date property.&lt;/p&gt;
-
-&lt;p&gt;Finally binding the updates to the table view, using the data source is a matter of:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;Observable.changeset(from: updates)
-  .bindTo(tableView.rx.realmChanges(dataSource))
-  .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This lets RxRealmDataSources piece everything together and drive the UI:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/unidirectional-animation.gif&#34; alt=&#34;table animation&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;the-complete-example:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;The complete example&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// 1. store data
-SourceControlAPI.updates()
-    .observeOn(SerialDispatchQueueScheduler(qos: .background))
-    .map(Update.fromOrEmpty)
-    .subscribe(Realm.rx.add())
-    .addDisposableTo(bag)
-
-// 2. display data
-let dataSource = RxTableViewRealmDataSource&amp;lt;Update&amp;gt;(cellIdentifier: &amp;quot;Cell&amp;quot;, cellType: UITableViewCell.self) {cell, ip, update in
-    cell.detailTextLabel!.text = &amp;quot;[&amp;quot; + update.ago + &amp;quot;] &amp;quot; + update.name + &amp;quot; &amp;quot; + update.action
-    cell.textLabel?.text = &amp;quot;Repo: &amp;quot; + update.repo
-}
-dataSource.headerTitle = &amp;quot;Source Control Activity&amp;quot;
-
-let realm = try! Realm()
-let updates = realm.objects(Update.self).sorted(byKeyPath: &amp;quot;date&amp;quot;, ascending: false)
-
-Observable.changeset(from: updates)
-    .bindTo(tableView.rx.realmChanges(dataSource))
-    .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;discussion:651c147c2ff853de33caa4d4f7fea8c9&#34;&gt;Discussion&lt;/h3&gt;
-
-&lt;p&gt;In real life you never have just two data flows in your whole app. But even in this simple example you can see the benefits of being able to clearly and simply define how data flows. Even as you scale your app, the complexity of defining these type of data flows does not increase.&lt;/p&gt;
-
-&lt;p&gt;Hope that was an inspirational read! You can dig into more details below&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Links&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The complete demo app from my talk: &lt;a href=&#34;https://github.com/icanzilb/RxSwiftoniOS&#34;&gt;https://github.com/icanzilb/RxSwiftoniOS&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The talk slides: &lt;a href=&#34;https://speakerdeck.com/icanzilb/rxswift-on-ios&#34;&gt;https://speakerdeck.com/icanzilb/rxswift-on-ios&lt;/a&gt;&lt;/p&gt;
-</description>
+      <description>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.
+I already posted a write up on the GitHub API search example here: http://rx-marin.com/post/dotswift-search-github-json-api/.
+The second post in the series, the one about presenting view controllers, is online here: http://rx-marin.</description>
     </item>
     
   </channel>

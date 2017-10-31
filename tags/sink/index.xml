@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 19 Sep 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/sink/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/sink/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Custom property bindings with RxSwift</title>
@@ -15,106 +17,9 @@
       <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-custom-bindings/</guid>
-      <description>
-
-&lt;p&gt;Recently, in one of the few meetups I&amp;rsquo;ve been in person to, someone told me the didn&amp;rsquo;t try RxSwift because somebody told them that RxSwift doesn&amp;rsquo;t support custom views.&lt;/p&gt;
-
-&lt;p&gt;While I&amp;rsquo;m still baffled what that original person meant, I thought the best way to disagree is to write a short tutorial to prove them wrong.&lt;/p&gt;
-
-&lt;h2 id=&#34;what-are-custom-property-sinks:614ccbc09013a93ad6e5b11beb304f3a&#34;&gt;What are custom property sinks?&lt;/h2&gt;
-
-&lt;p&gt;When you use RxCocoa bindings you can easily bind the values an observable emits to some view on screen like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;myObservable
-  .map { &amp;quot;new value is \($0)&amp;quot; }
-  .bind(to: myLabel.rx.text )
-  .disposed(by: bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But have you ever wondered what &lt;code&gt;rx.text&lt;/code&gt; is and what so magical is there about it? Nothing. There&amp;rsquo;s nothing magical - just Cmd click on it and you will see the source code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Reactive where Base: UILabel {
-    /// Bindable sink for `text` property.
-    public var text: UIBindingObserver&amp;lt;Base, String?&amp;gt; {
-        return UIBindingObserver(UIElement: self.base) { label, text in
-            label.text = text
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The extension adds the property &lt;code&gt;text&lt;/code&gt; to the &lt;code&gt;Reactive&lt;/code&gt; struct (this is effectively the &lt;code&gt;rx&lt;/code&gt; property on classes with reactive extensions) but only to the class &lt;code&gt;UILabel&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;text&lt;/code&gt; itself is of type &lt;code&gt;UIBindingObserver&lt;/code&gt; - it&amp;rsquo;s simply an observer similar to any other, that receives values and decides how to process them.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Note: In RxSwift 4 &lt;code&gt;UIBindingObserver&lt;/code&gt; has been changed to &lt;code&gt;Binder&lt;/code&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;When you bind an observable subscription to the &lt;code&gt;text&lt;/code&gt; property, the property returns a new observer which executes its block parameter when each value is emitted. E.g. any time it receives a new value it runs the code &lt;code&gt;label.text = text&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s &lt;strong&gt;literally&lt;/strong&gt; all there is to adding a bindable sink property to a class - in your code you might be binding a &lt;code&gt;UIColor&lt;/code&gt; value instead of &lt;code&gt;String&lt;/code&gt;, or adding a reactive extension to &lt;code&gt;UIApplication&lt;/code&gt; instead of &lt;code&gt;UILabel&lt;/code&gt; like in the example above, but the very simple demonstrated technique stays the same.&lt;/p&gt;
-
-&lt;h2 id=&#34;adding-a-reactive-extension-to-swiftspinner:614ccbc09013a93ad6e5b11beb304f3a&#34;&gt;Adding a reactive extension to SwiftSpinner&lt;/h2&gt;
-
-&lt;p&gt;To show the code in action let&amp;rsquo;s add a quick reactive extension to the &lt;a href=&#34;https://github.com/icanzilb/SwiftSpinner&#34;&gt;SwiftSpinner&lt;/a&gt; library.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m creating a new Xcode project and importing all the pods I need for the demo:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;import SwiftSpinner
-import RxSwift
-import RxCocoa
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;First I&amp;rsquo;m adding a reactive extension on the &lt;code&gt;SwiftSpinner&lt;/code&gt; class:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Reactive where Base: SwiftSpinner {
-  
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This will add an &lt;code&gt;rx&lt;/code&gt; property to SwiftSpinner instances. Further I&amp;rsquo;ll add the property &lt;code&gt;progress&lt;/code&gt; so I can bind observables emitting &lt;code&gt;Int&lt;/code&gt; values to it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;public var progress: UIBindingObserver&amp;lt;Base, Int&amp;gt; {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Finally I&amp;rsquo;m converting values between &lt;code&gt;0&lt;/code&gt; and &lt;code&gt;100&lt;/code&gt; and call &lt;code&gt;SwiftSpinner.show(progress:title:)&lt;/code&gt; to display the current progress on screen and the complete code is:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Reactive where Base: SwiftSpinner {
-    public var progress: UIBindingObserver&amp;lt;Base, Int&amp;gt; {
-        return UIBindingObserver(UIElement: self.base) { spinner, progress in
-            let progress = max(0, min(progress, 100))
-            SwiftSpinner.show(progress: Double(progress)/100.0, title: &amp;quot;\(progress)% completed&amp;quot;)
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that&amp;rsquo;s it. Let&amp;rsquo;s test the new reactive extension:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-
-    Observable&amp;lt;Int&amp;gt;.timer(0.0, period: 0.15, scheduler: MainScheduler.instance)
-        .bind(to: SwiftSpinner.sharedInstance.rx.progress )
-        .disposed(by: bag)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see that timer drive the progress bar like a mad man:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/swiftspinner.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;And that&amp;rsquo;s a wrap! If anyone is misinformed about how easy it is to create reactive extensions with RxSwift send them read this post!&lt;/p&gt;
-
-&lt;h2 id=&#34;where-to-go-from-here:614ccbc09013a93ad6e5b11beb304f3a&#34;&gt;Where to go from here?&lt;/h2&gt;
-
-&lt;p&gt;Dig into the source code of RxCocoa - there&amp;rsquo;s no better way to learn about creating bindable sinks. Or even better - get our book about RxSwift :)&lt;/p&gt;
-
-&lt;p&gt;The book is available at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you can see any updates, discuss in the website forums, etc.&lt;/p&gt;
-</description>
+      <description>Recently, in one of the few meetups I&amp;rsquo;ve been in person to, someone told me the didn&amp;rsquo;t try RxSwift because somebody told them that RxSwift doesn&amp;rsquo;t support custom views.
+While I&amp;rsquo;m still baffled what that original person meant, I thought the best way to disagree is to write a short tutorial to prove them wrong.
+What are custom property sinks? When you use RxCocoa bindings you can easily bind the values an observable emits to some view on screen like so:</description>
     </item>
     
   </channel>

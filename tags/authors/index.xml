@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 10 Apr 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/authors/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/authors/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Two free chapters from the RxSwift book!</title>
@@ -15,52 +17,9 @@
       <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-book-free-chapters/</guid>
-      <description>
-
-&lt;p&gt;Last week we announced our brand new RxSwift book (&lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;available now&lt;/a&gt;)!&lt;/p&gt;
-
-&lt;p&gt;The book starts with the very basics in Chapter 1, &amp;ldquo;Hello, world!&amp;rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &amp;ldquo;MVVM&amp;rdquo; and Chapter 24, &amp;ldquo;Building a complete app with RxSwift&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&amp;rsquo;s written by four very active RxSwift community memebers and it&amp;rsquo;s polished by two more editors. All in all the quality (apart from some first edition errata, hehe) is very high.&lt;/p&gt;
-
-&lt;p&gt;But don&amp;rsquo;t take my word for it&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;As part of the launch celebration Ray Wenderlich (the publisher of the book) has released two of the book&amp;rsquo;s chapters for free on his website. So, if you&amp;rsquo;re still trying to make your mind about the quality of the content found inside the book - here&amp;rsquo;s your chance!&lt;/p&gt;
-
-&lt;h2 id=&#34;chapter-7-transforming-operators:a40446abe461214d278199604fa0bc59&#34;&gt;Chapter 7, Transforming Operators&lt;/h2&gt;
-
-&lt;p&gt;In the first half of the book where we cover foundational classes like &lt;code&gt;Observable&lt;/code&gt;, &lt;code&gt;PublishSubject&lt;/code&gt;, &lt;code&gt;Variable&lt;/code&gt;, and most of the operators found in RxSwift, we alternate between theory and &amp;ldquo;&amp;hellip; in practice&amp;rdquo; chapters.&lt;/p&gt;
-
-&lt;p&gt;In the theory chapters we introduce concepts and lead the reader through experimenting in an Xcode playground. This hands on approach to learning has proven to be more fun than just reading theory (I&amp;rsquo;ve worked on a number of books with raywenderlich.com).&lt;/p&gt;
-
-&lt;p&gt;Long story short, in Chapter 7 we&amp;rsquo;re introducing transforming operators and how to use them. The chapter is written by Scott Gardner and takes the readers on a journey through some of the most used operators like: &lt;code&gt;toArray()&lt;/code&gt;, &lt;code&gt;map(_)&lt;/code&gt;, &lt;code&gt;mapWithIndex(_)&lt;/code&gt;, &lt;code&gt;flatMap(_)&lt;/code&gt;, &lt;code&gt;flatMapFirst(_)&lt;/code&gt;, and &lt;code&gt;flatMapLatest(_)&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The chapter features some theory, solid explanations with diagrams, and code to try in the provided playground.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/to-array.png&#34; alt=&#34;to array&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can find an abbreviated free version of that chapter here:
-&lt;a href=&#34;https://www.raywenderlich.com/158205/rxswift-transforming-operators&#34;&gt;https://www.raywenderlich.com/158205/rxswift-transforming-operators&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;chapter-8-transforming-operators-in-practice:a40446abe461214d278199604fa0bc59&#34;&gt;Chapter 8, Transforming Operators in Practice&lt;/h2&gt;
-
-&lt;p&gt;As with all &amp;ldquo;.. in practice&amp;rdquo; chapters in RxSwift: Reactive programming with Swift, the chapter that follows takes the introduced new concepts and/or operators and leads the reader through a step-by-step tutorial, building up a real iOS project to showcase some real-life usages of the newly introduced concepts.&lt;/p&gt;
-
-&lt;p&gt;Chapter 8, Transforming Operators in Practice leads the reader through building a GitHub activity app. This kind of app, which talks to an online JSON API, processes the response asynchronously, and displays results on screen is the perfect opportunity to use a bunch of transforming operators.&lt;/p&gt;
-
-&lt;p&gt;Even if a little tailored to showcase specifically transforming operators, the project in that chapter can serve as a base to any app that needs to fetch JSON and display the response data on screen, so it&amp;rsquo;s a great excercise in building RxSwift apps.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/github-activity.png&#34; alt=&#34;github activity&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can find an abbreviated free version of that chapter here:
-&lt;a href=&#34;https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice&#34;&gt;https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;where-to-buy:a40446abe461214d278199604fa0bc59&#34;&gt;Where to buy?&lt;/h2&gt;
-
-&lt;p&gt;Enjoy those completely free chapters from the book, and we hope you&amp;rsquo;ll enjoy reading the book too!&lt;/p&gt;
-
-&lt;p&gt;The book is available at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!&lt;/p&gt;
-</description>
+      <description>Last week we announced our brand new RxSwift book (available now)!
+The book starts with the very basics in Chapter 1, &amp;ldquo;Hello, world!&amp;rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &amp;ldquo;MVVM&amp;rdquo; and Chapter 24, &amp;ldquo;Building a complete app with RxSwift&amp;rdquo;.
+Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&amp;rsquo;s written by four very active RxSwift community memebers and it&amp;rsquo;s polished by two more editors.</description>
     </item>
     
     <item>
@@ -69,94 +28,8 @@
       <pubDate>Mon, 03 Apr 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-book-available-now/</guid>
-      <description>
-
-&lt;p&gt;After a long time working on this project, I and my friends and colleagues &lt;a href=&#34;https://twitter.com/fpillet&#34;&gt;Florent Pillet&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/bontoJR&#34;&gt;Junior Bontognali&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/scotteg&#34;&gt;Scott Gardner&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/ashfurrow&#34;&gt;Ash Furrow&lt;/a&gt;, &lt;a href=&#34;https://twitter.com/crispytwit&#34;&gt;Chris Belanger&lt;/a&gt;, and &lt;a href=&#34;https://twitter.com/rwenderlich&#34;&gt;Ray&lt;/a&gt; and &lt;a href=&#34;https://twitter.com/vwenderlich&#34;&gt;Vicki&lt;/a&gt; Wenderlich are happy to announce that our new book about development with RxSwift is &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;available now&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h2 id=&#34;how-it-came-to-be:a0d4785814e3d20a5250358d39666ba2&#34;&gt;How it came to be?&lt;/h2&gt;
-
-&lt;p&gt;When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&amp;rsquo;t a single structured resource where people can learn systematically.&lt;/p&gt;
-
-&lt;p&gt;Almost instantly I started dreaming about creating an RxSwift book that will make beginning development with Rx on iOS easier and more pleasant.&lt;/p&gt;
-
-&lt;p&gt;I met with Junior, Scott, Florent, and Ash in different combinations over a number of conferences and it became clear all of us were working on some education materials in one form or another and the only sensible thing to do is to comibine our efforts!&lt;/p&gt;
-
-&lt;p&gt;At the time Ray Wenderlich has already noticed that RxSwift and Rx are generating a lot of buzz and came with the idea of a book that will take the readers from complete beginner to a professinonal.&lt;/p&gt;
-
-&lt;p&gt;And after some time of very hard work on this, I&amp;rsquo;m proud to announce &amp;hellip; (drumroll) &amp;hellip;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-rxswift-book:a0d4785814e3d20a5250358d39666ba2&#34;&gt;The RxSwift book&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;&lt;img src=&#34;http://rx-marin.com/images/RxSwift-cover.png&#34; alt=&#34;Rxbook cover&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;the-book-concept:a0d4785814e3d20a5250358d39666ba2&#34;&gt;The book concept&lt;/h3&gt;
-
-&lt;p&gt;The big idea behind this book is to start from the basics and explain how the foundational APIs work and can be used, therefore eliminating any &amp;ldquo;&lt;em&gt;magic&lt;/em&gt;&amp;rdquo; behind using RxSwift.&lt;/p&gt;
-
-&lt;p&gt;We tackle introducing the RxSwift concepts by alterating between theory chapters and practice chapters:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;theory chapters&lt;/strong&gt; introduce new APIs and operators and guide the readers through trying out code in an Xcode playground. This way the reader has the context to play with simple code and understand how things really work.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;practice chapters&lt;/strong&gt; feature a starter project and guide the reader through adding RxSwift code in key places to Rx-ify the project, and excercise the newly learned skills in the relevant theory chapter.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Once we cover the basics like observables, subjects, and operators, the book moves onto more advanced topics like error handling, testing, RxCocoa, and creating custom reactive extensions.&lt;/p&gt;
-
-&lt;p&gt;The last section of the book walks the readers through two complete apps discussing app architecture (there is a separate chapter covering MVVM), app services, project navigation, and more.&lt;/p&gt;
-
-&lt;h3 id=&#34;table-of-contents:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Table of contents&lt;/h3&gt;
-
-&lt;p&gt;The book is divided into six sections. Here’s a brief overview:&lt;/p&gt;
-
-&lt;h4 id=&#34;section-i-getting-started-with-rxswift:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section I: Getting Started with RxSwift&lt;/h4&gt;
-
-&lt;p&gt;The first section of the book covers RxSwift basics. Don’t skip this section, as you will be required to have a good understanding of how and why things work in the following sections.&lt;/p&gt;
-
-&lt;h4 id=&#34;section-ii-operators-and-best-practices:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section II: Operators and Best Practices&lt;/h4&gt;
-
-&lt;p&gt;In this section, once you&amp;rsquo;ve mastered the basics, you will move on to building more complex Rx code by using operators. Operators allow you to chain and compose little pieces of functionality to build up complex logic.&lt;/p&gt;
-
-&lt;h4 id=&#34;section-iii-ios-apps-with-rxcocoa:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section III: iOS Apps with RxCocoa&lt;/h4&gt;
-
-&lt;p&gt;Once you&amp;rsquo;ve mastered RxSwift&amp;rsquo;s basics and know how to use operators, you will move on to iOS specific APIs, which will allow you to use and integrate your RxSwift code with the existing iOS classes and UI controls.&lt;/p&gt;
-
-&lt;h4 id=&#34;section-iv-intermediate-rxswift-rxcocoa:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section IV: Intermediate RxSwift/RxCocoa&lt;/h4&gt;
-
-&lt;p&gt;In this section, you will look into more topics like building an error handling strategy for your app, handling your networking needs the reactive way, writing Rx tests, and more.&lt;/p&gt;
-
-&lt;h4 id=&#34;section-v-rxswift-community-cookbook:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section V: RxSwift Community Cookbook&lt;/h4&gt;
-
-&lt;p&gt;Many of the available RxSwift based libraries are created and maintained by the community – by people just like you. In this section, we&amp;rsquo;ll look into a few of these projects and how you can use them in your own apps.&lt;/p&gt;
-
-&lt;h4 id=&#34;section-vi-putting-it-all-together:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Section VI: Putting it All Together&lt;/h4&gt;
-
-&lt;p&gt;This part of the book deals with app architecture and strategies for building production-quality, full-blown iOS applications. You will learn how to structure your project and explore a couple of different approaches to designing your data streams and project navigation.&lt;/p&gt;
-
-&lt;h2 id=&#34;what-s-included:a0d4785814e3d20a5250358d39666ba2&#34;&gt;What&amp;rsquo;s included?&lt;/h2&gt;
-
-&lt;p&gt;You will get to experiment in Playgrounds but also build a number of projects throughout the book:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/rxbook-apps-1.png&#34; alt=&#34;RxSwift book projects&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Like &lt;em&gt;any&lt;/em&gt; raywenderlich.com book you can purchase either a &lt;strong&gt;PDF&lt;/strong&gt; or a &lt;strong&gt;print&lt;/strong&gt; version. Both come with full project source code, split in:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;starter projects - your starting point for each chapter.&lt;/li&gt;
-&lt;li&gt;final projects - the completed chapter projects as you have them at the end of each chapter.&lt;/li&gt;
-&lt;li&gt;challenge projects - the final + some extra excercises you are supposed to complete on your own.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Like any other digital raywenderlich.com book - you get &lt;strong&gt;ANY&lt;/strong&gt; further editions of the book &lt;strong&gt;for free&lt;/strong&gt;. Thanks for supporting us!&lt;/p&gt;
-
-&lt;p&gt;Finally, of course you can use the code in any of your projects!&lt;/p&gt;
-
-&lt;p&gt;Thanks again for considering our book and spreading the word about it - we worked very hard on putting this together and it&amp;rsquo;s a product of love, which we hope will be helpful to many who start developing with RxSwift.&lt;/p&gt;
-
-&lt;h2 id=&#34;where-to-buy:a0d4785814e3d20a5250358d39666ba2&#34;&gt;Where to buy?&lt;/h2&gt;
-
-&lt;p&gt;The book is available at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!&lt;/p&gt;
-</description>
+      <description>After a long time working on this project, I and my friends and colleagues Florent Pillet, Junior Bontognali, Scott Gardner, Ash Furrow, Chris Belanger, and Ray and Vicki Wenderlich are happy to announce that our new book about development with RxSwift is available now!
+How it came to be? When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&amp;rsquo;t a single structured resource where people can learn systematically.</description>
     </item>
     
   </channel>

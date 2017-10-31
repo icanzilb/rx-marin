@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 15 Aug 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/nsspain/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/nsspain/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Raffling my ticket to NSSpain 2017</title>
@@ -15,32 +17,8 @@
       <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/nsspain-ticket/</guid>
-      <description>&lt;p&gt;This year is the 5th edition of &lt;a href=&#34;https://2017.nsspain.com&#34;&gt;NSSpain&lt;/a&gt; - the only international iOS/macOS conference in Spain and one of the best in the world I&amp;rsquo;ve been to. There are many reasons why I think NSSpain is the right way to do a conference, including but not limited to - single track, remote location, and best-in-business speakers&amp;hellip; &lt;em&gt;(And that&amp;rsquo;s why last year I sponsored a student-ticket to NSSpain.)&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Speakers receive not only free entry to the full conference and free accomodation, but also tons of love from the organizers. (You will probably be surprised but not all iOS confs provide free entry/accomodation/travel to speakers even if speakers do speak for free.)&lt;/p&gt;
-
-&lt;p&gt;I will lead an RxSwift workshop and give a talk at NSSpain 2017, and therefore I will receive a refund for the ticket I already bought. &lt;strong&gt;HOWEVER&lt;/strong&gt;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;&amp;hellip; a bro in IT, a bro-ogler, decided to attack a huge group of our colleagues last week based on their gender and for literally everyone in the industry this ought to be unacceptable.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;d like to &lt;em&gt;manifest&lt;/em&gt; (lol) that not all men in tech are like him, so I will raffle my NSSpain ticket instead of getting my money back.&lt;/p&gt;
-
-&lt;p&gt;In order to participate in the raffle you must be (aka the rules):&lt;/p&gt;
-
-&lt;p&gt;1) a woman in tech (no bros sorry - my ticket, my rules)&lt;/p&gt;
-
-&lt;p&gt;&lt;del&gt;2) maintain a repo or have successfully done a meaningful PR to a Swift/ObjC library (no typo fixes, etc.)&lt;/del&gt; rule number two is removed by popular request&lt;/p&gt;
-
-&lt;p&gt;3) ping me on twitter &lt;a href=&#34;https://twitter.com/icanzilb&#34;&gt;@icanzilb&lt;/a&gt; or chose your preferred way to contact me from &lt;a href=&#34;http://www.underplot.com&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I will raffle the names and ping the one of you who gets the ticket on Aug 21st so you can arrange your travel.&lt;/p&gt;
-
-&lt;p&gt;&lt;del&gt;Additionally I will retweet all qualifying entries to give you more visibility and ask ppl I know to retweet as well. If you tag your submission with &lt;code&gt;#WITBragDay&lt;/code&gt; probably even more people will pick it up and retweet.&lt;/del&gt; Since I got so much backlash about trying to promote OSS via this raffle, the re-tweeting part also is discontinued.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s the plan! :) Let&amp;rsquo;s do it!&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll see you all at NSSpain.&lt;/p&gt;
-</description>
+      <description>This year is the 5th edition of NSSpain - the only international iOS/macOS conference in Spain and one of the best in the world I&amp;rsquo;ve been to. There are many reasons why I think NSSpain is the right way to do a conference, including but not limited to - single track, remote location, and best-in-business speakers&amp;hellip; (And that&amp;rsquo;s why last year I sponsored a student-ticket to NSSpain.)
+Speakers receive not only free entry to the full conference and free accomodation, but also tons of love from the organizers.</description>
     </item>
     
   </channel>

@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 29 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/replacewithdate/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/replacewithdate/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Custom convenience operators with RxSwift, Part 1</title>
@@ -15,159 +17,9 @@
       <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/</guid>
-      <description>
-
-&lt;h2 id=&#34;intro:00ee3dba4704e83677ebf533fee4350e&#34;&gt;Intro&lt;/h2&gt;
-
-&lt;p&gt;Just like when learning a new language you need to build up a dictionary to start understanding how the language works, you got to learn the Rx operators and everything will eventually click together.&lt;/p&gt;
-
-&lt;p&gt;And then once you have a good common of a language it&amp;rsquo;s okay to start coming up with new words too to boost the expressiveness of your speech and for convenience.&lt;/p&gt;
-
-&lt;p&gt;Same thing happened with me last week - for the first time I felt like I&amp;rsquo;m getting work done with RxSwift because I had good understanding how to use at least few operators. Naturally I wished to create my own custom convenience operators that would not do anything essentially new but will just help me express myself better and clearer.&lt;/p&gt;
-
-&lt;h2 id=&#34;replacewith-value-replace-any-element-with-a-constant:00ee3dba4704e83677ebf533fee4350e&#34;&gt;replaceWith(value): Replace any element with a constant&lt;/h2&gt;
-
-&lt;p&gt;When I just want to react to a certain group of events I replace the actual value emitted so that I can merge two or more Observables into one stream and observe that single stream.&lt;/p&gt;
-
-&lt;p&gt;The following piece of code is from &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/&#34;&gt;last weeks&lt;/a&gt; post and observes the taps on the Start and Stop buttons of the laps timer app:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
-	.toObservable()
-    .merge()
-    .startWith(false)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I was looking at this chunk of code and thought that there should be a cleaner, more readable way to represent the mapping parts. What I do there for both observables is to ignore the actual value and replace it with a constant.&lt;/p&gt;
-
-&lt;p&gt;So I dug through the RxSwift code and based on what I found there I put together this brilliant (hic) piece of code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func replaceWith&amp;lt;R&amp;gt;(value: R) -&amp;gt; Observable&amp;lt;R&amp;gt; {
-    return Observable.create { observer in
-        let subscription = self.subscribe { e in
-            switch e {
-            case .Next(_):
-                observer.on(.Next(value))
-            case .Error(let error):
-                observer.on(.Error(error))
-            case .Completed:
-                observer.on(.Completed)
-            }
-        }
-        return subscription
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I create and return a new &lt;code&gt;Observable&lt;/code&gt; and pass through the &lt;code&gt;Error&lt;/code&gt; and &lt;code&gt;Completed&lt;/code&gt; events, but replace the value of the &lt;code&gt;Next&lt;/code&gt; event with the &lt;code&gt;value&lt;/code&gt; constant. Seems good?&lt;/p&gt;
-
-&lt;p&gt;What looked like a magnificent piece of code turned out to be a bit of an overkill. I mean after all I just wanted to &amp;ldquo;map&amp;rdquo; any value of any type to a constant and when you say it that way the code almost writes itself! So in the end I rewrote the code like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension ObservableType {
-    func replaceWith&amp;lt;R&amp;gt;(value: R) -&amp;gt; Observable&amp;lt;R&amp;gt; {
-        return map { _ in value }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As you can see I didn&amp;rsquo;t have to go crazy about the whole thing but just literally take the piece of code I wanted to re-use and abstract it in a method on the &lt;code&gt;ObservableType&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;With this the same code block from the beginning of the post looks like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
-	.toObservable()
-    .merge()
-    .startWith(false)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Awesome! Having my own custom convenience operator made the code less prone to errors (no custom code in a closure to write) and more readable.&lt;/p&gt;
-
-&lt;p&gt;At this point I started doubting myself a bit - this was too good to be true honestly. I thought I must be doing something wrong :)&lt;/p&gt;
-
-&lt;p&gt;However it turned out many people have this exact custom operator in their code base, it apparently solves a common problem.&lt;/p&gt;
-
-&lt;p&gt;Then I got a bit crazy and decided just for fun to explore how much further I can take this.&lt;/p&gt;
-
-&lt;h2 id=&#34;replacewithdate-replace-with-timestamp-of-the-latest-value:00ee3dba4704e83677ebf533fee4350e&#34;&gt;replaceWithDate(): Replace with timestamp of the latest value&lt;/h2&gt;
-
-&lt;p&gt;Since I was already warmed up by putting together &lt;code&gt;replaceWith&lt;/code&gt; I thought it&amp;rsquo;d be fun to have a convenience operator to give me the timestamp of the latest element from the observable sequence.&lt;/p&gt;
-
-&lt;p&gt;In this concrete case the constant I&amp;rsquo;d replace the element with would just be the current date:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension ObservableType {
-    func replaceWithDate&amp;lt;R&amp;gt;(value: R) -&amp;gt; Observable&amp;lt;NSDate&amp;gt; {
-        return map { _ in NSDate() }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now I can bind the latest value from an Observable to a label, and show the timestamp of that value in another label like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let count = Observable&amp;lt;Int&amp;gt;
-    .interval(3, scheduler: MainScheduler.instance)
-    .shareReplay(1)
-
-count.map {counter in &amp;quot;\(counter)&amp;quot;}
-    .bindTo(label1.rx_text)
-    .addDisposableTo(bag)
-
-count.replaceWithDate()
-    .map {$0.description}
-    .bindTo(label2.rx_text)
-    .addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And here&amp;rsquo;s the result (wait few seconds to see the increments):&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latest-date.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;negate-negate-the-value-of-the-element:00ee3dba4704e83677ebf533fee4350e&#34;&gt;negate(): Negate the value of the element&lt;/h2&gt;
-
-&lt;p&gt;Next I noticed that sometimes I need to bind an &lt;code&gt;Observable&lt;/code&gt; to &lt;code&gt;rx_enabled&lt;/code&gt; property of a button, and sometimes to &lt;code&gt;rx_hidden&lt;/code&gt;. While writing binding code I had to use numerous &lt;code&gt;map {value in !value}&lt;/code&gt;, which made my code less readable.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;If you check &lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt; you will see that in my effort to increase readability I ended up having two observables: one called &lt;code&gt;isRunning&lt;/code&gt; and one &lt;code&gt;isntRunning&lt;/code&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;After another read through some of RxSwift&amp;rsquo;s code I learned how to add an operator to an &lt;code&gt;Observable&lt;/code&gt; of a certain type. In my case I wanted to add the &lt;code&gt;negate()&lt;/code&gt; operator to just observables producing &lt;code&gt;Bool&lt;/code&gt; values.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Observable&lt;/code&gt; exposes its elements&amp;rsquo; type as &lt;code&gt;Element&lt;/code&gt; and I could easily match this to the &lt;code&gt;BooleanType&lt;/code&gt; (Swift ftw!):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element: BooleanType {
-    public func negate() -&amp;gt; Observable&amp;lt;Bool&amp;gt; {
-        return map {value in !value}
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Sweet - thanks protocol extensions with associated types! Now I could easily write code like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;active.bindTo(btnStart.rx_enabled).addDisposableTo(bag)
-active.negate().bindTo(btnStart.rx_hidden).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This code will both enable and show the button whenever &lt;code&gt;active&lt;/code&gt; emits a &lt;code&gt;true&lt;/code&gt; element. Pretty sleek eh?&lt;/p&gt;
-
-&lt;p&gt;To wrap up today&amp;rsquo;s post here&amp;rsquo;s what I&amp;rsquo;ve also added to my project a bit later:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension Observable where Element : SignedIntegerType {
-    public func negate() -&amp;gt; Observable&amp;lt;E&amp;gt; {
-        return map {value in -value}
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now &lt;code&gt;negate()&lt;/code&gt; worked also in other contexts. If you used it on &lt;code&gt;Observable&amp;lt;Bool&amp;gt;&lt;/code&gt; it would apply a logical &lt;code&gt;not&lt;/code&gt; to the value; if you used it on a &lt;code&gt;Observable&amp;lt;Int&amp;gt;&lt;/code&gt; it would produce the negative value of the element. Cool!&lt;/p&gt;
-
-&lt;h2 id=&#34;conclusion:00ee3dba4704e83677ebf533fee4350e&#34;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&amp;rsquo;s nothing wrong with it.&lt;/p&gt;
-
-&lt;p&gt;In my next post I&amp;rsquo;ll look into few more operators I created along the way for myself. Do you want to share any of yours?&lt;/p&gt;
-
-&lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
-</description>
+      <description>Intro Just like when learning a new language you need to build up a dictionary to start understanding how the language works, you got to learn the Rx operators and everything will eventually click together.
+And then once you have a good common of a language it&amp;rsquo;s okay to start coming up with new words too to boost the expressiveness of your speech and for convenience.
+Same thing happened with me last week - for the first time I felt like I&amp;rsquo;m getting work done with RxSwift because I had good understanding how to use at least few operators.</description>
     </item>
     
   </channel>

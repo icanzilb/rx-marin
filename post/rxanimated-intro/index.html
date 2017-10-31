@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Introducing RxAnimated // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="Animated bindings for RxCocoa">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.30.2" />
+
+  <meta property="og:title" content="Introducing RxAnimated" />
+<meta property="og:description" content="Animated bindings for RxCocoa" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/rxanimated-intro/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxanimated-intro/">31/Oct &middot; Introducing RxAnimated</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-custom-bindings/">19/Sep &middot; Custom property bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/nsspain-ticket/">15/Aug &middot; Raffling my ticket to NSSpain 2017</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/">1/Jun &middot; First update to the RxSwift book with version 1.1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-advanced-combine-latest/">19/May &middot; combineLatest beyond the basics</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-free-chapters/">10/Apr &middot; Two free chapters from the RxSwift book!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-available-now/">3/Apr &middot; RxSwift book - available now!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">24/Mar &middot; (dotSwift) Unidirectional data flow with RxSwift and RxRealm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">28/Feb &middot; (dotSwift) Presenting View Controllers with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">27/Jan &middot; (dotSwift) Search GitHub with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/animated/">31/Oct &middot; Animated</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/animation/">31/Oct &middot; Animation</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/announcement/">15/Aug &middot; Announcement</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/api/">27/Jan &middot; Api</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/authors/">10/Apr &middot; Authors</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/bind/">31/Oct &middot; Bind</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/binding/">31/Oct &middot; Binding</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/bindings/">31/Mar &middot; Bindings</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/book/">1/Jun &middot; Book</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/">15/Aug &middot; Categories</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/code/">31/Oct &middot; Code</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/combinelatest/">19/May &middot; Combinelatest</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/data/">24/Mar &middot; Data</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/dataflow/">24/Mar &middot; Dataflow</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/dynamic/">19/May &middot; Dynamic</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/interval/">22/Feb &middot; Interval</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/json/">27/Jan &middot; Json</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/negate/">29/Feb &middot; Negate</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/nsspain/">15/Aug &middot; Nsspain</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/">31/Oct &middot; Posts</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/realm/">18/Apr &middot; Realm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/release/">1/Jun &middot; Release</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/repeat/">8/Jan &middot; Repeat</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/replacewith/">29/Feb &middot; Replacewith</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/replacewithdate/">29/Feb &middot; Replacewithdate</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/retry/">8/Jan &middot; Retry</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxbook/">10/Apr &middot; Rxbook</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxcocoa/">24/Mar &middot; Rxcocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxrealm/">24/Mar &middot; Rxrealm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxswift/">31/Oct &middot; Rxswift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxswiftext/">8/Jan &middot; Rxswiftext</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sample/">16/Feb &middot; Sample</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/scan/">4/Apr &middot; Scan</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sequences/">19/May &middot; Sequences</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/settings/">18/Apr &middot; Settings</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sink/">19/Sep &middot; Sink</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/state/">4/Apr &middot; State</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/">31/Oct &middot; Tags</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/tests/">23/May &middot; Tests</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/uikit/">28/Feb &middot; Uikit</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/uiviewcontroller/">28/Feb &middot; Uiviewcontroller</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/unit-tests/">23/May &middot; Unit Tests</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/update/">1/Jun &middot; Update</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/usewithlatest/">22/Feb &middot; Usewithlatest</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/">31/Oct &middot; rx_marin&lt;blog&gt;</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#introducing-rxanimated">Introducing RxAnimated</a>
+<ul>
+<li>
+<ul>
+<li><a href="#non-animated-binding-code">Non-animated binding code</a></li>
+<li><a href="#animated-binding-with-rxanimated">Animated binding with RxAnimated</a></li>
+</ul></li>
+<li><a href="#api-design">API design</a>
+<ul>
+<li><a href="#animations-are-constrained-to-the-ui-component-type"><strong>Animations are constrained to the UI component type</strong></a></li>
+<li><a href="#you-can-easily-add-new-binding-sinks-via-protocols"><strong>You can easily add new binding sinks via protocols</strong></a></li>
+</ul></li>
+<li><a href="#what-comes-out-of-the-box">What comes out of the box?</a></li>
+<li><a href="#why-only-animated-bindings">Why only animated bindings?</a></li>
+</ul></li>
+<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+</ul></li>
+</ul>
+</nav>
+					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;">
+				  <a href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rxbook.png"><br/><br/>
+					<small class="toc-label">&raquo; Authors: F. Pillet, J. Bontognali, M. Todorov, & S. Gardner <br/> &raquo; Tech Ed: Ash Furrow<br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+					</div>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/rxanimated-intro/">Introducing RxAnimated</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>31</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Oct</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Introducing%20RxAnimated&url=http%3a%2f%2frx-marin.com%2fpost%2frxanimated-intro%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>RxCocoa is super powerful for UI bindings - you can use <code>bind(to:)</code> to bind pretty much any kind of observable to a UI Control of your choice. You can bind a <code>String</code> to a <code>UILabel</code>, <code>UIImage</code> to a <code>UIImageView</code>, or an array of objects to <code>UITableView</code> or <code>UICollectionView</code>.</p>
+
+<p>Now, for table and collection view bindings there is a special library to allow you to bind a list of objects called <code>RxDataSources</code> and besides all the other goodness the library can add animations to your bindings.</p>
+
+<p>And by god it makes all the difference in the world&hellip; So, I had the idea to bring the possibility to animate bindings also to other controls besides table and collection views for a while, but just recently found the time to look in more detail in implementing something re-usable.</p>
+
+<h2 id="introducing-rxanimated">Introducing RxAnimated</h2>
+
+<p>RxAnimated is a newly released library for RxSwift/RxCocoa, which allows you to:</p>
+
+<ul>
+<li>add simple pre-built transitions to your bindings, like fade and flip</li>
+<li>add arbitrary block-based animations to your transitions</li>
+<li>extend RxAnimated to support new bindings sinks in your own classes</li>
+<li>extend RxAnimated to support new your own custom animations</li>
+</ul>
+
+<p>In this post I&rsquo;m going to show how to get started with RxAnimated. In short the goal of the library is to slightly change existing binding code so that instead of instant changes it adds animations to the UI.</p>
+
+<h4 id="non-animated-binding-code">Non-animated binding code</h4>
+
+<p>To bind an observable to a label in your UI you would usually do something like this:</p>
+
+<pre><code class="language-swift">import RxCocoa
+...
+counterObservable
+  .bind(to: label.rx.text)
+</code></pre>
+
+<p>The binding results in instant changes in the UI like so:</p>
+
+<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-noanim.gif" alt="" /></p>
+
+<h4 id="animated-binding-with-rxanimated">Animated binding with RxAnimated</h4>
+
+<p>To add a simple flip transition to the same binding you need to import RxAnimated and change a bit the code like so:</p>
+
+<pre><code class="language-swift">import RxCocoa
+import RxAnimated
+...
+counterObservable
+  .bind(animated: label.rx.animated.flip(.top, duration: 0.33).text)
+</code></pre>
+
+<p>I struggled to create a very idiomatic API (and had some very fruitful discussions in the RxSwift slack) so you can with as little change add animations. You basically take the existing binding sink and insert the type of transition you want:</p>
+
+<p><img src="http://rx-marin.com/images/rxanimated1.png" alt="" /></p>
+
+<p>With this change the binding triggers the transition each time it needs to produce side effects (e.g. in that case update the text of the label):</p>
+
+<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-anim.gif" alt="" /></p>
+
+<h3 id="api-design">API design</h3>
+
+<p>The API is designed to be very flexible and I&rsquo;m going to highlight just few points here:</p>
+
+<h4 id="animations-are-constrained-to-the-ui-component-type"><strong>Animations are constrained to the UI component type</strong></h4>
+
+<p>The build-in animations like fade and flip are constrained to <code>UIView</code> so you can use them on all views. If we look at the previous example:</p>
+
+<pre><code class="language-swift">counterObservable
+  .bind(animated: label.rx.animated.flip(.top, duration: 0.33).text)
+</code></pre>
+
+<p>You would add the same animation in the same way to an image view:</p>
+
+<pre><code class="language-swift">imagesObservable
+  .bind(animated: imageView.rx.animated.flip(.top, duration: 0.33).image)
+</code></pre>
+
+<p>This will produce the same animation any time a new image is emitted by the observable:</p>
+
+<p><img src="http://rx-marin.com/images/rxanimated2.gif" alt="" /></p>
+
+<p>The binding type or the observable type does not restrict the animation you apply.</p>
+
+<p>If you do want however to create your own animation and restrict it only to <code>UILabel</code> and its sub-classes you can do that and the API will not make it available for bindings to any other types.</p>
+
+<h4 id="you-can-easily-add-new-binding-sinks-via-protocols"><strong>You can easily add new binding sinks via protocols</strong></h4>
+
+<p>RxAnimated includes a list of bindings you can use out of the box but what if you have a custom view with its custom properties, which you bind to and want to animate?</p>
+
+<p>Let&rsquo;s look at the implementation of <code>UIView.rx.animated ... isHidden</code>:</p>
+
+<pre><code class="language-swift">extension AnimatedSink where Base: UIView {
+    public var isHidden: Binder&lt;Bool&gt; {
+        return Binder(self.base) { view, hidden in
+            self.type.animate(view: view, binding: {
+                view.isHidden = hidden
+            })
+        }
+    }
+}
+</code></pre>
+
+<p><code>AnimatedSink</code> is the type, which adds the <code>rx.animated</code> namespace to UI components. You extend it and make sure to set the <code>Base</code> to your target type. Then you add a property for your binding sink (above that&rsquo;s <code>isHidden</code>), which creates a new <code>Binder</code> instance. Inside the <code>Binder</code>s closure parameter you call <code>self.type.animate(...)</code> to create an animation.</p>
+
+<p>Finally inside the closure you do the UI updates you want to have animated. In the example above that&rsquo;s simply setting <code>view.isHidden</code> to a new value but it can be anything you want - you can transform the view, update properties, etc.</p>
+
+<p>You can add new custom animations in a similar fashion, just have a look at the code.</p>
+
+<h3 id="what-comes-out-of-the-box">What comes out of the box?</h3>
+
+<p>Here&rsquo;s a list of the built-in animated sinks:</p>
+
+<pre><code class="language-swift">UIView
+  .rx.animated...isHidden
+  .rx.animated...alpha
+
+UILabel
+  .rx.animated...text
+  .rx.animated...attributedText
+
+UIControl
+  .rx.animated...isEnabled
+  .rx.animated...isSelected
+  
+UIButton
+  .rx.animated...title
+  .rx.animated...image
+  .rx.animated...backgroundImage
+  
+UIImageView.rx.animated...image
+
+NSLayoutConstraint
+  .rx.animated...constant
+  .rx.animated...isActive
+</code></pre>
+
+<p>List of the built-in animations:</p>
+
+<pre><code class="language-swift">UIView
+  .rx.animated.fade(duration: TimeInterval)
+  .rx.animated.flip(FlipDirection, duration: TimeInterval)
+  .rx.animated.tick(FlipDirection, duration: TimeInterval)
+  .rx.animated.animation(duration: TimeInterval, animations: ()-&gt;Void)
+
+NSLayoutConstraint
+  .rx.animated.layout(duration: TimeInterval)
+</code></pre>
+
+<h3 id="why-only-animated-bindings">Why only animated bindings?</h3>
+
+<p>Maybe some of you will ask &ldquo;What if I want to create an arbitrary animation when my observable emits a value?&rdquo; Well the good news is - you can! In <code>observe(onNext: {...})</code> is the place to perform any side effects your heart desires, including animations. For the moment I don&rsquo;t see big benefit (or a clear way to) create some animation API, which will add value to creating animations via <code>observe(onNext:..)</code>.</p>
+
+<p>Bindings on the other hand are a useful feature, which benefits of simple transition animations and I think RxAnimated adds a lot of value there.</p>
+
+<h2 id="where-to-go-from-here">Where to go from here?</h2>
+
+<p><strong>RxAnimated</strong> is available for free on GitHub: <a href="https://github.com/RxSwiftCommunity/RxAnimated">https://github.com/RxSwiftCommunity/RxAnimated</a> and can be installed via CocoaPods like so <code>pod &quot;RxAnimated&quot;</code>. It supports RxSwift4+ and I&rsquo;d appreciate if you have any feedback regarding the library. As always you can reach me at <a href="https://twitter.com/icanzilb">@icanzilb</a>.</p>
+
+<p>The best way to get started is to check the code in the repo example app which demoes various types of bindings and animations:</p>
+
+<p><img src="http://rx-marin.com/images/rxanimated3.gif" alt="" /></p>
+
+<p>To learn more about creating RxCocoa bindings and RxSwift in general check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc.</p>
+
+	
+			
+
+<div style="padding:10px; border:1px solid silver; margin:10px;">
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Introducing%20RxAnimated&url=http%3a%2f%2frx-marin.com%2fpost%2frxanimated-intro%2f">
+Tweet</a></p>
+</div>
+
+<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
+	<a style="display:block;float:left;margin-right:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rxbook.png" style="width:200px;"></a>
+	<br/>
+	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
+	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
+	Available from Ray Wenderlich: <a style="font-weight: bold;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank">&raquo; Learn more</a>.
+</div>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-bind" href="http://rx-marin.com//tags/bind">bind</a>,
+	                
+	                <a class="post-tag post-tag-binding" href="http://rx-marin.com//tags/binding">binding</a>,
+	                
+	                <a class="post-tag post-tag-animation" href="http://rx-marin.com//tags/animation">animation</a>,
+	                
+	                <a class="post-tag post-tag-animated" href="http://rx-marin.com//tags/animated">animated</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-custom-bindings/">Custom property bindings with RxSwift</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

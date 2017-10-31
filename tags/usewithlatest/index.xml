@@ -7,14 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 22 Feb 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/usewithlatest/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/usewithlatest/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Split laps timer with RxSwift and RxCocoa: Part 2</title>
-      <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</link>
+      <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/</link>
       <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/</guid>
+      <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/</guid>
       <description>&lt;p&gt;In my post from last week I worked on creating a split lapse timer app (&lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt;). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.&lt;/p&gt;
 
 &lt;p&gt;Well this week I am implementing exactly this functionality.&lt;/p&gt;
@@ -29,113 +31,7 @@
 
 &lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
 
-&lt;p&gt;My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce &lt;code&gt;true&lt;/code&gt; values and the stop button will produce &lt;code&gt;false&lt;/code&gt; values. When merged I will get one sequence that emits every time the state changes:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;o---- (play tap) true--- (stop tap) false --- (play tap) true ---&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;So at the top of &lt;code&gt;viewDidLoad()&lt;/code&gt; I created a new Observable like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
-    .toObservable()
-    .merge()
-    .startWith(false)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;First I mapped the taps on &lt;code&gt;btnPlay&lt;/code&gt; to &lt;code&gt;true&lt;/code&gt; and the taps on &lt;code&gt;btnStop&lt;/code&gt; to &lt;code&gt;false&lt;/code&gt; and merged them together.&lt;/p&gt;
-
-&lt;p&gt;The Observable starts with a &lt;code&gt;false&lt;/code&gt; value to give the user the opportunity to start the timer at their convenience.&lt;/p&gt;
-
-&lt;p&gt;I printed the values the new observable emits and was quite happy with the result:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;isRunning.subscribeNext({state in
-    print(state)
-}).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The code printed &lt;code&gt;true&lt;/code&gt; or &lt;code&gt;false&lt;/code&gt; in the console each time I pressed play or stop. Neato!&lt;/p&gt;
-
-&lt;p&gt;Now it looked very easy to bind that Observable to the buttons&amp;rsquo; &lt;code&gt;rx_enabled&lt;/code&gt; property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&amp;rsquo;t running at all!&lt;/p&gt;
-
-&lt;p&gt;And since some of the controls needed to be enabled when the timer is running and others when it isn&amp;rsquo;t - I made myself yet another observable and bound the controls like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let isntRunning = isRunning.map({running in !running}).shareReplay(1)
-
-isRunning.bindTo(btnStop.rx_enabled).addDisposableTo(bag)
-isntRunning.bindTo(btnLap.rx_hidden).addDisposableTo(bag)
-isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The stop button is enabled while the timer is running. Play is enabled when the timer is paused.&lt;/p&gt;
-
-&lt;p&gt;I really love this kind of code. No &lt;code&gt;if&lt;/code&gt;s no &lt;code&gt;switch&lt;/code&gt;es; once you get the code running it&amp;rsquo;s very difficult to mess up and there&amp;rsquo;s simply no space for introducing bugs. Everything is air-tight.&lt;/p&gt;
-
-&lt;p&gt;The app started with the laps button hidden and only the play button enabled like so:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-play.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Further you could click play just once because it instantly became disabled. How cool :]&lt;/p&gt;
-
-&lt;p&gt;Now my problem was that even though the UI already reflected the different states of the timer - well &amp;hellip; the timer didn&amp;rsquo;t care at all about any of that :]&lt;/p&gt;
-
-&lt;p&gt;I looked into the &lt;code&gt;RxSwift&lt;/code&gt; implementation of a timer but didn&amp;rsquo;t find a way how to pause it (I guess that it couldn&amp;rsquo;t implement state, who knows &amp;hellip;). That&amp;rsquo;s why I thought I&amp;rsquo;d move away from directly binding the timer to the UI and implement my own counter.&lt;/p&gt;
-
-&lt;p&gt;At the time my timer looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Well, I thought, I just need to somehow combine &lt;code&gt;isRunning&lt;/code&gt; and &lt;code&gt;timer&lt;/code&gt; and filter the observable output when &lt;code&gt;isRunning&lt;/code&gt; is &lt;code&gt;false&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;So I did the following: I appended to the existing &lt;code&gt;timer&lt;/code&gt; an operator to combine it with the latest value from &lt;code&gt;isRunning&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.withLatestFrom(isRunning, resultSelector: {_, running in running})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You see that I just ignored the value emitted by &lt;code&gt;timer&lt;/code&gt; since I never use it for anything and return from &lt;code&gt;withLatestFrom&lt;/code&gt; the unchanged &lt;code&gt;running&lt;/code&gt; input parameter:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;(Int, Boolean) -&amp;gt; withLatestFrom -&amp;gt; Boolean&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Next I could simply use &lt;code&gt;filter&lt;/code&gt; to stop the observable from emitting when the timer is not running:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.filter({running in running})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And last but not least I had to attach a counter, but that was already something I knew how to do with &lt;code&gt;scan&lt;/code&gt; like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;.scan(0, accumulator: {(acc, _) in
-    return acc+1
-})
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;What &lt;code&gt;scan&lt;/code&gt; does above is to count how many times the timer fired while &lt;code&gt;isRunning&lt;/code&gt; was &lt;code&gt;true&lt;/code&gt; (which is exactly what I wanted).&lt;/p&gt;
-
-&lt;p&gt;Finally I had to set the initial value to show in the UI and to share the result between all observers:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; .startWith(0)
- .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The complete code of the enhanced timer observable looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;timer = Observable&amp;lt;NSInteger&amp;gt;.interval(0.1, scheduler: MainScheduler.instance)
-    .withLatestFrom(isRunning, resultSelector: {_, running in running})
-    .filter({running in running})
-    .scan(0, accumulator: {(acc, _) in
-        return acc+1
-    })
-    .startWith(0)
-    .shareReplayLatestWhileConnected()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that&amp;rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single &lt;code&gt;if&lt;/code&gt;!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-2-final.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;You can get the completed project from here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_finished.zip&#34;&gt;rx_laptimer_finished.zip&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

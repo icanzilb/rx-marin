@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 01 Jun 2017 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://rx-marin.com/tags/update/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://rx-marin.com/tags/update/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>First update to the RxSwift book with version 1.1</title>
@@ -15,51 +17,9 @@
       <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/</guid>
-      <description>
-
-&lt;p&gt;This is a short update about the first update to our RxSwift book.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;First of all&lt;/strong&gt;, we&amp;rsquo;d like to thank all of you who posted to our book errata forum!  (and if you haven&amp;rsquo;t hit the forums yet, check &amp;lsquo;em out - it&amp;rsquo;s the best place to report typos, bugs, and more: &lt;a href=&#34;https://forums.raywenderlich.com/c/books/rxswift&#34;&gt;https://forums.raywenderlich.com/c/books/rxswift&lt;/a&gt; ).&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve worked with the raywenderlich.com team on a number of books and I must say the RxSwift book has had, so far, the most enthusiastic feedback - we&amp;rsquo;ve been drowned in questions, thank you messages, and typo/bugs reports. Again - &lt;strong&gt;thank you&lt;/strong&gt;!&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ve addressed the most part of the feedback, and are looking for more - so if you see something that doesn&amp;rsquo;t feel or spell right, let us know.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Further&lt;/strong&gt; we&amp;rsquo;ve updated and tested the book projects on &lt;strong&gt;Xcode 8.3.2&lt;/strong&gt; and with &lt;strong&gt;RxSwift 3.4&lt;/strong&gt; - few APIs became deprecated since we published the book so to provide best experience for the readers we&amp;rsquo;ve updated the code to the latest syntax. There were few changes touching almost all code in the book like changing &lt;code&gt;addDisposeableTo(_)&lt;/code&gt; to &lt;code&gt;disposed(by:)&lt;/code&gt;, and &lt;code&gt;bindTo(_)&lt;/code&gt; to &lt;code&gt;bind(to:)&lt;/code&gt;. If you use the code from the initial book version that&amp;rsquo;ll still work fine but it will generate warnings asking you to change to the latest syntax.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Last, but not least&lt;/strong&gt;, we&amp;rsquo;ve updated the text in few places - we&amp;rsquo;ve noticed some repeating questions and figured that few spots needed more clarifications. So please keep asking us - it helps a lot!&lt;/p&gt;
-
-&lt;h2 id=&#34;how-to-update:f6c2e1bea7467fd778e61928bf8f2f2b&#34;&gt;How to update?&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;1) Head to your profile page on raywenderlich.com&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-profile.png&#34; alt=&#34;profile page&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;2) Click on &amp;ldquo;My Products&amp;rdquo; tab&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-products.png&#34; alt=&#34;my products&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;3) You will see all your purchases; click on the RxSwift book&lt;/strong&gt; (it has a &amp;ldquo;new&amp;rdquo; icon on top of it)&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-book.png&#34; alt=&#34;updated book cover&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;4) Scroll down the book page and download the latest version&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/update-download.png&#34; alt=&#34;update download&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s it - &lt;strong&gt;enjoy&lt;/strong&gt;!&lt;/p&gt;
-
-&lt;h2 id=&#34;where-to-go-from-here:f6c2e1bea7467fd778e61928bf8f2f2b&#34;&gt;Where to go from here?&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;if you&amp;rsquo;ve found a typo, something is not clear, or you found a bug: head to the book forums &lt;a href=&#34;https://forums.raywenderlich.com/c/books/rxswift&#34;&gt;https://forums.raywenderlich.com/c/books/rxswift&lt;/a&gt; and let us know!&lt;/li&gt;
-&lt;li&gt;if you&amp;rsquo;d like to chat about RxSwift in general: join over 3,000+ RxSwift developers in the RxSwift slack &lt;a href=&#34;http://rxswift-slack.herokuapp.com/&#34;&gt;http://rxswift-slack.herokuapp.com/&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;See you next time!&lt;/p&gt;
-
-&lt;p&gt;The book is available &lt;strong&gt;ONLY&lt;/strong&gt; at &lt;a href=&#34;https://store.raywenderlich.com/products/rxswift?source=underplot&#34;&gt;http://raywenderlich.com/store&lt;/a&gt; - this is where you get free updates, discuss in the website forums, etc.&lt;/p&gt;
-</description>
+      <description>This is a short update about the first update to our RxSwift book.
+First of all, we&amp;rsquo;d like to thank all of you who posted to our book errata forum! (and if you haven&amp;rsquo;t hit the forums yet, check &amp;lsquo;em out - it&amp;rsquo;s the best place to report typos, bugs, and more: https://forums.raywenderlich.com/c/books/rxswift ).
+I&amp;rsquo;ve worked with the raywenderlich.com team on a number of books and I must say the RxSwift book has had, so far, the most enthusiastic feedback - we&amp;rsquo;ve been drowned in questions, thank you messages, and typo/bugs reports.</description>
     </item>
     
   </channel>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Animation on rx_marin&lt;blog&gt;</title>
+    <link>http://rx-marin.com/tags/animation/</link>
+    <description>Recent content in Animation on rx_marin&lt;blog&gt;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://rx-marin.com/tags/animation/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introducing RxAnimated</title>
+      <link>http://rx-marin.com/post/rxanimated-intro/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxanimated-intro/</guid>
+      <description>RxCocoa is super powerful for UI bindings - you can use bind(to:) to bind pretty much any kind of observable to a UI Control of your choice. You can bind a String to a UILabel, UIImage to a UIImageView, or an array of objects to UITableView or UICollectionView.
+Now, for table and collection view bindings there is a special library to allow you to bind a list of objects called RxDataSources and besides all the other goodness the library can add animations to your bindings.</description>
+    </item>
+    
+  </channel>
+</rss>
