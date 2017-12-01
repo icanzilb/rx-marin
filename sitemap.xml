@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://rx-marin.com/post/observeon-vs-subscribeon/</loc>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://rx-marin.com/post/rxanimated-intro/</loc>
     <lastmod>2017-10-31T00:00:00+00:00</lastmod>
   </url>
@@ -169,7 +174,7 @@
   
   <url>
     <loc>http://rx-marin.com/categories/code/</loc>
-    <lastmod>2017-10-31T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -222,8 +227,14 @@
   </url>
   
   <url>
+    <loc>http://rx-marin.com/tags/observe/</loc>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://rx-marin.com/post/</loc>
-    <lastmod>2017-10-31T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -283,7 +294,7 @@
   
   <url>
     <loc>http://rx-marin.com/tags/rxswift/</loc>
-    <lastmod>2017-10-31T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -302,6 +313,12 @@
   <url>
     <loc>http://rx-marin.com/tags/scan/</loc>
     <lastmod>2016-04-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/tags/scheduler/</loc>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -326,6 +343,12 @@
   <url>
     <loc>http://rx-marin.com/tags/state/</loc>
     <lastmod>2016-04-04T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/tags/subscribe/</loc>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -373,7 +396,7 @@
   
   <url>
     <loc>http://rx-marin.com/</loc>
-    <lastmod>2017-10-31T00:00:00+00:00</lastmod>
+    <lastmod>2017-12-01T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

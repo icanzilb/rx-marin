@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Subscribe on rx_marin&lt;blog&gt;</title>
+    <link>http://rx-marin.com/tags/subscribe/</link>
+    <description>Recent content in Subscribe on rx_marin&lt;blog&gt;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 01 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://rx-marin.com/tags/subscribe/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>observeOn vs. subscribeOn</title>
+      <link>http://rx-marin.com/post/observeon-vs-subscribeon/</link>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/observeon-vs-subscribeon/</guid>
+      <description>Cross-thread subscriptions is a question that seems to pop up again and again on the RxSwift Slack channel. The explanation is very simple so I thought it was a good idea to put it in a blog post so whenever needed I can link to it instead of typing everything again and again.
+Observable subscriptions The terminology in regard to subscribing and observing is imho a bit messy so let&amp;rsquo;s first take this out of the way (do not skip this section!</description>
+    </item>
+    
+  </channel>
+</rss>

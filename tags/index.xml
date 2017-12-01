@@ -156,6 +156,15 @@
     </item>
     
     <item>
+      <title>Observe</title>
+      <link>http://rx-marin.com/tags/observe/</link>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/observe/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Realm</title>
       <link>http://rx-marin.com/tags/realm/</link>
       <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
@@ -239,7 +248,7 @@
     <item>
       <title>Rxswift</title>
       <link>http://rx-marin.com/tags/rxswift/</link>
-      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/tags/rxswift/</guid>
       <description></description>
@@ -269,6 +278,15 @@
       <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/tags/scan/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Scheduler</title>
+      <link>http://rx-marin.com/tags/scheduler/</link>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/scheduler/</guid>
       <description></description>
     </item>
     
@@ -305,6 +323,15 @@
       <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/tags/state/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Subscribe</title>
+      <link>http://rx-marin.com/tags/subscribe/</link>
+      <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/subscribe/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    observeOn vs. subscribeOn // rx_marin&lt;blog&gt;
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="How to subscribe and observe on different threads">
+<meta name="keywords" content="">
+<meta name="author" content="Marin Todorov">
+<meta name="generator" content="Hugo 0.30.2" />
+
+  <meta property="og:title" content="observeOn vs. subscribeOn" />
+<meta property="og:description" content="How to subscribe and observe on different threads" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://rx-marin.com/post/observeon-vs-subscribeon/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://rx-marin.com//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  <link href="http://rx-marin.com/etc/prism.css" rel="stylesheet" />
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://rx-marin.com/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+
+    
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+	
+	  <img src="http://rx-marin.com/images/avatar.jpg" class="sidebarphoto">
+    
+    <div class="social-buttons">
+      
+        
+        <a href="http://www.github.com/icanzilb" target="_blank"><i class='fa fa-github'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.linkedin.com/in/marintodorov/" target="_blank"><i class='fa fa-linkedin'></i>&nbsp;&nbsp;</a>
+        
+      
+        
+        <a href="http://www.twitter.com/icanzilb" target="_blank"><i class='fa fa-twitter'></i></a>
+        
+      
+      
+    </div>
+    
+	
+
+<div style="clear:both; height: 60px;padding-top:10px;">
+    <h2 class="brand-tagline" style="float: right; clear:none;padding-top: 10px;padding-left:10px; margin-top:0px;">&lt;blog&gt;</h2>
+    <h1 class="brand-title" style="font-size:2em!important;float:right;padding-top: 0px; margin-top:0px;">rx_marin</h1>
+</div>
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
+        
+          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
+        
+      </ul>
+    </nav>
+    
+    <div class="sidebar-posts" style="padding-top:20px!important;">
+	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/observeon-vs-subscribeon/">1/Dec &middot; observeOn vs. subscribeOn</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxanimated-intro/">31/Oct &middot; Introducing RxAnimated</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-custom-bindings/">19/Sep &middot; Custom property bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/nsspain-ticket/">15/Aug &middot; Raffling my ticket to NSSpain 2017</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxswift-book-update-1.1/">1/Jun &middot; First update to the RxSwift book with version 1.1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-advanced-combine-latest/">19/May &middot; combineLatest beyond the basics</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-free-chapters/">10/Apr &middot; Two free chapters from the RxSwift book!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-book-available-now/">3/Apr &middot; RxSwift book - available now!</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">24/Mar &middot; (dotSwift) Unidirectional data flow with RxSwift and RxRealm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">28/Feb &middot; (dotSwift) Presenting View Controllers with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">27/Jan &middot; (dotSwift) Search GitHub with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">8/Jan &middot; A smarter Retry with RxSwiftExt</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">23/May &middot; Testing your RxSwift code, part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">3/May &middot; Testing your RxSwift code, part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">18/Apr &middot; App state with Realm and RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-state-with-scan/">4/Apr &middot; Implementing state with scan in RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">31/Mar &middot; Custom bindings with RxSwift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">7/Mar &middot; Custom convenience operators with RxSwift, Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">29/Feb &middot; Custom convenience operators with RxSwift, Part 1</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/">22/Feb &middot; Split laps timer with RxSwift and RxCocoa: Part 2</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">16/Feb &middot; Split laps timer with RxSwift and RxCocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/animated/">31/Oct &middot; Animated</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/animation/">31/Oct &middot; Animation</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/announcement/">15/Aug &middot; Announcement</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/api/">27/Jan &middot; Api</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/authors/">10/Apr &middot; Authors</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/bind/">31/Oct &middot; Bind</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/binding/">31/Oct &middot; Binding</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/bindings/">31/Mar &middot; Bindings</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/book/">1/Jun &middot; Book</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/">15/Aug &middot; Categories</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/categories/code/">1/Dec &middot; Code</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/combinelatest/">19/May &middot; Combinelatest</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/data/">24/Mar &middot; Data</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/dataflow/">24/Mar &middot; Dataflow</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/dynamic/">19/May &middot; Dynamic</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/interval/">22/Feb &middot; Interval</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/json/">27/Jan &middot; Json</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/negate/">29/Feb &middot; Negate</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/nsspain/">15/Aug &middot; Nsspain</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/observe/">1/Dec &middot; Observe</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/">1/Dec &middot; Posts</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/realm/">18/Apr &middot; Realm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/release/">1/Jun &middot; Release</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/repeat/">8/Jan &middot; Repeat</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/replacewith/">29/Feb &middot; Replacewith</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/replacewithdate/">29/Feb &middot; Replacewithdate</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/retry/">8/Jan &middot; Retry</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxbook/">10/Apr &middot; Rxbook</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxcocoa/">24/Mar &middot; Rxcocoa</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxrealm/">24/Mar &middot; Rxrealm</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxswift/">1/Dec &middot; Rxswift</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/rxswiftext/">8/Jan &middot; Rxswiftext</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sample/">16/Feb &middot; Sample</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/scan/">4/Apr &middot; Scan</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/scheduler/">1/Dec &middot; Scheduler</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sequences/">19/May &middot; Sequences</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/settings/">18/Apr &middot; Settings</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/sink/">19/Sep &middot; Sink</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/state/">4/Apr &middot; State</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/subscribe/">1/Dec &middot; Subscribe</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/">31/Oct &middot; Tags</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/tests/">23/May &middot; Tests</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/uikit/">28/Feb &middot; Uikit</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/uiviewcontroller/">28/Feb &middot; Uiviewcontroller</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/unit-tests/">23/May &middot; Unit Tests</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/update/">1/Jun &middot; Update</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/tags/usewithlatest/">22/Feb &middot; Usewithlatest</a>
+          </li>
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/">1/Dec &middot; rx_marin&lt;blog&gt;</a>
+          </li>
+        
+      </div>
+
+	<style>
+		  .sidebar-post { font-size:0.75em; margin-top:12px; height: 14px;overflow:hidden;}
+		  .sidebar-post a {text-decoration: none;}
+	</style>
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#observable-subscriptions">Observable subscriptions</a></li>
+<li><a href="#schedulers">Schedulers</a></li>
+<li><a href="#subscribing-and-subscribeon">Subscribing and subscribeOn</a></li>
+<li><a href="#observing-and-observeon">Observing and observeOn</a></li>
+<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+</ul></li>
+</ul>
+</nav>
+					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;">
+				  <a href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rxbook.png"><br/><br/>
+					<small class="toc-label">&raquo; Authors: F. Pillet, J. Bontognali, M. Todorov, & S. Gardner <br/> &raquo; Tech Ed: Ash Furrow<br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+					</div>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://rx-marin.com/post/observeon-vs-subscribeon/">observeOn vs. subscribeOn</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>1</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Dec</span> <span class="post-date-year">2017</span>
+            	</span>
+            	
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
+
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=observeOn%20vs.%20subscribeOn&url=http%3a%2f%2frx-marin.com%2fpost%2fobserveon-vs-subscribeon%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>Cross-thread subscriptions is a question that seems to pop up again and again on the RxSwift Slack channel. The explanation is very simple so I thought it was a good idea to put it in a blog post so whenever needed I can link to it instead of typing everything again and again.</p>
+
+<h2 id="observable-subscriptions">Observable subscriptions</h2>
+
+<p>The terminology in regard to subscribing and observing is imho a bit messy so let&rsquo;s first take this out of the way (do <strong>not</strong> skip this section!).</p>
+
+<p>Let&rsquo;s see how an observable subscription works. We can split subscribing into 3 parts:</p>
+
+<p><img src="http://rx-marin.com/images/subscribe-schema.png" alt="subscription schema" /></p>
+
+<ol>
+<li><p>First you define an <code>Observable</code>, in some cases you provide some code in a closure that performs work and emits elements to any observers. When you create the observable, this code is stored for future use but <strong>NOT</strong> executed immediately. If there are no observers yet - the observable just sits and waits without doing anything.</p></li>
+
+<li><p>When you model your subscription you use some operators like <code>map</code>, <code>filter</code>, etc to process the emitted elements. Adding operators still does <strong>not</strong> perform any work - you&rsquo;re just creating a &ldquo;more specialized&rdquo; observable out of the original one.</p></li>
+
+<li><p>Only when you call the <code>subscribe(...)</code> method on an observable you &ldquo;<em>turn it on</em>&rdquo;. Calling <code>subscribe(...)</code> will <strong>actually</strong> execute the code you provide in the block in part 1 (above).</p></li>
+</ol>
+
+<p>So in that sense there two main points to make here:</p>
+
+<ul>
+<li>the <strong>&ldquo;subscription code&rdquo;</strong> is the code that gets called from your <code>subscribe()</code> and is located in <code>Observable.create { ... }</code>. This is the code that creates your subscription and produces elements.</li>
+<li>the <strong>&ldquo;observation code&rdquo;</strong> is where you observe for emitted elements - this is the code you provide in <code>onNext: { ... }</code>, <code>onCompleted: {...}</code>, etc. This is where you do your observing.</li>
+</ul>
+
+<p><img src="http://rx-marin.com/images/subscribe-terms.png" alt="subscription vs observing" /></p>
+
+<h2 id="schedulers">Schedulers</h2>
+
+<p>There&rsquo;s a bunch of predefined schedulers that come with RxSwift that cover all your needs most of the time. There is a short doc on that topic: <a href="https://github.com/ReactiveX/RxSwift/blob/master/Documentation/Schedulers.md">schedulers at RxSwift repo.</a></p>
+
+<p>In this article we&rsquo;ll use two:</p>
+
+<ul>
+<li><code>MainScheduler.instance</code> which schedulers work on the main thread and</li>
+<li><code>ConcurrentDispatchQueueScheduler</code> which uses GCD to execute work on a given queue.</li>
+</ul>
+
+<h2 id="subscribing-and-subscribeon">Subscribing and subscribeOn</h2>
+
+<p>So let&rsquo;s look at the <code>subscribeOn</code> operator - it allows you to change the scheduler on which the <strong>subscription code</strong> will be executed.</p>
+
+<p><img src="http://rx-marin.com/images/subscribe-subscribeOn.png" alt="" /></p>
+
+<p>By default the subscription code will run on the same thread as the code where you call <code>subscribe()</code> except if you change the context by using <code>subscribeOn(...)</code>.</p>
+
+<p>For example:</p>
+
+<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
+    observer.onNext(1)
+    sleep(1)
+    observer.onNext(2)
+    return Disposables.create()
+}
+.subscribe(onNext: { el in
+    print(Thread.isMainThread)
+})
+</code></pre>
+
+<p>If you place this code in a <code>viewDidLoad</code> you will block the main thread because of the usage of <code>sleep</code> in the subscription code.</p>
+
+<p>Your <code>onNext</code> code will print <code>true</code> because you always will stay on the main thread:</p>
+
+<pre><code>[main] subscribe() -&gt; [main] create{ ... } -&gt; [main] onNext { ... }
+</code></pre>
+
+<p>Now you can change the scheduler of the subscription by inserting a <code>subscribeOn</code> operator:</p>
+
+<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
+    observer.onNext(1)
+    sleep(1)
+    observer.onNext(2)
+    return Disposables.create()
+}
+.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+.subscribe(onNext: { el in
+    print(Thread.isMainThread)
+})
+</code></pre>
+
+<p>This time you will switch threads while subscribing:</p>
+
+<pre><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [background] onNext { ... }
+</code></pre>
+
+<p>And the print in the <code>onNext</code> will output a <code>false</code>.</p>
+
+<h2 id="observing-and-observeon">Observing and observeOn</h2>
+
+<p>Now let&rsquo;s move to observing the elements of the sequence. This part concerns your observation code.</p>
+
+<p><img src="http://rx-marin.com/images/subscribe-observeOn.png" alt="" /></p>
+
+<p>In our earlier example you switched subscription to a background queue because it does some blocking work. But what you in fact want is to run the code in <code>onNext { .. }</code> on the main thread so you can update the app&rsquo;s UI.</p>
+
+<p>This you can achieve by using the <code>observeOn</code> operator. By the way you can place <code>observeOn</code> and <code>subscribeOn</code> anywhere in your operator chain - the order doesn&rsquo;t really matter.</p>
+
+<p>RxSwift includes a shared scheduler that uses the main thread <code>MainScheduler.instance</code> so you can use it to observe elements easily like so:</p>
+
+<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
+    observer.onNext(1)
+    sleep(1)
+    observer.onNext(2)
+    return Disposables.create()
+}
+.observeOn(MainScheduler.instance)
+.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+.subscribe(onNext: { el in
+    print(Thread.isMainThread)
+})
+</code></pre>
+
+<p>This will execute the code like so:</p>
+
+<pre><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [main] onNext { ... }
+</code></pre>
+
+<p>This is a pattern which you will often use if you do a lot of asynchronous work so the early you get used to it - the better.</p>
+
+<p>I hope this quick post brought some clarity into the naming and usage.</p>
+
+<h2 id="where-to-go-from-here">Where to go from here?</h2>
+
+<p>To learn more about schedulers, and cross-thread subscriptions check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
+
+	
+			
+
+<div style="padding:10px; border:1px solid silver; margin:10px;">
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=observeOn%20vs.%20subscribeOn&url=http%3a%2f%2frx-marin.com%2fpost%2fobserveon-vs-subscribeon%2f">
+Tweet</a></p>
+</div>
+
+<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
+	<a style="display:block;float:left;margin-right:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rxbook.png" style="width:200px;"></a>
+	<br/>
+	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
+	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
+	Available from Ray Wenderlich: <a style="font-weight: bold;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank">&raquo; Learn more</a>.
+</div>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-subscribe" href="http://rx-marin.com//tags/subscribe">subscribe</a>,
+	                
+	                <a class="post-tag post-tag-observe" href="http://rx-marin.com//tags/observe">observe</a>,
+	                
+	                <a class="post-tag post-tag-scheduler" href="http://rx-marin.com//tags/scheduler">scheduler</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxanimated-intro/">Introducing RxAnimated</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+			<li><a href="http://rx-marin.com/categories">Categories</a></li>
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2017. All rights reserved.</p>
+</div>
+
+<script src="http://rx-marin.com/etc/prism.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-34358526-7', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>
