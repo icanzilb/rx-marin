@@ -6,10 +6,21 @@
     <description>Recent content in Subscribe on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 Dec 2017 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://rx-marin.com/tags/subscribe/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Testing with RxBlocking, part 1</title>
+      <link>http://rx-marin.com/post/rxblocking-part1/</link>
+      <pubDate>Tue, 19 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/rxblocking-part1/</guid>
+      <description>Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.
+In this blog post I&amp;rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&amp;rsquo;ll go over a bunch of real-life examples from open source I&amp;rsquo;ve written.
+Testing with RxTest  pod RxTest to install it to your test suite from https://github.com/ReactiveX/RxSwift/tree/master/RxTest</description>
+    </item>
     
     <item>
       <title>observeOn vs. subscribeOn</title>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    Rxbook // rx_marin&lt;blog&gt;
+    Testing with RxBlocking, part 1 // rx_marin&lt;blog&gt;
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -11,16 +11,16 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-<meta name="description" content="">
+<meta name="description" content="How to use RxBlocking to simplify your asynchronous tests">
 <meta name="keywords" content="">
-<meta name="author" content="">
+<meta name="author" content="Marin Todorov">
 <meta name="generator" content="Hugo 0.30.2" />
 
-  <meta property="og:title" content="Rxbook" />
-<meta property="og:description" content="" />
+  <meta property="og:title" content="Testing with RxBlocking, part 1" />
+<meta property="og:description" content="How to use RxBlocking to simplify your asynchronous tests" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://rx-marin.com/tags/rxbook/" />
+<meta property="og:url" content="http://rx-marin.com/post/rxblocking-part1/" />
 
 
   
@@ -44,7 +44,7 @@
   <link rel="shortcut icon" href="http://rx-marin.com/favicon.png">
 
   
-  <link href="http://rx-marin.com/tags/rxbook/index.xml" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
+  <link href="" rel="alternate" type="application/rss+xml" title="rx_marin&lt;blog&gt;" />
 
     
 
@@ -56,6 +56,8 @@
 </head>
 
 <body>
+	
+
 	<div id="layout" class="pure-g">
     <div class="sidebar pure-u-1 pure-u-md-1-4">
   <div class="header">
@@ -393,90 +395,243 @@
   </div>
 </div>
 
+	
+	
 
     <div class="content pure-u-1 pure-u-md-3-4">
-      <a name="top"></a>
-      
+		<a name="top"></a>
+		
 
-      <div class="posts">
-        
-          <section  class="post">
-            <header class="post-header">
-            
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#testing-with-rxtest">Testing with RxTest</a></li>
+<li><a href="#testing-with-rxblocking">Testing with RxBlocking</a></li>
+</ul></li>
+<li><a href="#rxblocking-crash-course">RxBlocking crash course</a>
+<ul>
+<li><a href="#what-does-rxblocking-do">What does RxBlocking do?</a></li>
+<li><a href="#waiting-on-completing-sequences">Waiting on completing sequences</a></li>
+<li><a href="#waiting-on-non-completing-sequences">Waiting on non-completing sequences</a></li>
+<li><a href="#waiting-for-a-given-time-only">Waiting for a given time only</a></li>
+<li><a href="#waiting-on-the-final-element-of-a-sequence">Waiting on the final element of a sequence</a></li>
+</ul></li>
+<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+</ul></li>
+</ul>
+</nav>
+					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;">
+				  <a href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rxbook.png"><br/><br/>
+					<small class="toc-label">&raquo; Authors: F. Pillet, J. Bontognali, M. Todorov, & S. Gardner <br/> &raquo; Tech Ed: Ash Furrow<br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+					</div>
+		    </div>
+		    
+	    
+  		<section class="post">
             <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-book-free-chapters/">Two free chapters from the RxSwift book!</a>
+              <a href="http://rx-marin.com/post/rxblocking-part1/">Testing with RxBlocking, part 1</a>
             </h1>
-            </header>
-            <p class="post-meta">
+            <h3 class="post-subtitle">
             	
-		          <span class="post-date">
-		            <span class="post-date-day"><sup>10</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2017</span>
-		          </span>
-      				
-      				
-      					By <a class="post-author" >Marin Todorov</a>
-      				
-              
-                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>3 min. read</em></span>
-              
-      				
-      					<div class="post-categories">
-				        
-      					
-					        <a class="post-category post-category-announcement" href="http://rx-marin.com//categories/announcement">announcement</a>
-      					
-      					</div>
-      				
-            </p>
-            <article class="post-summary">
-            	Last week we announced our brand new RxSwift book (available now)!
-The book starts with the very basics in Chapter 1, &ldquo;Hello, world!&rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &ldquo;MVVM&rdquo; and Chapter 24, &ldquo;Building a complete app with RxSwift&rdquo;.
-Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&rsquo;s written by four very active RxSwift community memebers and it&rsquo;s polished by two more editors.
-            </article>
-			<div class="read-more-link">
-				<a href="http://rx-marin.com/post/rxswift-book-free-chapters/"><span class="read-more-slashes">//</span>Read More...</a>
-			</div>
-          </section>
-        
-          <section  class="post">
-            <header class="post-header">
+            </h3>
             
-            <h1 class="post-title">
-              <a href="http://rx-marin.com/post/rxswift-book-available-now/">RxSwift book - available now!</a>
-            </h1>
-            </header>
-            <p class="post-meta">
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>19</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Dec</span> <span class="post-date-year">2017</span>
+            	</span>
             	
-		          <span class="post-date">
-		            <span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2017</span>
-		          </span>
-      				
-      				
-      					By <a class="post-author" >Marin Todorov</a>
-      				
-              
-                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-              
-      				
-      					<div class="post-categories">
-				        
-      					
-					        <a class="post-category post-category-announcement" href="http://rx-marin.com//categories/announcement">announcement</a>
-      					
-      					</div>
-      				
-            </p>
-            <article class="post-summary">
-            	After a long time working on this project, I and my friends and colleagues Florent Pillet, Junior Bontognali, Scott Gardner, Ash Furrow, Chris Belanger, and Ray and Vicki Wenderlich are happy to announce that our new book about development with RxSwift is available now!
-How it came to be? When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&rsquo;t a single structured resource where people can learn systematically.
-            </article>
-			<div class="read-more-link">
-				<a href="http://rx-marin.com/post/rxswift-book-available-now/"><span class="read-more-slashes">//</span>Read More...</a>
-			</div>
-          </section>
-        
-      </div>
+            
+            	
+            		<span class="post-author-single">By <a class="post-author"  target="">Marin Todorov</a></span>
+            		
 
+
+
+
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					
+				
+				</div>
+			
+
+			
+
+			
+
+<p><a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Testing%20with%20RxBlocking%2c%20part%201&url=http%3a%2f%2frx-marin.com%2fpost%2frxblocking-part1%2f"
+  data-size="medium">
+Tweet</a><p>
+
+            
+
+<p>Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.</p>
+
+<p>In this blog post I&rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&rsquo;ll go over a bunch of real-life examples from open source I&rsquo;ve written.</p>
+
+<h3 id="testing-with-rxtest">Testing with RxTest</h3>
+
+<blockquote>
+<p><code>pod RxTest</code> to install it to your test suite from <a href="https://github.com/ReactiveX/RxSwift/tree/master/RxTest">https://github.com/ReactiveX/RxSwift/tree/master/RxTest</a></p>
+</blockquote>
+
+<p>I&rsquo;ve already written in the past about RxTest and few people have thanked me personally for shading some light on its usage, so if you&rsquo;re interested head to the original article and read through: <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part1</a>.</p>
+
+<p>RxTest is excellent for the cases when you need to provide a bunch of inputs and record and inspect some outputs. For example you have a view model, which given a city name outputs the name of the country the city is located in. RxTest makes it easy to test the sequence <code>&quot;Berlin&quot;, &quot;London&quot;, &quot;Barcelona&quot;</code> as input and compare if the recorded output was <code>[&quot;Germany&quot;, &quot;UK&quot;, &quot;Spain&quot;]</code> in one pass. Simple!</p>
+
+<h3 id="testing-with-rxblocking">Testing with RxBlocking</h3>
+
+<blockquote>
+<p><code>pod RxBlocking</code> to install it to your test suite from <a href="https://github.com/ReactiveX/RxSwift/tree/master/RxBlocking">https://github.com/ReactiveX/RxSwift/tree/master/RxBlocking</a></p>
+</blockquote>
+
+<p>RxBlocking on the other hand is reaaaaaly handy in case you need to test some asynchronous functionality where you can&rsquo;t control the source of asynchronisity. Often times this means you&rsquo;re stepping up from unit tests to integration tests but nonetheless you do need a tool write those too.</p>
+
+<p>What RxBlocking is great to is to allow you to consume an observable sequence in batches or even wait on a single element to be emitted. It simplifies great async tests and this is what I&rsquo;m gonna write about in this and the next blog posts.</p>
+
+<h2 id="rxblocking-crash-course">RxBlocking crash course</h2>
+
+<p>The RxBlocking library is very very simple and it features only a handful of operators. Let&rsquo;s look at couple of examples and after that we&rsquo;re going to dive into more elaborated examples.</p>
+
+<h3 id="what-does-rxblocking-do">What does RxBlocking do?</h3>
+
+<p>RxBlocking allows you to &ldquo;stop and wait for a given condition to be fulfilled&rdquo;. In regards to testing observable sequences a handy &ldquo;condition&rdquo; is to wait for an element to be emitted. Let&rsquo;s have a look:</p>
+
+<pre><code class="language-swift">let element = try! items.toBlocking().first()!
+XCTAssertEqual(1, element)
+</code></pre>
+
+<p>What this code does is the following</p>
+
+<ol>
+<li><code>items</code> is an <code>Observable&lt;Int&gt;</code>, which you want to test</li>
+<li><code>items.toBlocking()</code> converts it to a blocking observable, and when you call <code>first()</code> on it the runtime &ldquo;stops&rdquo; and waits for the next element to be emitted.</li>
+<li>&ldquo;waiting&rdquo; for an element does not block the current thread but it uses the runloop to periodically check if the condition has been fulfilled</li>
+<li>finally, when <code>items</code> emits an element, the result is assigned to <code>element</code></li>
+<li>then the execution continues to the next line and by using <code>XCTAssertEqual()</code> we can check if <code>element</code> contains the value we expect.</li>
+</ol>
+
+<p>This is a minimal explanation of RxBlocking and a full unit test. The big win of using <code>toBlocking()</code> for that test is that the code is asynchronous - it could, for example, take few seconds before <code>items</code> emits.</p>
+
+<p>You can of course write the same test as an asynchronous XCTest test, but hey look at how clear and neat the RxBlocking code looks!</p>
+
+<p>Let&rsquo;s look at few quick examples.</p>
+
+<h3 id="waiting-on-completing-sequences">Waiting on completing sequences</h3>
+
+<p>In case the observable sequence completes, you can get all the emitted elements by using <code>toArray()</code> like so:</p>
+
+<pre><code class="language-swift">let elements = try! items.toBlocking().toArray()
+XCTAssertEqual([1, 5, 10, 15], elements)
+</code></pre>
+
+<p><code>toArray()</code> waits until the sequence completes and returns all emitted elements as an array. On the next line you can compare the result <code>elements</code> to the values you expected.</p>
+
+<h3 id="waiting-on-non-completing-sequences">Waiting on non-completing sequences</h3>
+
+<p><code>toArray()</code> can be used directly on any observable sequence, which completes (e.g. the <code>.completed</code> event is the &ldquo;condition&rdquo; to un-block). But how about if your sequence does not complete and you&rsquo;d like to check the 4th and 5th elements only?</p>
+
+<p>You can use all operators as usual on your sequence before you convert it to a blocking observable. Let&rsquo;s have a look:</p>
+
+<pre><code class="language-swift">let elements = try! items.skip(3).take(2).toBlocking().toArray()
+XCTAssertEqual([15, 20], elements)
+</code></pre>
+
+<p>In this case you will skip over the first 3 elements and take only the next 2 in your sequence. Then you use <code>toBlocking()</code> and get the resulting 2 elements by using <code>toArray()</code>. Bam!</p>
+
+<h3 id="waiting-for-a-given-time-only">Waiting for a given time only</h3>
+
+<p>It&rsquo;s worth mentioning that in case you don&rsquo;t want your test to wait for ever (which is mostly the case?) you can provide a timeout parameter:</p>
+
+<pre><code class="language-swift">let elements = try! items.toBlocking(timeout: 1).toArray()
+</code></pre>
+
+<p>If <code>items</code> does not complete within 1 second <code>toArray()</code> will raise an error. If you want to handle this properly use <code>try?</code> instead of <code>try!</code> or catch the thrown error otherwise.</p>
+
+<h3 id="waiting-on-the-final-element-of-a-sequence">Waiting on the final element of a sequence</h3>
+
+<p>Finally, you might be interested only in the final element of a squence. This is handy if the elements in the sequence represent some kind of state and you want to test only the final state of the observable.</p>
+
+<pre><code class="language-swift">let lastElement = try! items.toBlocking().last()!
+XCTAssertEqual(1, lastElement)
+</code></pre>
+
+<p><code>last()</code> will &ldquo;stop and wait&rdquo; for the observable to complete and return as result the last element of the sequence.</p>
+
+<h2 id="where-to-go-from-here">Where to go from here?</h2>
+
+<p>In Part 2 I&rsquo;ll look over a number of real-life examples to give you a better idea where you can take your tests with the power of RxBlocking.</p>
+
+<p>To learn more about RxSwift and testing check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
+
+	
+			
+
+<div style="padding:10px; border:1px solid silver; margin:10px;">
+<p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
+  href="https://twitter.com/icanzilb">
+Follow @icanzilb</a></p>
+
+<p>Share this post: <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Testing%20with%20RxBlocking%2c%20part%201&url=http%3a%2f%2frx-marin.com%2fpost%2frxblocking-part1%2f">
+Tweet</a></p>
+</div>
+
+<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
+	<a style="display:block;float:left;margin-right:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rxbook.png" style="width:200px;"></a>
+	<br/>
+	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
+	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
+	Available from Ray Wenderlich: <a style="font-weight: bold;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank">&raquo; Learn more</a>.
+</div>
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-rxswift" href="http://rx-marin.com//tags/rxswift">rxswift</a>,
+	                
+	                <a class="post-tag post-tag-subscribe" href="http://rx-marin.com//tags/subscribe">subscribe</a>,
+	                
+	                <a class="post-tag post-tag-observe" href="http://rx-marin.com//tags/observe">observe</a>,
+	                
+	                <a class="post-tag post-tag-scheduler" href="http://rx-marin.com//tags/scheduler">scheduler</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/observeon-vs-subscribeon/">observeOn vs. subscribeOn</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
       <div class="footer">
 	<hr class="thin" />
 	<div class="pure-menu pure-menu-horizontal pure-menu-open">
@@ -522,6 +677,10 @@ How it came to be? When I first tried out RxSwift (being excited about it by som
 
     </div>
   </div>
+	
+
+	
+
   
 </body>
 </html>

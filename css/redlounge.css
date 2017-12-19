@@ -310,6 +310,18 @@ img {
 	height: auto;
 }
 
+blockquote {
+	background: #efefef!important;
+	border-radius: 5px!important;
+	width: 60%;
+	padding: 10px;
+	overflow: hidden;
+}
+
+blockquote p {
+	margin:0px!important;
+}
+
 /* Banner Image */
 .content-banner-image {
 	overflow: hidden;
