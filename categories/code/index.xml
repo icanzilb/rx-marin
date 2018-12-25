@@ -6,10 +6,21 @@
     <description>Recent content in Code on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://rx-marin.com/categories/code/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Binding to a table view with multiple cells and sections</title>
+      <link>http://rx-marin.com/post/bind-multiple-cells/</link>
+      <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/bind-multiple-cells/</guid>
+      <description>One of the questions that keeps popping up in the RxSwift Slack channel for years now is how to display multiple cell types when binding data to a table view.
+This is actually very easy to do and in this post I&amp;rsquo;ll show you two distinct ways to display multiple cells in a table view (and it works identically for collection views if that&amp;rsquo;s what you&amp;rsquo;re looking for).
+We&amp;rsquo;ll look at the following two use cases:</description>
+    </item>
     
     <item>
       <title>Testing with RxBlocking, part 2</title>

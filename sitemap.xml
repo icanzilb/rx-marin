@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://rx-marin.com/post/bind-multiple-cells/</loc>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://rx-marin.com/post/rxblocking-part2/</loc>
     <lastmod>2018-03-08T00:00:00+00:00</lastmod>
   </url>
@@ -160,7 +165,7 @@
   
   <url>
     <loc>http://rx-marin.com/tags/binding/</loc>
-    <lastmod>2017-10-31T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -184,7 +189,7 @@
   
   <url>
     <loc>http://rx-marin.com/categories/code/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -244,7 +249,7 @@
   
   <url>
     <loc>http://rx-marin.com/post/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -292,7 +297,13 @@
   
   <url>
     <loc>http://rx-marin.com/tags/rxcocoa/</loc>
-    <lastmod>2017-03-24T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://rx-marin.com/tags/rxdatasources/</loc>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -406,7 +417,7 @@
   
   <url>
     <loc>http://rx-marin.com/</loc>
-    <lastmod>2018-03-08T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-25T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
