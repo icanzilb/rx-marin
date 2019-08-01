@@ -14,7 +14,7 @@
 <meta name="description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.30.2" />
+<meta name="generator" content="Hugo 0.56.1" />
 
   <meta property="og:title" content="Split laps timer with RxSwift and RxCocoa: Part 2" />
 <meta property="og:description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week" />
@@ -91,10 +91,13 @@
 </div>
     <nav class="nav">
       <ul class="nav-list">
-        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://rx-marin.com/">Home</a></li>
-        
-          <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://www.underplot.com">Contact</a></li>
-        
+        <li class="nav-item">
+        	<span class="nav-item-separator">/&nbsp;/</span>
+        	<a href="http://rx-marin.com/">Home</a>
+        	<div style="margin-right:20px;"></div>
+        	<span class="nav-item-separator">/&nbsp;/</span>
+        	<a href="http://www.underplot.com">Contact</a>
+        </li>
       </ul>
     </nav>
     
@@ -201,202 +204,6 @@
               <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">17/Jan &middot; Manually disposing a bag and creating a timer</a>
           </li>
         
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/animated/">31/Oct &middot; Animated</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/animation/">31/Oct &middot; Animation</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/categories/announcement/">15/Aug &middot; Announcement</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/api/">27/Jan &middot; Api</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/authors/">10/Apr &middot; Authors</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/bind/">31/Oct &middot; Bind</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/binding/">25/Dec &middot; Binding</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/bindings/">31/Mar &middot; Bindings</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/book/">1/Jun &middot; Book</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/categories/">15/Aug &middot; Categories</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/categories/code/">25/Dec &middot; Code</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/combinelatest/">19/May &middot; Combinelatest</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/data/">24/Mar &middot; Data</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/dataflow/">24/Mar &middot; Dataflow</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/dynamic/">19/May &middot; Dynamic</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/interval/">22/Feb &middot; Interval</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/json/">27/Jan &middot; Json</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/negate/">29/Feb &middot; Negate</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/nsspain/">15/Aug &middot; Nsspain</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/observe/">8/Mar &middot; Observe</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/post/">25/Dec &middot; Posts</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/realm/">18/Apr &middot; Realm</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/release/">1/Jun &middot; Release</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/repeat/">8/Jan &middot; Repeat</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/replacewith/">29/Feb &middot; Replacewith</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/replacewithdate/">29/Feb &middot; Replacewithdate</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/retry/">8/Jan &middot; Retry</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxbook/">10/Apr &middot; Rxbook</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxcocoa/">25/Dec &middot; Rxcocoa</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxdatasources/">25/Dec &middot; Rxdatasources</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxrealm/">24/Mar &middot; Rxrealm</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxswift/">8/Mar &middot; Rxswift</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/rxswiftext/">8/Jan &middot; Rxswiftext</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/sample/">16/Feb &middot; Sample</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/scan/">4/Apr &middot; Scan</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/scheduler/">8/Mar &middot; Scheduler</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/sequences/">19/May &middot; Sequences</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/settings/">18/Apr &middot; Settings</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/sink/">19/Sep &middot; Sink</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/state/">4/Apr &middot; State</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/subscribe/">8/Mar &middot; Subscribe</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/">31/Oct &middot; Tags</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/tests/">23/May &middot; Tests</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/uikit/">28/Feb &middot; Uikit</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/uiviewcontroller/">28/Feb &middot; Uiviewcontroller</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/unit-tests/">23/May &middot; Unit Tests</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/update/">1/Jun &middot; Update</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/tags/usewithlatest/">22/Feb &middot; Usewithlatest</a>
-          </li>
-        
-          <li class="sidebar-post">
-              <a href="http://rx-marin.com/">25/Dec &middot; rx_marin&lt;blog&gt;</a>
-          </li>
-        
       </div>
 
 	<style>
@@ -471,8 +278,6 @@ Tweet</a><p>
 <p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
 
 <p>Now let&rsquo;s put all those buttons to work!</p>
-
-<p></p>
 
 <p>My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce <code>true</code> values and the stop button will produce <code>false</code> values. When merged I will get one sequence that emits every time the state changes:</p>
 
@@ -594,7 +399,7 @@ Tweet</a></p>
 </div>
 
 <div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rxbook4.png" style="width:200px;"></a>
+	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="https://store.raywenderlich.com/products/rxswift?source=underplot" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
 	<br/>
 	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
 	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
@@ -624,14 +429,14 @@ Tweet</a></p>
 					
 					<div class="paging-newer">
 						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
+						<a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
 		            </div>
 		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
+			            <a class="paging-link" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
 		            </div>
 		            
 	            </div>
@@ -651,7 +456,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2018. All rights reserved.</p>
+	<p>&copy; 2019. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

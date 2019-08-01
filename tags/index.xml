@@ -6,58 +6,13 @@
     <description>Recent content in Tags on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://rx-marin.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Animated</title>
-      <link>http://rx-marin.com/tags/animated/</link>
-      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/animated/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Animation</title>
-      <link>http://rx-marin.com/tags/animation/</link>
-      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/animation/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Api</title>
-      <link>http://rx-marin.com/tags/api/</link>
-      <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/api/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Authors</title>
-      <link>http://rx-marin.com/tags/authors/</link>
-      <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/authors/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bind</title>
-      <link>http://rx-marin.com/tags/bind/</link>
-      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/bind/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Binding</title>
+      <title>binding</title>
       <link>http://rx-marin.com/tags/binding/</link>
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
@@ -66,169 +21,7 @@
     </item>
     
     <item>
-      <title>Bindings</title>
-      <link>http://rx-marin.com/tags/bindings/</link>
-      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/bindings/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Book</title>
-      <link>http://rx-marin.com/tags/book/</link>
-      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/book/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Combinelatest</title>
-      <link>http://rx-marin.com/tags/combinelatest/</link>
-      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/combinelatest/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Data</title>
-      <link>http://rx-marin.com/tags/data/</link>
-      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/data/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dataflow</title>
-      <link>http://rx-marin.com/tags/dataflow/</link>
-      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/dataflow/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Dynamic</title>
-      <link>http://rx-marin.com/tags/dynamic/</link>
-      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/dynamic/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Interval</title>
-      <link>http://rx-marin.com/tags/interval/</link>
-      <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/interval/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Json</title>
-      <link>http://rx-marin.com/tags/json/</link>
-      <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/json/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Negate</title>
-      <link>http://rx-marin.com/tags/negate/</link>
-      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/negate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nsspain</title>
-      <link>http://rx-marin.com/tags/nsspain/</link>
-      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/nsspain/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Observe</title>
-      <link>http://rx-marin.com/tags/observe/</link>
-      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/observe/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Realm</title>
-      <link>http://rx-marin.com/tags/realm/</link>
-      <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/realm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Release</title>
-      <link>http://rx-marin.com/tags/release/</link>
-      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/release/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Repeat</title>
-      <link>http://rx-marin.com/tags/repeat/</link>
-      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/repeat/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Replacewith</title>
-      <link>http://rx-marin.com/tags/replacewith/</link>
-      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/replacewith/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Replacewithdate</title>
-      <link>http://rx-marin.com/tags/replacewithdate/</link>
-      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/replacewithdate/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Retry</title>
-      <link>http://rx-marin.com/tags/retry/</link>
-      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/retry/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Rxbook</title>
-      <link>http://rx-marin.com/tags/rxbook/</link>
-      <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/rxbook/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Rxcocoa</title>
+      <title>rxcocoa</title>
       <link>http://rx-marin.com/tags/rxcocoa/</link>
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
@@ -237,7 +30,7 @@
     </item>
     
     <item>
-      <title>Rxdatasources</title>
+      <title>rxdatasources</title>
       <link>http://rx-marin.com/tags/rxdatasources/</link>
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
@@ -246,16 +39,16 @@
     </item>
     
     <item>
-      <title>Rxrealm</title>
-      <link>http://rx-marin.com/tags/rxrealm/</link>
-      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
+      <title>observe</title>
+      <link>http://rx-marin.com/tags/observe/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/tags/rxrealm/</guid>
+      <guid>http://rx-marin.com/tags/observe/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Rxswift</title>
+      <title>rxswift</title>
       <link>http://rx-marin.com/tags/rxswift/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -264,34 +57,7 @@
     </item>
     
     <item>
-      <title>Rxswiftext</title>
-      <link>http://rx-marin.com/tags/rxswiftext/</link>
-      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/rxswiftext/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Sample</title>
-      <link>http://rx-marin.com/tags/sample/</link>
-      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/sample/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Scan</title>
-      <link>http://rx-marin.com/tags/scan/</link>
-      <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/scan/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Scheduler</title>
+      <title>scheduler</title>
       <link>http://rx-marin.com/tags/scheduler/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -300,43 +66,7 @@
     </item>
     
     <item>
-      <title>Sequences</title>
-      <link>http://rx-marin.com/tags/sequences/</link>
-      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/sequences/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Settings</title>
-      <link>http://rx-marin.com/tags/settings/</link>
-      <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/settings/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Sink</title>
-      <link>http://rx-marin.com/tags/sink/</link>
-      <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/sink/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>State</title>
-      <link>http://rx-marin.com/tags/state/</link>
-      <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/state/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Subscribe</title>
+      <title>subscribe</title>
       <link>http://rx-marin.com/tags/subscribe/</link>
       <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
       
@@ -345,43 +75,70 @@
     </item>
     
     <item>
-      <title>Tests</title>
-      <link>http://rx-marin.com/tags/tests/</link>
-      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+      <title>animated</title>
+      <link>http://rx-marin.com/tags/animated/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/tags/tests/</guid>
+      <guid>http://rx-marin.com/tags/animated/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Uikit</title>
-      <link>http://rx-marin.com/tags/uikit/</link>
-      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      <title>animation</title>
+      <link>http://rx-marin.com/tags/animation/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/tags/uikit/</guid>
+      <guid>http://rx-marin.com/tags/animation/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Uiviewcontroller</title>
-      <link>http://rx-marin.com/tags/uiviewcontroller/</link>
-      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      <title>bind</title>
+      <link>http://rx-marin.com/tags/bind/</link>
+      <pubDate>Tue, 31 Oct 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/tags/uiviewcontroller/</guid>
+      <guid>http://rx-marin.com/tags/bind/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Unit Tests</title>
-      <link>http://rx-marin.com/tags/unit-tests/</link>
-      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+      <title>sink</title>
+      <link>http://rx-marin.com/tags/sink/</link>
+      <pubDate>Tue, 19 Sep 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://rx-marin.com/tags/unit-tests/</guid>
+      <guid>http://rx-marin.com/tags/sink/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Update</title>
+      <title>nsspain</title>
+      <link>http://rx-marin.com/tags/nsspain/</link>
+      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/nsspain/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>book</title>
+      <link>http://rx-marin.com/tags/book/</link>
+      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/book/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>release</title>
+      <link>http://rx-marin.com/tags/release/</link>
+      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/release/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>update</title>
       <link>http://rx-marin.com/tags/update/</link>
       <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
       
@@ -390,11 +147,254 @@
     </item>
     
     <item>
-      <title>Usewithlatest</title>
+      <title>combineLatest</title>
+      <link>http://rx-marin.com/tags/combinelatest/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/combinelatest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dynamic</title>
+      <link>http://rx-marin.com/tags/dynamic/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/dynamic/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sequences</title>
+      <link>http://rx-marin.com/tags/sequences/</link>
+      <pubDate>Fri, 19 May 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/sequences/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>authors</title>
+      <link>http://rx-marin.com/tags/authors/</link>
+      <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/authors/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rxbook</title>
+      <link>http://rx-marin.com/tags/rxbook/</link>
+      <pubDate>Mon, 10 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/rxbook/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>data</title>
+      <link>http://rx-marin.com/tags/data/</link>
+      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/data/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dataflow</title>
+      <link>http://rx-marin.com/tags/dataflow/</link>
+      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/dataflow/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rxrealm</title>
+      <link>http://rx-marin.com/tags/rxrealm/</link>
+      <pubDate>Fri, 24 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/rxrealm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>uikit</title>
+      <link>http://rx-marin.com/tags/uikit/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/uikit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>uiviewcontroller</title>
+      <link>http://rx-marin.com/tags/uiviewcontroller/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/uiviewcontroller/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>api</title>
+      <link>http://rx-marin.com/tags/api/</link>
+      <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/api/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>json</title>
+      <link>http://rx-marin.com/tags/json/</link>
+      <pubDate>Fri, 27 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/json/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>repeat</title>
+      <link>http://rx-marin.com/tags/repeat/</link>
+      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/repeat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>retry</title>
+      <link>http://rx-marin.com/tags/retry/</link>
+      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/retry/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>rxswiftext</title>
+      <link>http://rx-marin.com/tags/rxswiftext/</link>
+      <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/rxswiftext/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tests</title>
+      <link>http://rx-marin.com/tags/tests/</link>
+      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/tests/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>unit tests</title>
+      <link>http://rx-marin.com/tags/unit-tests/</link>
+      <pubDate>Mon, 23 May 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/unit-tests/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>realm</title>
+      <link>http://rx-marin.com/tags/realm/</link>
+      <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/realm/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>settings</title>
+      <link>http://rx-marin.com/tags/settings/</link>
+      <pubDate>Mon, 18 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/settings/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>scan</title>
+      <link>http://rx-marin.com/tags/scan/</link>
+      <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/scan/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>state</title>
+      <link>http://rx-marin.com/tags/state/</link>
+      <pubDate>Mon, 04 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/state/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>bindings</title>
+      <link>http://rx-marin.com/tags/bindings/</link>
+      <pubDate>Thu, 31 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/bindings/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>negate</title>
+      <link>http://rx-marin.com/tags/negate/</link>
+      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/negate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>replaceWith</title>
+      <link>http://rx-marin.com/tags/replacewith/</link>
+      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/replacewith/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>replaceWithDate</title>
+      <link>http://rx-marin.com/tags/replacewithdate/</link>
+      <pubDate>Mon, 29 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/replacewithdate/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>interval</title>
+      <link>http://rx-marin.com/tags/interval/</link>
+      <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/interval/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>useWithLatest</title>
       <link>http://rx-marin.com/tags/usewithlatest/</link>
       <pubDate>Mon, 22 Feb 2016 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/tags/usewithlatest/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sample</title>
+      <link>http://rx-marin.com/tags/sample/</link>
+      <pubDate>Tue, 16 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/sample/</guid>
       <description></description>
     </item>
     

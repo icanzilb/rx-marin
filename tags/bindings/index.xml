@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Bindings on rx_marin&lt;blog&gt;</title>
+    <title>bindings on rx_marin&lt;blog&gt;</title>
     <link>http://rx-marin.com/tags/bindings/</link>
-    <description>Recent content in Bindings on rx_marin&lt;blog&gt;</description>
+    <description>Recent content in bindings on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 31 Mar 2016 00:00:00 +0000</lastBuildDate>
@@ -40,9 +40,7 @@ Binding to make a view visible I noticed there is a binding on the hidden proper
 
 &lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -6,26 +6,26 @@
     <description>Recent content in Categories on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 15 Aug 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://rx-marin.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Announcement</title>
-      <link>http://rx-marin.com/categories/announcement/</link>
-      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/categories/announcement/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Code</title>
+      <title>code</title>
       <link>http://rx-marin.com/categories/code/</link>
       <pubDate>Tue, 25 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/categories/code/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>announcement</title>
+      <link>http://rx-marin.com/categories/announcement/</link>
+      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/categories/announcement/</guid>
       <description></description>
     </item>
     

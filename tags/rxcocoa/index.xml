@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rxcocoa on rx_marin&lt;blog&gt;</title>
+    <title>rxcocoa on rx_marin&lt;blog&gt;</title>
     <link>http://rx-marin.com/tags/rxcocoa/</link>
-    <description>Recent content in Rxcocoa on rx_marin&lt;blog&gt;</description>
+    <description>Recent content in rxcocoa on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
@@ -126,9 +126,7 @@ Same thing happened with me last week - for the first time I felt like I&amp;rsq
 
 &lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -159,9 +157,7 @@ Same thing happened with me last week - for the first time I felt like I&amp;rsq
 
 &lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/laptimer-finished.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
+&lt;p&gt;Let&amp;rsquo;s build that app :]&lt;/p&gt;</description>
     </item>
     
   </channel>
