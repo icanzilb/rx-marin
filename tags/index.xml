@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on rx_marin&lt;blog&gt;</title>
@@ -6,10 +6,69 @@
     <description>Recent content in Tags on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 25 Dec 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 03 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://rx-marin.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>actor</title>
+      <link>http://rx-marin.com/tags/actor/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/actor/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="http://rx-marin.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>async</title>
+      <link>http://rx-marin.com/tags/async/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/async/</guid>
+      <description></description>
+    </item>
     
+    <item>
+      <title>await</title>
+      <link>http://rx-marin.com/tags/await/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/await/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>book</title>
+      <link>http://rx-marin.com/tags/book/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/book/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>concurrency</title>
+      <link>http://rx-marin.com/tags/concurrency/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/concurrency/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>swift</title>
+      <link>http://rx-marin.com/tags/swift/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/swift/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>task</title>
+      <link>http://rx-marin.com/tags/task/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/tags/task/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>binding</title>
@@ -116,15 +175,6 @@
       <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>http://rx-marin.com/tags/nsspain/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>book</title>
-      <link>http://rx-marin.com/tags/book/</link>
-      <pubDate>Thu, 01 Jun 2017 00:00:00 +0000</pubDate>
-      
-      <guid>http://rx-marin.com/tags/book/</guid>
       <description></description>
     </item>
     

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>actor on rx_marin&lt;blog&gt;</title>
+    <link>http://rx-marin.com/tags/actor/</link>
+    <description>Recent content in actor on rx_marin&lt;blog&gt;</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 03 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://rx-marin.com/tags/actor/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Announcing: “Modern Concurrency in Swift”</title>
+      <link>http://rx-marin.com/post/announcing-modern-swift-concurrency-book/</link>
+      <pubDate>Wed, 03 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://rx-marin.com/post/announcing-modern-swift-concurrency-book/</guid>
+      <description>I&amp;rsquo;m incredibly happy to share that today the new raywenderlich.com book &amp;ldquo;Modern Concurrency in Swift&amp;rdquo;, that I&amp;rsquo;ve been working on, is available at www.swiftconcurrencybook.com!
+Together with editors Sandra Grauschopf, Felipe Laso-Marsetti, Richard Turton, and Shai Mishali, we&amp;rsquo;ve been working very hard to get a book out as soon as possible on the newly released in 2021 Swift Concurrency:
+The book is written in the classic raywenderlich.com style that mixes key pieces of theory with step-by-step instructions, guiding the readers through working on practical, real-life projects.</description>
+    </item>
+    
+  </channel>
+</rss>

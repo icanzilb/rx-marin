@@ -505,3 +505,15 @@ hr.thin {
         bottom: 0;
     }
 }
+
+.highlight pre {
+	background-color: #efefef!important;
+}
+
+span.operator {
+	background-color: transparent!important;
+}
+
+span.punctuation {
+	color: #666!important;
+}

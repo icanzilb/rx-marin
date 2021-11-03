@@ -14,7 +14,7 @@
 <meta name="description" content="How to use RxBlocking to simplify your asynchronous tests">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Testing with RxBlocking, part 2" />
 <meta property="og:description" content="How to use RxBlocking to simplify your asynchronous tests" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,28 +230,31 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#when-to-use-rxblocking-vs-rxtest">When to use RxBlocking vs. RxTest?</a></li>
-<li><a href="#rxrealm-test-suite">RxRealm test suite</a></li>
-<li><a href="#migrating-rxrealm-from-rxtest-to-rxblocking">Migrating RxRealm from RxTest to RxBlocking</a></li>
-<li><a href="#testing-for-an-error-asynchronously">Testing for an error asynchronously</a></li>
-<li><a href="#testing-a-batch-of-changes">Testing a batch of changes</a></li>
-<li><a href="#test-that-eventually-all-commits-will-be-merged">Test that eventually all commits will be merged</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#when-to-use-rxblocking-vs-rxtest">When to use RxBlocking vs. RxTest?</a></li>
+    <li><a href="#rxrealm-test-suite">RxRealm test suite</a></li>
+    <li><a href="#migrating-rxrealm-from-rxtest-to-rxblocking">Migrating RxRealm from RxTest to RxBlocking</a></li>
+    <li><a href="#testing-for-an-error-asynchronously">Testing for an error asynchronously</a></li>
+    <li><a href="#testing-a-batch-of-changes">Testing a batch of changes</a></li>
+    <li><a href="#test-that-eventually-all-commits-will-be-merged">Test that eventually all commits will be merged</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -294,76 +301,55 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Previously, I wrote about the basics of testing with RxBlocking in <a href="http://rx-marin.com/post/rxblocking-part1/">Testing with RxBlocking, part1</a>.</p>
-
+            <p>Previously, I wrote about the basics of testing with RxBlocking in <a href="http://rx-marin.com/post/rxblocking-part1/">Testing with RxBlocking, part1</a>.</p>
 <p>Since then, I presented 2 times at meetups about MVVM and RxBlocking and I thought I&rsquo;d post few more examples in a broader context.</p>
-
 <p>But first a question I got several times already when discussing RxBlocking.</p>
-
 <h2 id="when-to-use-rxblocking-vs-rxtest">When to use RxBlocking vs. RxTest?</h2>
-
 <p>RxTest is a great library for testing RxSwift code. It offers everything you need to test your Rx code and in most cases it&rsquo;ll be everything you need.</p>
-
 <p>RxTest is great in that it offers a class called <code>TestScheduler</code> - it allows you to feed a batch of input values and instantly get the output and compare it to what you expect it ot be. It&rsquo;s a great tool and I already wrote about testing with RxTest before:</p>
-
 <ul>
 <li><a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part 1</a></li>
 <li><a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a></li>
 </ul>
-
 <p>In edge cases in which you cannot control the source of asynchronisity for example you need to have a different approach.</p>
-
 <p>RxBlocking is great when you need to wait until one element is emitted, record it, and then consume another one, etc.</p>
-
 <p>A good example is code that uses <code>RxRealm</code> - RxRealm relies on Realm&rsquo;s own notification system to produce change notifications and wraps those as observables. In this case you don&rsquo;t know exactly when the notification will be emitted since that&rsquo;s up to Realm. Furhter, changes to the database that are committed soone after each other might (or might not) be bundled together as a single notification by Realm depending on the available resources.</p>
-
 <p>Therefore to test correctly RxRealm observables you need to wait for an element before triggering the next one to guarantee the change notifications won&rsquo;t be bundled together.</p>
-
 <h2 id="rxrealm-test-suite">RxRealm test suite</h2>
-
 <p>In this post I&rsquo;ll look at the RxRealm test budle which I created some time ago with RxTest (not realizing there was the RxBlocking library to test async code).</p>
-
 <p>The main pain points about testing RxRealm are:</p>
-
 <ul>
 <li>completely asynchronous and emitting elements depends only on Realm</li>
 <li>notifications (and therefore elements) might be bundled up</li>
 <li>emitted elements might change over time (e.g. are mutable)</li>
 </ul>
-
 <blockquote>
 <p>Disclaimer: Provided the code depends entirely on the Realm dependency the tests in the suite are more of integration tests than unit tests. That&rsquo;s also one of the reasons why the suite requires RxBlocking.</p>
 </blockquote>
-
 <p>Let&rsquo;s look at how one test was implemented in RxTest. The code is testing whether <code>Results</code> collection emits an element when a change is written to the database via the <code>rx.add()</code> binding:</p>
-
-<p><img src="http://rx-marin.com/images/rxblocking-image1.png" alt="collection emits when objects added" /></p>
-
+<p><img src="http://rx-marin.com/images/rxblocking-image1.png" alt="collection emits when objects added"></p>
 <p>Here&rsquo;s the full code of that single test: I won&rsquo;t go into much detail what is the code doing as <strong>I don&rsquo;t recommend</strong> testing asynchronous code like that. I only include it here to show that testing edge cases like the RxRealm code base simly isn&rsquo;t suitable for RxTest:</p>
-
-<pre><code class="language-swift">    func testRxAddObject() {
-        let expectation = self.expectation(description: &quot;Message1&quot;)
-        let realm = realmInMemory(#function)
-        let bag = DisposeBag()
-        let events = [
-            next(0, Message(&quot;1&quot;)),
-            completed(0)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testRxAddObject</span>() {
+        <span style="color:#66d9ef">let</span> expectation = <span style="color:#66d9ef">self</span>.expectation(description: <span style="color:#e6db74">&#34;Message1&#34;</span>)
+        <span style="color:#66d9ef">let</span> realm = realmInMemory(<span style="color:#66d9ef">#function</span>)
+        <span style="color:#66d9ef">let</span> bag = DisposeBag()
+        <span style="color:#66d9ef">let</span> events = [
+            next(<span style="color:#ae81ff">0</span>, Message(<span style="color:#e6db74">&#34;1&#34;</span>)),
+            completed(<span style="color:#ae81ff">0</span>)
         ]
         
-        let rx_add: AnyObserver&lt;Message&gt; = realm.rx.add()
-        let scheduler = TestScheduler(initialClock: 0)
-        let observer = scheduler.createObserver(Array&lt;Message&gt;.self)
-        let observable = scheduler.createHotObservable(events).asObservable()
-        let messages$ = Observable.array(from: realm.objects(Message.self)).share(replay: 1)
+        <span style="color:#66d9ef">let</span> rx_add: AnyObserver&lt;Message&gt; = realm.rx.add()
+        <span style="color:#66d9ef">let</span> scheduler = TestScheduler(initialClock: <span style="color:#ae81ff">0</span>)
+        <span style="color:#66d9ef">let</span> observer = scheduler.createObserver(Array&lt;Message&gt;.<span style="color:#66d9ef">self</span>)
+        <span style="color:#66d9ef">let</span> observable = scheduler.createHotObservable(events).asObservable()
+        <span style="color:#66d9ef">let</span> messages<span style="color:#960050;background-color:#1e0010">$</span> = Observable.array(from: realm.objects(Message.<span style="color:#66d9ef">self</span>)).share(replay: <span style="color:#ae81ff">1</span>)
 
-        messages$.subscribe(observer)
+        messages<span style="color:#960050;background-color:#1e0010">$</span>.subscribe(observer)
             .disposed(by: bag)
         
-        messages$
-            .subscribe(onNext: { messages in
-                if messages.count == 1 {
+        messages<span style="color:#960050;background-color:#1e0010">$</span>
+            .subscribe(onNext: { messages <span style="color:#66d9ef">in</span>
+                <span style="color:#66d9ef">if</span> messages.count == <span style="color:#ae81ff">1</span> {
                     expectation.fulfill()
                 }
             })
@@ -375,210 +361,172 @@ Tweet</a><p>
         
         scheduler.start()
         
-        waitForExpectations(timeout: 1, handler: {error in
-            XCTAssertNil(error, &quot;Error: \(error!.localizedDescription)&quot;)
-            XCTAssertTrue(observer.events.count &gt; 0)
-            XCTAssertEqual(observer.events.last!.time, 0)
-            XCTAssertTrue(observer.events.last!.value.element!.equalTo([Message(&quot;1&quot;)]))
+        waitForExpectations(timeout: <span style="color:#ae81ff">1</span>, handler: {error <span style="color:#66d9ef">in</span>
+            XCTAssertNil(error, <span style="color:#e6db74">&#34;Error: </span><span style="color:#e6db74">\(</span>error!.localizedDescription<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
+            XCTAssertTrue(observer.events.count <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+            XCTAssertEqual(observer.events.last!.time, <span style="color:#ae81ff">0</span>)
+            XCTAssertTrue(observer.events.last!.value.element!.equalTo([Message(<span style="color:#e6db74">&#34;1&#34;</span>)]))
         })
     }
-</code></pre>
-
-<p>The solution is a bit of a needless mind-bender so you can just skip through as the code is included only for comparisson. Here&rsquo;s how I rewritten the same test with RxBlocking:</p>
-
-<pre><code class="language-swift">func testRxAddObjectWithSuccess() {
-  let realm = realmInMemory(#function)
-  let items = Observable.array(from: realm.objects(Message.self))
+</code></pre></div><p>The solution is a bit of a needless mind-bender so you can just skip through as the code is included only for comparisson. Here&rsquo;s how I rewritten the same test with RxBlocking:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testRxAddObjectWithSuccess</span>() {
+  <span style="color:#66d9ef">let</span> realm = realmInMemory(<span style="color:#66d9ef">#function</span>)
+  <span style="color:#66d9ef">let</span> items = Observable.array(from: realm.objects(Message.<span style="color:#66d9ef">self</span>))
     .map { $0.map {$0.text} }
 
-  // show all speakers
+  <span style="color:#75715e">// show all speakers</span>
   DispatchQueue.main.async {
-    _ = Observable.just(Message(&quot;1&quot;)).subscribe(realm.rx.add())
+    <span style="color:#66d9ef">_</span> = Observable.just(Message(<span style="color:#e6db74">&#34;1&#34;</span>)).subscribe(realm.rx.add())
   }
 
-  let result = try! items.skip(1).toBlocking(timeout: 1).first()!
-    XCTAssertEqual(result[0], &quot;1&quot;)
+  <span style="color:#66d9ef">let</span> result = <span style="color:#66d9ef">try</span>! items.skip(<span style="color:#ae81ff">1</span>).toBlocking(timeout: <span style="color:#ae81ff">1</span>).first()<span style="color:#f92672">!</span>
+    XCTAssertEqual(result[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;1&#34;</span>)
 }
-</code></pre>
-
-<p>The <code>.toBlocking()</code> API as explained in the previous part about testing with RxBlocking allows me to simply &ldquo;wait&rdquo; for an element to be emitted by the observable and then grab it and compare it to the value I expect. Bam!</p>
-
+</code></pre></div><p>The <code>.toBlocking()</code> API as explained in the previous part about testing with RxBlocking allows me to simply &ldquo;wait&rdquo; for an element to be emitted by the observable and then grab it and compare it to the value I expect. Bam!</p>
 <p>Right tool for the job, eh?</p>
-
 <h2 id="migrating-rxrealm-from-rxtest-to-rxblocking">Migrating RxRealm from RxTest to RxBlocking</h2>
-
 <p>So, how did the migration look like? Since all test with small exceptions follow 100% the same pattern:</p>
-
 <ol>
 <li>test setup</li>
 <li>trigger an element via an async task</li>
 <li>compared emitted element to expected value</li>
 </ol>
-
 <p>I could realatively quickly churn through RxRealm&rsquo;s test suite and migrate to RxBlocking. In fact, after the migration I didn&rsquo;t need RxTest at all.</p>
-
 <p>Here are some stats to illustrate better the change. RxRealm test suite with RxTest was <strong><code>1570</code></strong> lines of code. Then:</p>
-
-<p><img src="http://rx-marin.com/images/rxblokcing-image2.png" alt="installing rxblocking" /></p>
-
+<p><img src="http://rx-marin.com/images/rxblokcing-image2.png" alt="installing rxblocking"></p>
 <p>And the current version of the test suite is: <strong><code>921</code></strong> lines of code. I did also some general refactoring of the test code but using the right tool really helped save a lot of code in there.</p>
-
 <p>So for the rest of this post, let me include some of the more interesting tests of the RxRealm test suite (which you can read in full at: <a href="https://github.com/RxSwiftCommunity/RxRealm/tree/master/Example/RxRealm_Tests">https://github.com/RxSwiftCommunity/RxRealm/tree/master/Example/RxRealm_Tests</a>)</p>
-
 <h2 id="testing-for-an-error-asynchronously">Testing for an error asynchronously</h2>
-
 <p>In this test, I needed to simulate an error while writing objects to the <code>Realm.rx.add()</code> sink.</p>
-
 <p><strong>setup</strong>: The setup includes creating a realm configuration pointing to non-existing file and a <code>recordedError</code> variable to log the error.</p>
-
 <p><strong>trigger</strong>: I schedule an async task that will write a single object to <code>rx.add()</code> and in the error handler I simply store the error in <code>recordedError</code>.</p>
-
 <p><strong>test</strong>: In the test code I subscribe <code>recordedError</code> and wait for the next element - then compare it to the error I expect:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testRxAddObjectWithError</span>() {
+    <span style="color:#66d9ef">var</span> conf = Realm.Configuration()
+    conf.fileURL = URL(string: <span style="color:#e6db74">&#34;/asdasdasdsad&#34;</span>)<span style="color:#f92672">!</span>
 
-<pre><code class="language-swift">func testRxAddObjectWithError() {
-    var conf = Realm.Configuration()
-    conf.fileURL = URL(string: &quot;/asdasdasdsad&quot;)!
-
-    let recordedError = Variable&lt;Error?&gt;(nil)
+    <span style="color:#66d9ef">let</span> recordedError = Variable&lt;Error?<span style="color:#f92672">&gt;</span>(<span style="color:#66d9ef">nil</span>)
 
     DispatchQueue.main.async {
-        _ = Observable.just(Message(&quot;0&quot;))
-            .subscribe(Realm.rx.add(configuration: conf, update: true, onError: { value, error in
+        <span style="color:#66d9ef">_</span> = Observable.just(Message(<span style="color:#e6db74">&#34;0&#34;</span>))
+            .subscribe(Realm.rx.add(configuration: conf, update: <span style="color:#66d9ef">true</span>, onError: { value, error <span style="color:#66d9ef">in</span>
                 recordedError.value = error
             }))
     }
 
-    let error = try! recordedError.asObservable().skip(1).toBlocking(timeout: 1).first()!
+    <span style="color:#66d9ef">let</span> error = <span style="color:#66d9ef">try</span>! recordedError.asObservable().skip(<span style="color:#ae81ff">1</span>).toBlocking(timeout: <span style="color:#ae81ff">1</span>).first()<span style="color:#f92672">!</span>
     XCTAssertNotNil(error)
-    XCTAssertEqual((error! as NSError).code, 3)
+    XCTAssertEqual((error! <span style="color:#66d9ef">as</span> NSError).code, <span style="color:#ae81ff">3</span>)
 }
-</code></pre>
-
-<h2 id="testing-a-batch-of-changes">Testing a batch of changes</h2>
-
+</code></pre></div><h2 id="testing-a-batch-of-changes">Testing a batch of changes</h2>
 <p>In this test I want to delete objects from a Realm via the <code>Realm.rx.delete()</code> sink. There are two separate <code>delete()</code> sinks - one as a static property and one as instance property. I&rsquo;d like to test both from a single test case.</p>
-
 <p><strong>setup</strong>: The setup includes observing all persisted objects in the realm in order to record the emitted states.</p>
-
 <p><strong>trigger</strong>: I first write 4 objects to the database, then delete 2 via the instance sink, then the other 2 via the static sink property.</p>
-
 <p><strong>test</strong>: In the test code I subscribe to the collection of all objects to the database and then compare if the emitted collection states are 4 objects, then 2 objects, then 0:</p>
-
-<pre><code class="language-swift">func testRxDeleteItemsWithSuccess() {
-    let realm = realmInMemory(#function)
-    let items = Observable.array(from: realm.objects(UniqueObject.self).sorted(byKeyPath: &quot;id&quot;))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testRxDeleteItemsWithSuccess</span>() {
+    <span style="color:#66d9ef">let</span> realm = realmInMemory(<span style="color:#66d9ef">#function</span>)
+    <span style="color:#66d9ef">let</span> items = Observable.array(from: realm.objects(UniqueObject.<span style="color:#66d9ef">self</span>).sorted(byKeyPath: <span style="color:#e6db74">&#34;id&#34;</span>))
         .map { $0.map {$0.id} }
 
-    let object1 = UniqueObject(1)
-    let object2 = UniqueObject(2)
-    let object3 = UniqueObject(3)
-    let object4 = UniqueObject(4)
+    <span style="color:#66d9ef">let</span> object1 = UniqueObject(<span style="color:#ae81ff">1</span>)
+    <span style="color:#66d9ef">let</span> object2 = UniqueObject(<span style="color:#ae81ff">2</span>)
+    <span style="color:#66d9ef">let</span> object3 = UniqueObject(<span style="color:#ae81ff">3</span>)
+    <span style="color:#66d9ef">let</span> object4 = UniqueObject(<span style="color:#ae81ff">4</span>)
 
-    try! realm.write {
+    <span style="color:#66d9ef">try</span>! realm.write {
         realm.add([object1, object2, object3, object4])
     }
 
-    // show all speakers
+    <span style="color:#75715e">// show all speakers</span>
     DispatchQueue.main.async {
-        _ = Observable.just([object1, object2]).subscribe(realm.rx.delete())
-        _ = Observable.just([object3, object4]).subscribe(Realm.rx.delete())
+        <span style="color:#66d9ef">_</span> = Observable.just([object1, object2]).subscribe(realm.rx.delete())
+        <span style="color:#66d9ef">_</span> = Observable.just([object3, object4]).subscribe(Realm.rx.delete())
     }
 
-    let result = try! items.take(3).toBlocking(timeout: 1).toArray()
-    XCTAssertEqual(result[0], [1, 2, 3, 4])
-    XCTAssertEqual(result[1], [3, 4])
-    XCTAssertEqual(result[2], [])
+    <span style="color:#66d9ef">let</span> result = <span style="color:#66d9ef">try</span>! items.take(<span style="color:#ae81ff">3</span>).toBlocking(timeout: <span style="color:#ae81ff">1</span>).toArray()
+    XCTAssertEqual(result[<span style="color:#ae81ff">0</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>])
+    XCTAssertEqual(result[<span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>])
+    XCTAssertEqual(result[<span style="color:#ae81ff">2</span>], [])
 }
-</code></pre>
-
-<h2 id="test-that-eventually-all-commits-will-be-merged">Test that eventually all commits will be merged</h2>
-
+</code></pre></div><h2 id="test-that-eventually-all-commits-will-be-merged">Test that eventually all commits will be merged</h2>
 <p>Finally, let&rsquo;s look into this one weird test case that needed a bit of a deviation from the pattern. RxRealm allows you (to a degree) to easily subscribe or observe on different schedulers.</p>
-
 <p>For example you can create a bunch of Realm objects on the main thread, but write them to Realm on a background thread. Or create the objects in the background but decide to write them on the main thread to the database.</p>
-
 <p>In this test I wanted to cover a number of different setups and run them all at once and test that all commits are written to the database and the final state of the database is what I expect it to be.</p>
-
 <p>The pain point here is that some of the Realm notifications will be bundled and/or delivered in unpredictable order, depending on GCD&rsquo;s queue that will write the changes. So, the only thing I can and want to test is the final state after all changes have been written to the database.</p>
-
 <p><strong>setup</strong>: The setup includes an observable that emits the list of ids of all objects in the database. This is what I&rsquo;m gonna use at the end of check if all my objects were successfully written.</p>
-
 <p><strong>trigger</strong>: The test code includes 6 different async tasks - each creating or writing objects on different queues. All the tasks are scheduled to run immediately.</p>
-
 <p><strong>test</strong>: The test code is where it gets interesting. I create an observable called <code>until</code> which will emit once after it detects 6 objects being stored in the database.</p>
-
 <p>Next I use <code>until</code> as the trigger to complete my other observable which emits the collection of object ids, like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">items.takeUntil(until).toBlocking(timeout: <span style="color:#ae81ff">1</span>)
+</code></pre></div><p>Now, <code>items</code> will stop emitting whenever <code>until</code> detects there have been 6 objects stored and I can grab the last value and compare it to the list I expect to have in the Realm.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testRxAddObjectsFromDifferentThreads</span>() {
+    <span style="color:#66d9ef">let</span> realm = realmInMemory(<span style="color:#66d9ef">#function</span>)
+    <span style="color:#66d9ef">let</span> conf = realm.configuration
 
-<pre><code class="language-swift">items.takeUntil(until).toBlocking(timeout: 1)
-</code></pre>
-
-<p>Now, <code>items</code> will stop emitting whenever <code>until</code> detects there have been 6 objects stored and I can grab the last value and compare it to the list I expect to have in the Realm.</p>
-
-<pre><code class="language-swift">func testRxAddObjectsFromDifferentThreads() {
-    let realm = realmInMemory(#function)
-    let conf = realm.configuration
-
-    let items = Observable.array(from: realm.objects(UniqueObject.self).sorted(byKeyPath: &quot;id&quot;))
+    <span style="color:#66d9ef">let</span> items = Observable.array(from: realm.objects(UniqueObject.<span style="color:#66d9ef">self</span>).sorted(byKeyPath: <span style="color:#e6db74">&#34;id&#34;</span>))
         .map { $0.map {$0.id} }
 
-    // write on current thread
-    _ = Observable.just(UniqueObject(1)).subscribe(realm.rx.add())
+    <span style="color:#75715e">// write on current thread</span>
+    <span style="color:#66d9ef">_</span> = Observable.just(UniqueObject(<span style="color:#ae81ff">1</span>)).subscribe(realm.rx.add())
 
-    // write on background thread
+    <span style="color:#75715e">// write on background thread</span>
     DispatchQueue.global(qos: .background).async {
-        let realm = try! Realm(configuration: conf)
-        _ = Observable.just(UniqueObject(2))
+        <span style="color:#66d9ef">let</span> realm = <span style="color:#66d9ef">try</span>! Realm(configuration: conf)
+        <span style="color:#66d9ef">_</span> = Observable.just(UniqueObject(<span style="color:#ae81ff">2</span>))
             .subscribe(realm.rx.add())
     }
 
-    // write on main scheduler
+    <span style="color:#75715e">// write on main scheduler</span>
     DispatchQueue.global(qos: .background).async {
-        _ = Observable.just(UniqueObject(3))
+        <span style="color:#66d9ef">_</span> = Observable.just(UniqueObject(<span style="color:#ae81ff">3</span>))
             .observeOn(MainScheduler.instance)
             .subscribe(Realm.rx.add(configuration: conf))
     }
 
-    // write on bg scheduler
+    <span style="color:#75715e">// write on bg scheduler</span>
     DispatchQueue.main.async {
-        _ = Observable.just(UniqueObject(4))
+        <span style="color:#66d9ef">_</span> = Observable.just(UniqueObject(<span style="color:#ae81ff">4</span>))
             .observeOn( ConcurrentDispatchQueueScheduler(
                 queue: DispatchQueue.global(qos: .background)))
             .subscribe(Realm.rx.add(configuration: conf))
     }
 
-    // subscribe on main, write in bg
+    <span style="color:#75715e">// subscribe on main, write in bg</span>
     DispatchQueue.main.async {
-        _ = Observable.just([UniqueObject(5), UniqueObject(6)])
+        <span style="color:#66d9ef">_</span> = Observable.just([UniqueObject(<span style="color:#ae81ff">5</span>), UniqueObject(<span style="color:#ae81ff">6</span>)])
             .observeOn( ConcurrentDispatchQueueScheduler(
                 queue: DispatchQueue.global(qos: .background)))
             .subscribe( Realm.rx.add(configuration: conf) )
     }
 
-    let until = Observable.array(from: realm.objects(UniqueObject.self))
-        .filter {$0.count == 6}
-        .delay(0.1, scheduler: MainScheduler.instance)
+    <span style="color:#66d9ef">let</span> until = Observable.array(from: realm.objects(UniqueObject.<span style="color:#66d9ef">self</span>))
+        .filter {$0.count == <span style="color:#ae81ff">6</span>}
+        .delay(<span style="color:#ae81ff">0.1</span>, scheduler: MainScheduler.instance)
 
-    let result = try! items.takeUntil(until).toBlocking(timeout: 1).toArray()
-    XCTAssertEqual(result.last!, [1, 2, 3, 4, 5, 6])
+    <span style="color:#66d9ef">let</span> result = <span style="color:#66d9ef">try</span>! items.takeUntil(until).toBlocking(timeout: <span style="color:#ae81ff">1</span>).toArray()
+    XCTAssertEqual(result.last!, [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>])
 }
-</code></pre>
-
-<h2 id="where-to-go-from-here">Where to go from here?</h2>
-
+</code></pre></div><h2 id="where-to-go-from-here">Where to go from here?</h2>
 <p>If you&rsquo;ve missed any of the other test related posts here they are:</p>
-
 <ul>
 <li><a href="http://rx-marin.com/post/rxblocking-part1/">Testing with RxBlocking, part1</a></li>
 <li><a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part 1</a></li>
 <li><a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a></li>
 </ul>
-
 <p>To learn more about RxSwift and testing check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -588,13 +536,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -644,7 +585,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

@@ -14,7 +14,7 @@
 <meta name="description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Split laps timer with RxSwift and RxCocoa: Part 2" />
 <meta property="og:description" content="In this post I take on implementing UI with `state` and some `useWithLatest` to enhance the timer app from last week" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -223,6 +227,28 @@
 
 		
 			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents"></nav>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
+					</a>
+				</div>
+
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
+					</a>
+					</div>
+		    </div>
+		    
 	    
   		<section class="post">
             <h1 class="post-title">
@@ -266,108 +292,67 @@
 Tweet</a><p>
 
             <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
-
 <p>Well this week I am implementing exactly this functionality.</p>
-
 <p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
-
 <p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
-
-<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt=""></p>
 <p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
-
 <p>Now let&rsquo;s put all those buttons to work!</p>
-
 <p>My very first idea was to try generating a sequence of values to describe the current state of the timer. The start button would produce <code>true</code> values and the stop button will produce <code>false</code> values. When merged I will get one sequence that emits every time the state changes:</p>
-
 <p><code>o---- (play tap) true--- (stop tap) false --- (play tap) true ---&gt;</code></p>
-
 <p>So at the top of <code>viewDidLoad()</code> I created a new Observable like so:</p>
-
 <pre><code>let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
     .toObservable()
     .merge()
     .startWith(false)
     .shareReplayLatestWhileConnected()
 </code></pre>
-
 <p>First I mapped the taps on <code>btnPlay</code> to <code>true</code> and the taps on <code>btnStop</code> to <code>false</code> and merged them together.</p>
-
 <p>The Observable starts with a <code>false</code> value to give the user the opportunity to start the timer at their convenience.</p>
-
 <p>I printed the values the new observable emits and was quite happy with the result:</p>
-
 <pre><code>isRunning.subscribeNext({state in
     print(state)
 }).addDisposableTo(bag)
 </code></pre>
-
 <p>The code printed <code>true</code> or <code>false</code> in the console each time I pressed play or stop. Neato!</p>
-
-<p>Now it looked very easy to bind that Observable to the buttons&rsquo; <code>rx_enabled</code> property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&rsquo;t running at all!</p>
-
+<p>Now it looked very easy to bind that Observable to the buttons' <code>rx_enabled</code> property to actually make the UI reflect the timer state. I could as well hide the laps button when the timer isn&rsquo;t running at all!</p>
 <p>And since some of the controls needed to be enabled when the timer is running and others when it isn&rsquo;t - I made myself yet another observable and bound the controls like so:</p>
-
 <pre><code>let isntRunning = isRunning.map({running in !running}).shareReplay(1)
 
 isRunning.bindTo(btnStop.rx_enabled).addDisposableTo(bag)
 isntRunning.bindTo(btnLap.rx_hidden).addDisposableTo(bag)
 isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
 </code></pre>
-
 <p>The stop button is enabled while the timer is running. Play is enabled when the timer is paused.</p>
-
 <p>I really love this kind of code. No <code>if</code>s no <code>switch</code>es; once you get the code running it&rsquo;s very difficult to mess up and there&rsquo;s simply no space for introducing bugs. Everything is air-tight.</p>
-
 <p>The app started with the laps button hidden and only the play button enabled like so:</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-play.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/laptimer-play.png" alt=""></p>
 <p>Further you could click play just once because it instantly became disabled. How cool :]</p>
-
 <p>Now my problem was that even though the UI already reflected the different states of the timer - well &hellip; the timer didn&rsquo;t care at all about any of that :]</p>
-
 <p>I looked into the <code>RxSwift</code> implementation of a timer but didn&rsquo;t find a way how to pause it (I guess that it couldn&rsquo;t implement state, who knows &hellip;). That&rsquo;s why I thought I&rsquo;d move away from directly binding the timer to the UI and implement my own counter.</p>
-
 <p>At the time my timer looked like this:</p>
-
 <pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
 </code></pre>
-
 <p>Well, I thought, I just need to somehow combine <code>isRunning</code> and <code>timer</code> and filter the observable output when <code>isRunning</code> is <code>false</code>.</p>
-
 <p>So I did the following: I appended to the existing <code>timer</code> an operator to combine it with the latest value from <code>isRunning</code>:</p>
-
 <pre><code>.withLatestFrom(isRunning, resultSelector: {_, running in running})
 </code></pre>
-
 <p>You see that I just ignored the value emitted by <code>timer</code> since I never use it for anything and return from <code>withLatestFrom</code> the unchanged <code>running</code> input parameter:</p>
-
 <p><code>(Int, Boolean) -&gt; withLatestFrom -&gt; Boolean</code></p>
-
 <p>Next I could simply use <code>filter</code> to stop the observable from emitting when the timer is not running:</p>
-
 <pre><code>.filter({running in running})
 </code></pre>
-
 <p>And last but not least I had to attach a counter, but that was already something I knew how to do with <code>scan</code> like so:</p>
-
 <pre><code>.scan(0, accumulator: {(acc, _) in
     return acc+1
 })
 </code></pre>
-
 <p>What <code>scan</code> does above is to count how many times the timer fired while <code>isRunning</code> was <code>true</code> (which is exactly what I wanted).</p>
-
 <p>Finally I had to set the initial value to show in the UI and to share the result between all observers:</p>
-
 <pre><code> .startWith(0)
  .shareReplayLatestWhileConnected()
 </code></pre>
-
 <p>The complete code of the enhanced timer observable looked like this:</p>
-
 <pre><code>timer = Observable&lt;NSInteger&gt;.interval(0.1, scheduler: MainScheduler.instance)
     .withLatestFrom(isRunning, resultSelector: {_, running in running})
     .filter({running in running})
@@ -377,18 +362,22 @@ isntRunning.bindTo(btnPlay.rx_enabled).addDisposableTo(bag)
     .startWith(0)
     .shareReplayLatestWhileConnected()
 </code></pre>
-
 <p>And that&rsquo;s a wrap :] Now my timer app had a stateful UI and split lap all implemented without a single <code>if</code>!</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-2-final.gif" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/laptimer-2-final.gif" alt=""></p>
 <p>You can get the completed project from here: <a href="http://rx-marin.com/zip/rx_laptimer_finished.zip">rx_laptimer_finished.zip</a></p>
-
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.</p>
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -398,13 +387,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -456,7 +438,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

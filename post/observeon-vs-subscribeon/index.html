@@ -14,7 +14,7 @@
 <meta name="description" content="How to subscribe and observe on different threads">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="observeOn vs. subscribeOn" />
 <meta property="og:description" content="How to subscribe and observe on different threads" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,26 +230,29 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#observable-subscriptions">Observable subscriptions</a></li>
-<li><a href="#schedulers">Schedulers</a></li>
-<li><a href="#subscribing-and-subscribeon">Subscribing and subscribeOn</a></li>
-<li><a href="#observing-and-observeon">Observing and observeOn</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#observable-subscriptions">Observable subscriptions</a></li>
+    <li><a href="#schedulers">Schedulers</a></li>
+    <li><a href="#subscribing-and-subscribeon">Subscribing and subscribeOn</a></li>
+    <li><a href="#observing-and-observeon">Observing and observeOn</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -292,137 +299,102 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Cross-thread subscriptions is a question that seems to pop up again and again on the RxSwift Slack channel. The explanation is very simple so I thought it was a good idea to put it in a blog post so whenever needed I can link to it instead of typing everything again and again.</p>
-
+            <p>Cross-thread subscriptions is a question that seems to pop up again and again on the RxSwift Slack channel. The explanation is very simple so I thought it was a good idea to put it in a blog post so whenever needed I can link to it instead of typing everything again and again.</p>
 <h2 id="observable-subscriptions">Observable subscriptions</h2>
-
 <p>The terminology in regard to subscribing and observing is imho a bit messy so let&rsquo;s first take this out of the way (do <strong>not</strong> skip this section!).</p>
-
 <p>Let&rsquo;s see how an observable subscription works. We can split subscribing into 3 parts:</p>
-
-<p><img src="http://rx-marin.com/images/subscribe-schema.png" alt="subscription schema" /></p>
-
+<p><img src="http://rx-marin.com/images/subscribe-schema.png" alt="subscription schema"></p>
 <ol>
-<li><p>First you define an <code>Observable</code>, in some cases you provide some code in a closure that performs work and emits elements to any observers. When you create the observable, this code is stored for future use but <strong>NOT</strong> executed immediately. If there are no observers yet - the observable just sits and waits without doing anything.</p></li>
-
-<li><p>When you model your subscription you use some operators like <code>map</code>, <code>filter</code>, etc to process the emitted elements. Adding operators still does <strong>not</strong> perform any work - you&rsquo;re just creating a &ldquo;more specialized&rdquo; observable out of the original one.</p></li>
-
-<li><p>Only when you call the <code>subscribe(...)</code> method on an observable you &ldquo;<em>turn it on</em>&rdquo;. Calling <code>subscribe(...)</code> will <strong>actually</strong> execute the code you provide in the block in part 1 (above).</p></li>
+<li>
+<p>First you define an <code>Observable</code>, in some cases you provide some code in a closure that performs work and emits elements to any observers. When you create the observable, this code is stored for future use but <strong>NOT</strong> executed immediately. If there are no observers yet - the observable just sits and waits without doing anything.</p>
+</li>
+<li>
+<p>When you model your subscription you use some operators like <code>map</code>, <code>filter</code>, etc to process the emitted elements. Adding operators still does <strong>not</strong> perform any work - you&rsquo;re just creating a &ldquo;more specialized&rdquo; observable out of the original one.</p>
+</li>
+<li>
+<p>Only when you call the <code>subscribe(...)</code> method on an observable you &ldquo;<em>turn it on</em>&rdquo;. Calling <code>subscribe(...)</code> will <strong>actually</strong> execute the code you provide in the block in part 1 (above).</p>
+</li>
 </ol>
-
 <p>So in that sense there two main points to make here:</p>
-
 <ul>
 <li>the <strong>&ldquo;subscription code&rdquo;</strong> is the code that gets called from your <code>subscribe()</code> and is located in <code>Observable.create { ... }</code>. This is the code that creates your subscription and produces elements.</li>
 <li>the <strong>&ldquo;observation code&rdquo;</strong> is where you observe for emitted elements - this is the code you provide in <code>onNext: { ... }</code>, <code>onCompleted: {...}</code>, etc. This is where you do your observing.</li>
 </ul>
-
-<p><img src="http://rx-marin.com/images/subscribe-terms.png" alt="subscription vs observing" /></p>
-
+<p><img src="http://rx-marin.com/images/subscribe-terms.png" alt="subscription vs observing"></p>
 <h2 id="schedulers">Schedulers</h2>
-
 <p>There&rsquo;s a bunch of predefined schedulers that come with RxSwift that cover all your needs most of the time. There is a short doc on that topic: <a href="https://github.com/ReactiveX/RxSwift/blob/master/Documentation/Schedulers.md">schedulers at RxSwift repo.</a></p>
-
 <p>In this article we&rsquo;ll use two:</p>
-
 <ul>
 <li><code>MainScheduler.instance</code> which schedulers work on the main thread and</li>
 <li><code>ConcurrentDispatchQueueScheduler</code> which uses GCD to execute work on a given queue.</li>
 </ul>
-
 <h2 id="subscribing-and-subscribeon">Subscribing and subscribeOn</h2>
-
 <p>So let&rsquo;s look at the <code>subscribeOn</code> operator - it allows you to change the scheduler on which the <strong>subscription code</strong> will be executed.</p>
-
-<p><img src="http://rx-marin.com/images/subscribe-subscribeOn.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/subscribe-subscribeOn.png" alt=""></p>
 <p>By default the subscription code will run on the same thread as the code where you call <code>subscribe()</code> except if you change the context by using <code>subscribeOn(...)</code>.</p>
-
 <p>For example:</p>
-
-<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
-    observer.onNext(1)
-    sleep(1)
-    observer.onNext(2)
-    return Disposables.create()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable&lt;Int&gt;.create { observer <span style="color:#66d9ef">in</span>
+    observer.onNext(<span style="color:#ae81ff">1</span>)
+    sleep(<span style="color:#ae81ff">1</span>)
+    observer.onNext(<span style="color:#ae81ff">2</span>)
+    <span style="color:#66d9ef">return</span> Disposables.create()
 }
-.subscribe(onNext: { el in
+.subscribe(onNext: { el <span style="color:#66d9ef">in</span>
     print(Thread.isMainThread)
 })
-</code></pre>
-
-<p>If you place this code in a <code>viewDidLoad</code> you will block the main thread because of the usage of <code>sleep</code> in the subscription code.</p>
-
+</code></pre></div><p>If you place this code in a <code>viewDidLoad</code> you will block the main thread because of the usage of <code>sleep</code> in the subscription code.</p>
 <p>Your <code>onNext</code> code will print <code>true</code> because you always will stay on the main thread:</p>
-
-<pre><code>[main] subscribe() -&gt; [main] create{ ... } -&gt; [main] onNext { ... }
-</code></pre>
-
-<p>Now you can change the scheduler of the subscription by inserting a <code>subscribeOn</code> operator:</p>
-
-<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
-    observer.onNext(1)
-    sleep(1)
-    observer.onNext(2)
-    return Disposables.create()
+<pre tabindex="0"><code>[main] subscribe() -&gt; [main] create{ ... } -&gt; [main] onNext { ... }
+</code></pre><p>Now you can change the scheduler of the subscription by inserting a <code>subscribeOn</code> operator:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable&lt;Int&gt;.create { observer <span style="color:#66d9ef">in</span>
+    observer.onNext(<span style="color:#ae81ff">1</span>)
+    sleep(<span style="color:#ae81ff">1</span>)
+    observer.onNext(<span style="color:#ae81ff">2</span>)
+    <span style="color:#66d9ef">return</span> Disposables.create()
 }
 .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-.subscribe(onNext: { el in
+.subscribe(onNext: { el <span style="color:#66d9ef">in</span>
     print(Thread.isMainThread)
 })
-</code></pre>
-
-<p>This time you will switch threads while subscribing:</p>
-
-<pre><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [background] onNext { ... }
-</code></pre>
-
-<p>And the print in the <code>onNext</code> will output a <code>false</code>.</p>
-
+</code></pre></div><p>This time you will switch threads while subscribing:</p>
+<pre tabindex="0"><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [background] onNext { ... }
+</code></pre><p>And the print in the <code>onNext</code> will output a <code>false</code>.</p>
 <h2 id="observing-and-observeon">Observing and observeOn</h2>
-
 <p>Now let&rsquo;s move to observing the elements of the sequence. This part concerns your observation code.</p>
-
-<p><img src="http://rx-marin.com/images/subscribe-observeOn.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/subscribe-observeOn.png" alt=""></p>
 <p>In our earlier example you switched subscription to a background queue because it does some blocking work. But what you in fact want is to run the code in <code>onNext { .. }</code> on the main thread so you can update the app&rsquo;s UI.</p>
-
 <p>This you can achieve by using the <code>observeOn</code> operator. By the way you can place <code>observeOn</code> and <code>subscribeOn</code> anywhere in your operator chain - the order doesn&rsquo;t really matter.</p>
-
 <p>RxSwift includes a shared scheduler that uses the main thread <code>MainScheduler.instance</code> so you can use it to observe elements easily like so:</p>
-
-<pre><code class="language-swift">Observable&lt;Int&gt;.create { observer in
-    observer.onNext(1)
-    sleep(1)
-    observer.onNext(2)
-    return Disposables.create()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable&lt;Int&gt;.create { observer <span style="color:#66d9ef">in</span>
+    observer.onNext(<span style="color:#ae81ff">1</span>)
+    sleep(<span style="color:#ae81ff">1</span>)
+    observer.onNext(<span style="color:#ae81ff">2</span>)
+    <span style="color:#66d9ef">return</span> Disposables.create()
 }
 .observeOn(MainScheduler.instance)
 .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-.subscribe(onNext: { el in
+.subscribe(onNext: { el <span style="color:#66d9ef">in</span>
     print(Thread.isMainThread)
 })
-</code></pre>
-
-<p>This will execute the code like so:</p>
-
-<pre><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [main] onNext { ... }
-</code></pre>
-
-<p>This is a pattern which you will often use if you do a lot of asynchronous work so the early you get used to it - the better.</p>
-
+</code></pre></div><p>This will execute the code like so:</p>
+<pre tabindex="0"><code>[main] subscribe() -&gt; [background] create{ ... } -&gt; [main] onNext { ... }
+</code></pre><p>This is a pattern which you will often use if you do a lot of asynchronous work so the early you get used to it - the better.</p>
 <p>I hope this quick post brought some clarity into the naming and usage.</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p>To learn more about schedulers, and cross-thread subscriptions check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -432,13 +404,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -488,7 +453,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

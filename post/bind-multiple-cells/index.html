@@ -14,7 +14,7 @@
 <meta name="description" content="How to bind data to a table view that requires displaying multiple cell types">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Binding to a table view with multiple cells and sections" />
 <meta property="og:description" content="How to bind data to a table view that requires displaying multiple cell types" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,27 +230,31 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#easy-binding-via-rxcocoa-and-bind-to">Easy binding via RxCocoa and bind(to:)</a>
-<ul>
-<li><a href="#using-multiple-data-models">Using multiple data models</a></li>
-</ul></li>
-<li><a href="#binding-multiple-table-sections-via-rxdatasources">Binding multiple table sections via RxDataSources</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#easy-binding-via-rxcocoa-and-bindto">Easy binding via RxCocoa and bind(to:)</a>
+      <ul>
+        <li><a href="#using-multiple-data-models">Using multiple data models</a></li>
+      </ul>
+    </li>
+    <li><a href="#binding-multiple-table-sections-via-rxdatasources">Binding multiple table sections via RxDataSources</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -293,216 +301,149 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>One of the questions that keeps popping up in the RxSwift Slack channel for years now is how to display multiple cell types when binding data to a table view.</p>
-
+            <p>One of the questions that keeps popping up in the RxSwift Slack channel for years now is how to display multiple cell types when binding data to a table view.</p>
 <p>This is actually very easy to do and in this post I&rsquo;ll show you two distinct ways to display multiple cells in a table view (and it works identically for collection views if that&rsquo;s what you&rsquo;re looking for).</p>
-
 <p>We&rsquo;ll look at the following two use cases:</p>
-
 <ul>
 <li>binding items via using RxCocoa&rsquo;s <code>bind(to:)</code> operator,</li>
 <li>using <code>RxDataSources</code> to bind cells in different table <strong>sections</strong>.</li>
 </ul>
-
 <p>Let&rsquo;s get started!</p>
-
-<h2 id="easy-binding-via-rxcocoa-and-bind-to">Easy binding via RxCocoa and bind(to:)</h2>
-
+<h2 id="easy-binding-via-rxcocoa-and-bindto">Easy binding via RxCocoa and bind(to:)</h2>
 <p>If you do not need multiple table sections or you do not want to add RxDataSources as an extra dependency in your project you can bind directly via <code>bind(to:)</code>.</p>
-
 <p>I&rsquo;ve got a simple table view controller with two separate cells - one is displaying &ldquo;standard&rdquo; items in my list and the other &ldquo;important&rdquo; ones (the latter is just styled a bit more fancy):</p>
-
-<p><img src="http://rx-marin.com/images/multiplecells-viewcontroller.png" alt="view controller" /></p>
-
+<p><img src="http://rx-marin.com/images/multiplecells-viewcontroller.png" alt="view controller"></p>
 <p>The two cells have identifiers as follows: &ldquo;Cell&rdquo; and &ldquo;ImportantCell&rdquo;.</p>
-
 <p>In my view controller&rsquo;s <code>viewDidLoad(_:)</code> method I&rsquo;m making an observable of string values to display in the table view:</p>
-
-<pre><code class="language-swift">let items = Observable.just([
-  &quot;First&quot;, 
-  &quot;(New) Second&quot;, 
-  &quot;(New) Third&quot;, 
-  &quot;Fourth&quot;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> items = Observable.just([
+  <span style="color:#e6db74">&#34;First&#34;</span>, 
+  <span style="color:#e6db74">&#34;(New) Second&#34;</span>, 
+  <span style="color:#e6db74">&#34;(New) Third&#34;</span>, 
+  <span style="color:#e6db74">&#34;Fourth&#34;</span>
 ])
-</code></pre>
-
-<p>The goal here will be to bind this observable to the table and display any items starting with &ldquo;(New)&rdquo; via the pre-designed important cell.</p>
-
+</code></pre></div><p>The goal here will be to bind this observable to the table and display any items starting with &ldquo;(New)&rdquo; via the pre-designed important cell.</p>
 <p>Next I&rsquo;m adding two helper factory methods that will produce standard and important cells when needed:</p>
-
-<pre><code class="language-swift">private func makeCell(with element: String, from table: UITableView) -&gt; UITableViewCell {
-  let cell = table.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">makeCell</span>(with element: String, from table: UITableView) -&gt; UITableViewCell {
+  <span style="color:#66d9ef">let</span> cell = table.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>)<span style="color:#f92672">!</span>
   cell.textLabel!.text = element
-  return cell
+  <span style="color:#66d9ef">return</span> cell
 }
 
-private func makeImportantCell(with element: String, from table: UITableView) -&gt; UITableViewCell {
-  let cell = table.dequeueReusableCell(withIdentifier: &quot;ImportantCell&quot;)!
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">makeImportantCell</span>(with element: String, from table: UITableView) -&gt; UITableViewCell {
+  <span style="color:#66d9ef">let</span> cell = table.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;ImportantCell&#34;</span>)<span style="color:#f92672">!</span>
   cell.textLabel!.text = element
   cell.textLabel!.textColor = .red
-  return cell
+  <span style="color:#66d9ef">return</span> cell
 }
 
-</code></pre>
-
-<p><code>makeCell</code> instantiates a cell with &ldquo;Cell&rdquo; identifier and sets its label to the given string. <code>makeImportantCell</code> similarly makes an instance of &ldquo;ImportantCell&rdquo; and also applies some styling to the label.</p>
-
+</code></pre></div><p><code>makeCell</code> instantiates a cell with &ldquo;Cell&rdquo; identifier and sets its label to the given string. <code>makeImportantCell</code> similarly makes an instance of &ldquo;ImportantCell&rdquo; and also applies some styling to the label.</p>
 <p>Now I need to call the correct factory method when binding data. Back in <code>viewDidLoad(_:)</code> I&rsquo;m adding the binding code:</p>
-
-<pre><code class="language-swift">items.bind(to: tableView.rx.items) { table, index, element in
-  if element.hasPrefix(&quot;(New)&quot;) {
-    return self.makeImportantCell(with: element, from: table)
-  } else {
-    return self.makeCell(with: element, from: table)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">items.bind(to: tableView.rx.items) { table, index, element <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">if</span> element.hasPrefix(<span style="color:#e6db74">&#34;(New)&#34;</span>) {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.makeImportantCell(with: element, from: table)
+  } <span style="color:#66d9ef">else</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.makeCell(with: element, from: table)
   }
 }
 .disposed(by: bag)
-</code></pre>
-
-<p>And there you have it - this code binds the <code>items</code> observable sequence to the table view items and provides a factory closure that instantiates each cell that the table will display.</p>
-
+</code></pre></div><p>And there you have it - this code binds the <code>items</code> observable sequence to the table view items and provides a factory closure that instantiates each cell that the table will display.</p>
 <p>In this example it&rsquo;s enough to use <code>hasPrefix(_:)</code> to diversify between the cell types to return, but of couse in your own code you can have as complex rules as you need.</p>
-
 <p>Running the code displays my list on screen with the correct cells:</p>
-
-<p><img src="http://rx-marin.com/images/multiplecells-bindexample.png" alt="multiple cells" /></p>
-
+<p><img src="http://rx-marin.com/images/multiplecells-bindexample.png" alt="multiple cells"></p>
 <h3 id="using-multiple-data-models">Using multiple data models</h3>
-
 <p>More often that not you will have a list of data models (usually some custom structs) instead of a list of strings that you&rsquo;d like to bind to a table view.</p>
-
 <p>That&rsquo;s easy enough to as well, define a custom <code>enum</code> with the different data models you will be binding and do a switch in the cell factory closure. For example:</p>
-
-<pre><code class="language-swift">enum MyCellModels {
-  case former(FirstModel)
-  case latter(SecondModel)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">MyCellModels</span> {
+  <span style="color:#66d9ef">case</span> former(FirstModel)
+  <span style="color:#66d9ef">case</span> latter(SecondModel)
 }
-</code></pre>
-
-<p>Now your observable should emit a sequence of <code>MyCellModels</code> instances and you&rsquo;re good to go. The next section actually features an example of this approach so we won&rsquo;t go into more details right here and now.</p>
-
+</code></pre></div><p>Now your observable should emit a sequence of <code>MyCellModels</code> instances and you&rsquo;re good to go. The next section actually features an example of this approach so we won&rsquo;t go into more details right here and now.</p>
 <h2 id="binding-multiple-table-sections-via-rxdatasources">Binding multiple table sections via RxDataSources</h2>
-
 <p>Another use case for binding multiple cell types is when your table features multiple sections - sometimes different sections display different kinds of data and naturally you&rsquo;ll use different cells to do that.</p>
-
 <p>The default binding via RxCocoa does not support sections but the well known <strong>RxDataSources</strong> library does that so we&rsquo;ll have a look at how to use it with multiple cell types.</p>
-
 <p>The concept is similar to what we looked at in the first section of this post but here we&rsquo;ll take the code a bit further.</p>
-
 <p>For this example I&rsquo;m going to use exactly the same view controller in my storyboard:</p>
-
-<p><img src="http://rx-marin.com/images/multiplecells-viewcontroller.png" alt="view controller" /></p>
-
+<p><img src="http://rx-marin.com/images/multiplecells-viewcontroller.png" alt="view controller"></p>
 <p>This time around though I&rsquo;m going to add <strong>RxDataSources</strong> to a new view controller class and do things slightly differently.</p>
-
 <p>First I&rsquo;m going to model my data. In this example the standard items in my table are going to be driven by a list of strings, but the important items are going to have a dedicated data model struct called <code>Important</code>. (This is done  mostly so that I can show you how to model more compelx data bindings.)</p>
-
 <p>Let&rsquo;s start with <code>Important</code>:</p>
-
-<pre><code class="language-swift">struct Important {
-  let text: String
-  let imporance: Int
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Important</span> {
+  <span style="color:#66d9ef">let</span> text: String
+  <span style="color:#66d9ef">let</span> imporance: Int
 }
-</code></pre>
-
-<p>The data model for each important cell in the table includes a text to display on screen and an importance level (an arbitrary number for demo purposes).</p>
-
+</code></pre></div><p>The data model for each important cell in the table includes a text to display on screen and an importance level (an arbitrary number for demo purposes).</p>
 <p>Next I&rsquo;m going to build the type for my observable sequence, which should accomodate for either <code>String</code> items or <code>Important</code> items:</p>
-
-<pre><code class="language-swift">enum CellModel {
-  case standard(String)
-  case important(Important)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">CellModel</span> {
+  <span style="color:#66d9ef">case</span> standard(String)
+  <span style="color:#66d9ef">case</span> important(Important)
 }
-</code></pre>
-
-<p>Now I can create a sequence of type <code>CellModel</code> and bind it to the table view.</p>
-
+</code></pre></div><p>Now I can create a sequence of type <code>CellModel</code> and bind it to the table view.</p>
 <p>I&rsquo;m going to copy my cell factory methods from the previous section, but adjust the latter one to accomodate for displaying the custom <code>Important</code> model like so:</p>
-
-<pre><code class="language-swift">private func makeCell(with element: String, from table: UITableView) -&gt; UITableViewCell {
-  let cell = table.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">makeCell</span>(with element: String, from table: UITableView) -&gt; UITableViewCell {
+  <span style="color:#66d9ef">let</span> cell = table.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>)<span style="color:#f92672">!</span>
   cell.textLabel!.text = element
-  return cell
+  <span style="color:#66d9ef">return</span> cell
 }
 
-private func makeImportantCell(with element: Important, from table: UITableView) -&gt; UITableViewCell {
-  let cell = table.dequeueReusableCell(withIdentifier: &quot;ImportantCell&quot;)!
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">makeImportantCell</span>(with element: Important, from table: UITableView) -&gt; UITableViewCell {
+  <span style="color:#66d9ef">let</span> cell = table.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;ImportantCell&#34;</span>)<span style="color:#f92672">!</span>
   cell.textLabel!.text = element.text
   cell.textLabel!.textColor = .red
-  return cell
+  <span style="color:#66d9ef">return</span> cell
 }
-</code></pre>
-
-<p>With all that prep finished let&rsquo;s move to the view controller&rsquo;s <code>viewDidLoad(_:)</code> where I&rsquo;m going to create the observable and bind it to the table view.</p>
-
+</code></pre></div><p>With all that prep finished let&rsquo;s move to the view controller&rsquo;s <code>viewDidLoad(_:)</code> where I&rsquo;m going to create the observable and bind it to the table view.</p>
 <p>First I&rsquo;m going to create the observable:</p>
-
-<pre><code class="language-swift">let sections = Observable.just([
-  SectionModel(model: &quot;Standard Items&quot;, items: [
-      CellModel.standard(&quot;First item&quot;),
-      CellModel.standard(&quot;Second item&quot;)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> sections = Observable.just([
+  SectionModel(model: <span style="color:#e6db74">&#34;Standard Items&#34;</span>, items: [
+      CellModel.standard(<span style="color:#e6db74">&#34;First item&#34;</span>),
+      CellModel.standard(<span style="color:#e6db74">&#34;Second item&#34;</span>)
   ]),
-  SectionModel(model: &quot;Important Items&quot;, items: [
-      CellModel.important(.init(text: &quot;Third item&quot;, imporance: 1)),
-      CellModel.important(.init(text: &quot;Fourth item&quot;, imporance: 100))
+  SectionModel(model: <span style="color:#e6db74">&#34;Important Items&#34;</span>, items: [
+      CellModel.important(.<span style="color:#66d9ef">init</span>(text: <span style="color:#e6db74">&#34;Third item&#34;</span>, imporance: <span style="color:#ae81ff">1</span>)),
+      CellModel.important(.<span style="color:#66d9ef">init</span>(text: <span style="color:#e6db74">&#34;Fourth item&#34;</span>, imporance: <span style="color:#ae81ff">100</span>))
   ])
 ])
-</code></pre>
-
-<p>When using RxDataSources to bind sectioned data you need to emit section models. You can create your own section model types or (as above) you can use the example, pre-defined <code>SectionModel</code>.</p>
-
+</code></pre></div><p>When using RxDataSources to bind sectioned data you need to emit section models. You can create your own section model types or (as above) you can use the example, pre-defined <code>SectionModel</code>.</p>
 <p>Each <code>SectionModel</code> in the list contains a section name and a list of <code>CellModel</code> items.</p>
-
 <p>The first section contains <code>CellModel.standard</code> items and the second section  contains <code>CellModel.important</code> items. In case your observable updates the table content dynamically you need to re-emit exactly the same structure each time.</p>
-
 <p>Next I&rsquo;m going to create my custom data source for the binding:</p>
-
-<pre><code class="language-swift">let dataSource = RxTableViewSectionedReloadDataSource&lt;SectionModel&lt;String, CellModel&gt;&gt;(configureCell: { dataSource, table, indexPath, item in
-  switch item {
-  case .standard(let text):
-    return self.makeCell(with: text, from: table)
-  case .important(let important):
-    return self.makeImportantCell(with: important, from: table)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> dataSource = RxTableViewSectionedReloadDataSource&lt;SectionModel&lt;String, CellModel&gt;<span style="color:#f92672">&gt;</span>(configureCell: { dataSource, table, indexPath, item <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">switch</span> item {
+  <span style="color:#66d9ef">case</span> .standard(<span style="color:#66d9ef">let</span> text):
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.makeCell(with: text, from: table)
+  <span style="color:#66d9ef">case</span> .important(<span style="color:#66d9ef">let</span> important):
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.makeImportantCell(with: important, from: table)
   }
 })
-</code></pre>
-
-<p>I&rsquo;m creating a <code>RxTableViewSectionedReloadDataSource</code> which is set to emit <code>SectionModel&lt;String, CellModel&gt;</code> items. In the cell factory closure I just use a <code>switch</code> over each item and return the cell appropriate for displaying each item.</p>
-
+</code></pre></div><p>I&rsquo;m creating a <code>RxTableViewSectionedReloadDataSource</code> which is set to emit <code>SectionModel&lt;String, CellModel&gt;</code> items. In the cell factory closure I just use a <code>switch</code> over each item and return the cell appropriate for displaying each item.</p>
 <p>Additionally to make the output a bit easier to understand let&rsquo;s configure the headers for each section as well:</p>
-
-<pre><code class="language-swift">dataSource.titleForHeaderInSection = { dataSource, index in
-  return dataSource.sectionModels[index].model
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">dataSource.titleForHeaderInSection = { dataSource, index <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">return</span> dataSource.sectionModels[index].model
 }
-</code></pre>
-
-<p>With the data source ready, the last bit is to actually bind the observable to the table view:</p>
-
-<pre><code class="language-swift">sections
+</code></pre></div><p>With the data source ready, the last bit is to actually bind the observable to the table view:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">sections
   .bind(to: tableView.rx.items(dataSource: dataSource))
   .disposed(by: bag)
-</code></pre>
-
-<p>And here&rsquo;s the result in the iPhone Simulator:</p>
-
-<p><img src="http://rx-marin.com/images/multiplecells-datasources.png" alt="binding with data sources" /></p>
-
+</code></pre></div><p>And here&rsquo;s the result in the iPhone Simulator:</p>
+<p><img src="http://rx-marin.com/images/multiplecells-datasources.png" alt="binding with data sources"></p>
 <p>As you saw, when you ignore all the setup and data code the actual binding is just few lines - RxDataSources really shines when it comes to handling more complex data bindings.</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p>No matter if you are looking for an easy and quick binding via RxCocoa&rsquo;s built-in <code>bind(to:)</code> or binding a more complex data model via RxDataSources, it&rsquo;s always just few lines of code! I hope you enjoyed this post!</p>
-
 <p>In case you are interested in binding data from the Realm database specificaly, I got <a href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">some posts</a> in here that cover this as well.</p>
-
 <p>To learn more about RxSwift and testing check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -512,13 +453,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -544,6 +478,11 @@ Tweet</a></p>
 		            
 
 					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">Announcing: “Modern Concurrency in Swift”</a>
+		            </div>
+		            
 	            </div>
             
           </section>
@@ -561,7 +500,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

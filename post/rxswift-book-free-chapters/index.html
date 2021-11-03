@@ -14,7 +14,7 @@
 <meta name="description" content="If you&#39;re looking to try before you buy, there are two RxSwift book chapters published for free.">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Two free chapters from the RxSwift book!" />
 <meta property="og:description" content="If you&#39;re looking to try before you buy, there are two RxSwift book chapters published for free." />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,24 +230,27 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#chapter-7-transforming-operators">Chapter 7, Transforming Operators</a></li>
-<li><a href="#chapter-8-transforming-operators-in-practice">Chapter 8, Transforming Operators in Practice</a></li>
-<li><a href="#where-to-buy">Where to buy?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#chapter-7-transforming-operators">Chapter 7, Transforming Operators</a></li>
+    <li><a href="#chapter-8-transforming-operators-in-practice">Chapter 8, Transforming Operators in Practice</a></li>
+    <li><a href="#where-to-buy">Where to buy?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -290,56 +297,42 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Last week we announced our brand new RxSwift book (<a href="https://store.raywenderlich.com/products/rxswift?source=underplot">available now</a>)!</p>
-
+            <p>Last week we announced our brand new RxSwift book (<a href="https://store.raywenderlich.com/products/rxswift?source=underplot">available now</a>)!</p>
 <p>The book starts with the very basics in Chapter 1, &ldquo;Hello, world!&rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &ldquo;MVVM&rdquo; and Chapter 24, &ldquo;Building a complete app with RxSwift&rdquo;.</p>
-
 <p>Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&rsquo;s written by four very active RxSwift community memebers and it&rsquo;s polished by two more editors. All in all the quality (apart from some first edition errata, hehe) is very high.</p>
-
 <p>But don&rsquo;t take my word for it&hellip;</p>
-
 <p>As part of the launch celebration Ray Wenderlich (the publisher of the book) has released two of the book&rsquo;s chapters for free on his website. So, if you&rsquo;re still trying to make your mind about the quality of the content found inside the book - here&rsquo;s your chance!</p>
-
 <h2 id="chapter-7-transforming-operators">Chapter 7, Transforming Operators</h2>
-
 <p>In the first half of the book where we cover foundational classes like <code>Observable</code>, <code>PublishSubject</code>, <code>Variable</code>, and most of the operators found in RxSwift, we alternate between theory and &ldquo;&hellip; in practice&rdquo; chapters.</p>
-
 <p>In the theory chapters we introduce concepts and lead the reader through experimenting in an Xcode playground. This hands on approach to learning has proven to be more fun than just reading theory (I&rsquo;ve worked on a number of books with raywenderlich.com).</p>
-
 <p>Long story short, in Chapter 7 we&rsquo;re introducing transforming operators and how to use them. The chapter is written by Scott Gardner and takes the readers on a journey through some of the most used operators like: <code>toArray()</code>, <code>map(_)</code>, <code>mapWithIndex(_)</code>, <code>flatMap(_)</code>, <code>flatMapFirst(_)</code>, and <code>flatMapLatest(_)</code>.</p>
-
 <p>The chapter features some theory, solid explanations with diagrams, and code to try in the provided playground.</p>
-
-<p><img src="http://rx-marin.com/images/to-array.png" alt="to array" /></p>
-
+<p><img src="http://rx-marin.com/images/to-array.png" alt="to array"></p>
 <p>You can find an abbreviated free version of that chapter here:
 <a href="https://www.raywenderlich.com/158205/rxswift-transforming-operators">https://www.raywenderlich.com/158205/rxswift-transforming-operators</a></p>
-
 <h2 id="chapter-8-transforming-operators-in-practice">Chapter 8, Transforming Operators in Practice</h2>
-
 <p>As with all &ldquo;.. in practice&rdquo; chapters in RxSwift: Reactive programming with Swift, the chapter that follows takes the introduced new concepts and/or operators and leads the reader through a step-by-step tutorial, building up a real iOS project to showcase some real-life usages of the newly introduced concepts.</p>
-
 <p>Chapter 8, Transforming Operators in Practice leads the reader through building a GitHub activity app. This kind of app, which talks to an online JSON API, processes the response asynchronously, and displays results on screen is the perfect opportunity to use a bunch of transforming operators.</p>
-
 <p>Even if a little tailored to showcase specifically transforming operators, the project in that chapter can serve as a base to any app that needs to fetch JSON and display the response data on screen, so it&rsquo;s a great excercise in building RxSwift apps.</p>
-
-<p><img src="http://rx-marin.com/images/github-activity.png" alt="github activity" /></p>
-
+<p><img src="http://rx-marin.com/images/github-activity.png" alt="github activity"></p>
 <p>You can find an abbreviated free version of that chapter here:
 <a href="https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice">https://www.raywenderlich.com/158364/rxswift-transforming-operators-practice</a></p>
-
 <h2 id="where-to-buy">Where to buy?</h2>
-
 <p>Enjoy those completely free chapters from the book, and we hope you&rsquo;ll enjoy reading the book too!</p>
-
 <p>The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -349,13 +342,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -405,7 +391,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

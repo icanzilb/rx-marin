@@ -14,7 +14,7 @@
 <meta name="description" content="In this post I go over some of the convenience operators I built for my current project">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Custom convenience operators with RxSwift, Part 1" />
 <meta property="og:description" content="In this post I go over some of the convenience operators I built for my current project" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,26 +230,29 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#replacewith-value-replace-any-element-with-a-constant">replaceWith(value): Replace any element with a constant</a></li>
-<li><a href="#replacewithdate-replace-with-timestamp-of-the-latest-value">replaceWithDate(): Replace with timestamp of the latest value</a></li>
-<li><a href="#negate-negate-the-value-of-the-element">negate(): Negate the value of the element</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#replacewithvalue-replace-any-element-with-a-constant">replaceWith(value): Replace any element with a constant</a></li>
+    <li><a href="#replacewithdate-replace-with-timestamp-of-the-latest-value">replaceWithDate(): Replace with timestamp of the latest value</a></li>
+    <li><a href="#negate-negate-the-value-of-the-element">negate(): Negate the value of the element</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -292,100 +299,67 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<h2 id="intro">Intro</h2>
-
+            <h2 id="intro">Intro</h2>
 <p>Just like when learning a new language you need to build up a dictionary to start understanding how the language works, you got to learn the Rx operators and everything will eventually click together.</p>
-
 <p>And then once you have a good common of a language it&rsquo;s okay to start coming up with new words too to boost the expressiveness of your speech and for convenience.</p>
-
 <p>Same thing happened with me last week - for the first time I felt like I&rsquo;m getting work done with RxSwift because I had good understanding how to use at least few operators. Naturally I wished to create my own custom convenience operators that would not do anything essentially new but will just help me express myself better and clearer.</p>
-
-<h2 id="replacewith-value-replace-any-element-with-a-constant">replaceWith(value): Replace any element with a constant</h2>
-
+<h2 id="replacewithvalue-replace-any-element-with-a-constant">replaceWith(value): Replace any element with a constant</h2>
 <p>When I just want to react to a certain group of events I replace the actual value emitted so that I can merge two or more Observables into one stream and observe that single stream.</p>
-
 <p>The following piece of code is from <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">last weeks</a> post and observes the taps on the Start and Stop buttons of the laps timer app:</p>
-
-<pre><code class="language-swift">let isRunning = [btnPlay.rx_tap.map({_ in true}), btnStop.rx_tap.map({_ in false})]
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> isRunning = [btnPlay.rx_tap.map({<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">true</span>}), btnStop.rx_tap.map({<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">false</span>})]
 	.toObservable()
     .merge()
-    .startWith(false)
+    .startWith(<span style="color:#66d9ef">false</span>)
     .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>I was looking at this chunk of code and thought that there should be a cleaner, more readable way to represent the mapping parts. What I do there for both observables is to ignore the actual value and replace it with a constant.</p>
-
+</code></pre></div><p>I was looking at this chunk of code and thought that there should be a cleaner, more readable way to represent the mapping parts. What I do there for both observables is to ignore the actual value and replace it with a constant.</p>
 <p>So I dug through the RxSwift code and based on what I found there I put together this brilliant (hic) piece of code:</p>
-
-<pre><code class="language-swift">func replaceWith&lt;R&gt;(value: R) -&gt; Observable&lt;R&gt; {
-    return Observable.create { observer in
-        let subscription = self.subscribe { e in
-            switch e {
-            case .Next(_):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">replaceWith</span>&lt;R&gt;(value: R) -&gt; Observable&lt;R&gt; {
+    <span style="color:#66d9ef">return</span> Observable.create { observer <span style="color:#66d9ef">in</span>
+        <span style="color:#66d9ef">let</span> subscription = <span style="color:#66d9ef">self</span>.subscribe { e <span style="color:#66d9ef">in</span>
+            <span style="color:#66d9ef">switch</span> e {
+            <span style="color:#66d9ef">case</span> .Next(<span style="color:#66d9ef">_</span>):
                 observer.on(.Next(value))
-            case .Error(let error):
+            <span style="color:#66d9ef">case</span> .Error(<span style="color:#66d9ef">let</span> error):
                 observer.on(.Error(error))
-            case .Completed:
+            <span style="color:#66d9ef">case</span> .Completed:
                 observer.on(.Completed)
             }
         }
-        return subscription
+        <span style="color:#66d9ef">return</span> subscription
     }
 }
-</code></pre>
-
-<p>I create and return a new <code>Observable</code> and pass through the <code>Error</code> and <code>Completed</code> events, but replace the value of the <code>Next</code> event with the <code>value</code> constant. Seems good?</p>
-
+</code></pre></div><p>I create and return a new <code>Observable</code> and pass through the <code>Error</code> and <code>Completed</code> events, but replace the value of the <code>Next</code> event with the <code>value</code> constant. Seems good?</p>
 <p>What looked like a magnificent piece of code turned out to be a bit of an overkill. I mean after all I just wanted to &ldquo;map&rdquo; any value of any type to a constant and when you say it that way the code almost writes itself! So in the end I rewrote the code like so:</p>
-
-<pre><code class="language-swift">extension ObservableType {
-    func replaceWith&lt;R&gt;(value: R) -&gt; Observable&lt;R&gt; {
-        return map { _ in value }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">ObservableType</span> {
+    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">replaceWith</span>&lt;R&gt;(value: R) -&gt; Observable&lt;R&gt; {
+        <span style="color:#66d9ef">return</span> map { <span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> value }
     }
 }
-</code></pre>
-
-<p>As you can see I didn&rsquo;t have to go crazy about the whole thing but just literally take the piece of code I wanted to re-use and abstract it in a method on the <code>ObservableType</code>.</p>
-
+</code></pre></div><p>As you can see I didn&rsquo;t have to go crazy about the whole thing but just literally take the piece of code I wanted to re-use and abstract it in a method on the <code>ObservableType</code>.</p>
 <p>With this the same code block from the beginning of the post looks like:</p>
-
-<pre><code class="language-swift">let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> isRunning = [btnPlay.rx_tap.replaceWith(<span style="color:#66d9ef">true</span>), btnStop.rx_tap.replaceWith(<span style="color:#66d9ef">false</span>)]
 	.toObservable()
     .merge()
-    .startWith(false)
+    .startWith(<span style="color:#66d9ef">false</span>)
     .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>Awesome! Having my own custom convenience operator made the code less prone to errors (no custom code in a closure to write) and more readable.</p>
-
+</code></pre></div><p>Awesome! Having my own custom convenience operator made the code less prone to errors (no custom code in a closure to write) and more readable.</p>
 <p>At this point I started doubting myself a bit - this was too good to be true honestly. I thought I must be doing something wrong :)</p>
-
 <p>However it turned out many people have this exact custom operator in their code base, it apparently solves a common problem.</p>
-
 <p>Then I got a bit crazy and decided just for fun to explore how much further I can take this.</p>
-
 <h2 id="replacewithdate-replace-with-timestamp-of-the-latest-value">replaceWithDate(): Replace with timestamp of the latest value</h2>
-
 <p>Since I was already warmed up by putting together <code>replaceWith</code> I thought it&rsquo;d be fun to have a convenience operator to give me the timestamp of the latest element from the observable sequence.</p>
-
 <p>In this concrete case the constant I&rsquo;d replace the element with would just be the current date:</p>
-
-<pre><code class="language-swift">extension ObservableType {
-    func replaceWithDate&lt;R&gt;(value: R) -&gt; Observable&lt;NSDate&gt; {
-        return map { _ in NSDate() }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">ObservableType</span> {
+    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">replaceWithDate</span>&lt;R&gt;(value: R) -&gt; Observable&lt;NSDate&gt; {
+        <span style="color:#66d9ef">return</span> map { <span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> NSDate() }
     }
 }
-</code></pre>
+</code></pre></div><p>Now I can bind the latest value from an Observable to a label, and show the timestamp of that value in another label like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> count = Observable&lt;Int&gt;
+    .interval(<span style="color:#ae81ff">3</span>, scheduler: MainScheduler.instance)
+    .shareReplay(<span style="color:#ae81ff">1</span>)
 
-<p>Now I can bind the latest value from an Observable to a label, and show the timestamp of that value in another label like so:</p>
-
-<pre><code class="language-swift">let count = Observable&lt;Int&gt;
-    .interval(3, scheduler: MainScheduler.instance)
-    .shareReplay(1)
-
-count.map {counter in &quot;\(counter)&quot;}
+count.map {counter <span style="color:#66d9ef">in</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">\(</span>counter<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>}
     .bindTo(label1.rx_text)
     .addDisposableTo(bag)
 
@@ -393,62 +367,48 @@ count.replaceWithDate()
     .map {$0.description}
     .bindTo(label2.rx_text)
     .addDisposableTo(bag)
-</code></pre>
-
-<p>And here&rsquo;s the result (wait few seconds to see the increments):</p>
-
-<p><img src="http://rx-marin.com/images/latest-date.gif" alt="" /></p>
-
+</code></pre></div><p>And here&rsquo;s the result (wait few seconds to see the increments):</p>
+<p><img src="http://rx-marin.com/images/latest-date.gif" alt=""></p>
 <h2 id="negate-negate-the-value-of-the-element">negate(): Negate the value of the element</h2>
-
 <p>Next I noticed that sometimes I need to bind an <code>Observable</code> to <code>rx_enabled</code> property of a button, and sometimes to <code>rx_hidden</code>. While writing binding code I had to use numerous <code>map {value in !value}</code>, which made my code less readable.</p>
-
 <blockquote>
 <p>If you check <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">last week&rsquo;s post</a> you will see that in my effort to increase readability I ended up having two observables: one called <code>isRunning</code> and one <code>isntRunning</code>.</p>
 </blockquote>
-
 <p>After another read through some of RxSwift&rsquo;s code I learned how to add an operator to an <code>Observable</code> of a certain type. In my case I wanted to add the <code>negate()</code> operator to just observables producing <code>Bool</code> values.</p>
-
-<p><code>Observable</code> exposes its elements&rsquo; type as <code>Element</code> and I could easily match this to the <code>BooleanType</code> (Swift ftw!):</p>
-
-<pre><code class="language-swift">extension Observable where Element: BooleanType {
-    public func negate() -&gt; Observable&lt;Bool&gt; {
-        return map {value in !value}
+<p><code>Observable</code> exposes its elements' type as <code>Element</code> and I could easily match this to the <code>BooleanType</code> (Swift ftw!):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element: BooleanType {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">negate</span>() -&gt; Observable&lt;Bool&gt; {
+        <span style="color:#66d9ef">return</span> map {value <span style="color:#66d9ef">in</span> <span style="color:#f92672">!</span>value}
     }
 }
-</code></pre>
-
-<p>Sweet - thanks protocol extensions with associated types! Now I could easily write code like:</p>
-
-<pre><code class="language-swift">active.bindTo(btnStart.rx_enabled).addDisposableTo(bag)
+</code></pre></div><p>Sweet - thanks protocol extensions with associated types! Now I could easily write code like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">active.bindTo(btnStart.rx_enabled).addDisposableTo(bag)
 active.negate().bindTo(btnStart.rx_hidden).addDisposableTo(bag)
-</code></pre>
-
-<p>This code will both enable and show the button whenever <code>active</code> emits a <code>true</code> element. Pretty sleek eh?</p>
-
+</code></pre></div><p>This code will both enable and show the button whenever <code>active</code> emits a <code>true</code> element. Pretty sleek eh?</p>
 <p>To wrap up today&rsquo;s post here&rsquo;s what I&rsquo;ve also added to my project a bit later:</p>
-
-<pre><code class="language-swift">extension Observable where Element : SignedIntegerType {
-    public func negate() -&gt; Observable&lt;E&gt; {
-        return map {value in -value}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element : SignedIntegerType {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">negate</span>() -&gt; Observable&lt;E&gt; {
+        <span style="color:#66d9ef">return</span> map {value <span style="color:#66d9ef">in</span> <span style="color:#f92672">-</span>value}
     }
 }
-</code></pre>
-
-<p>Now <code>negate()</code> worked also in other contexts. If you used it on <code>Observable&lt;Bool&gt;</code> it would apply a logical <code>not</code> to the value; if you used it on a <code>Observable&lt;Int&gt;</code> it would produce the negative value of the element. Cool!</p>
-
+</code></pre></div><p>Now <code>negate()</code> worked also in other contexts. If you used it on <code>Observable&lt;Bool&gt;</code> it would apply a logical <code>not</code> to the value; if you used it on a <code>Observable&lt;Int&gt;</code> it would produce the negative value of the element. Cool!</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&rsquo;s nothing wrong with it.</p>
-
 <p>In my next post I&rsquo;ll look into few more operators I created along the way for myself. Do you want to share any of yours?</p>
-
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on  Twitter.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -458,13 +418,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -516,7 +469,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

@@ -14,7 +14,7 @@
 <meta name="description" content="Dig a little deeper into combineLatest and learn about more advanced usages">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="combineLatest beyond the basics" />
 <meta property="og:description" content="Dig a little deeper into combineLatest and learn about more advanced usages" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,25 +230,28 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#what-does-the-combinelatest-operator-do">What does the combineLatest operator do?</a></li>
-<li><a href="#using-combinelatest-with-a-dynamic-number-of-source-observables">Using combineLatest with a dynamic number of source observables</a></li>
-<li><a href="#all-at-once-vs-as-they-come">All at once vs. as they come</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#what-does-the-combinelatest-operator-do">What does the combineLatest operator do?</a></li>
+    <li><a href="#using-combinelatest-with-a-dynamic-number-of-source-observables">Using combineLatest with a dynamic number of source observables</a></li>
+    <li><a href="#all-at-once-vs-as-they-come">All at once vs. as they come</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -291,28 +298,16 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>In the last couple of weeks I got to talk to few people who were either still struggling to understand what exactly does <code>combineLatest</code> do or didn&rsquo;t know about a more recent power feature.</p>
-
+            <p>In the last couple of weeks I got to talk to few people who were either still struggling to understand what exactly does <code>combineLatest</code> do or didn&rsquo;t know about a more recent power feature.</p>
 <p>So here it is &hellip; a post about <code>combineLatest</code>!</p>
-
 <h2 id="what-does-the-combinelatest-operator-do">What does the combineLatest operator do?</h2>
-
 <p><code>combineLatest</code> is super useful and it was the first thing in RxSwift that really made see how powerful Rx is and showed me what kind of problems can be easily solved with RxSwift.</p>
-
 <p>So what does it do? Any time any of the source sequences emits an element, also <code>combineLatest</code>&rsquo;s result seqiemce emits an element, which contains all the latest values of each of the source sequences.</p>
-
 <p>Let&rsquo;s look at a marble diagram (source: <a href="http://rxmarbles.com/#combineLatest">http://rxmarbles.com/#combineLatest</a>):</p>
-
-<p><img src="http://rx-marin.com/images/combineLatest.png" alt="combineLatest schema" /></p>
-
+<p><img src="http://rx-marin.com/images/combineLatest.png" alt="combineLatest schema"></p>
 <p>We have two sequences S1 and S2, which emit values - the former emits numbers and the latter - letters.</p>
-
 <p>After all source sequences emit for the first time (e.g. they do have a <em>latest</em> value), when any of the sources emits an element <code>combineLatest</code> grabs the latest values of all sources and emits the combined result.</p>
-
 <p>So let&rsquo;s have a look what happens on the diagam above:</p>
-
 <ul>
 <li>first, S1 emits <code>1</code> - since not all sources have emitted at that time, the result does not emit</li>
 <li>then, S1 emits <code>2</code> - same thing happens since S2 still hasn&rsquo;t emitted anything (e.g. has no latest value)</li>
@@ -320,150 +315,104 @@ Tweet</a><p>
 <li>later S2 emits another element <code>B</code>, again <code>combineLatest</code> combines it with the latest element from S1, which is <code>2</code></li>
 <li>and so forth&hellip;</li>
 </ul>
-
 <p><code>combineLatest</code> is particularly useful handling UI input (you can react to all changes in any of the UI&rsquo;s text fields, switches, etc) or when you fire a number of networking requests and need to react when any of the http responses completes.</p>
-
 <h2 id="using-combinelatest-with-a-dynamic-number-of-source-observables">Using combineLatest with a dynamic number of source observables</h2>
-
 <p>I created a small example for this article, and added the code to my <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a> repository. If you clone the repo and run it - it&rsquo;s under number 4 in the main menu.</p>
-
-<p><img src="http://rx-marin.com/images/rxoniosmenu.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/rxoniosmenu.png" alt=""></p>
 <p>If you&rsquo;re only interested in the code just peak inside here: <a href="https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift">https://github.com/icanzilb/RxSwiftoniOS/blob/master/RxSwiftiOS/CombineViewController.swift</a>.</p>
-
 <p>One of the lesser known features of <code>combineLatest</code> is that you can either use it with a given number of sources (which can be two, three, four, or more but still a fixed number), like so:</p>
-
-<pre><code class="language-swift">Observable.combineLatest(S1, S2, S3) { value1, value2, value3 in
-	print(&quot;latest values: ...&quot;)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable.combineLatest(S1, S2, S3) { value1, value2, value3 <span style="color:#66d9ef">in</span>
+	print(<span style="color:#e6db74">&#34;latest values: ...&#34;</span>)
 }
-</code></pre>
-
-<p>But if you don&rsquo;t know how many sources you have in advance or in case you want to be able to easily map over the emitted values you can also provide a collection of source observables to <code>combineLatest</code>. Like so:</p>
-
-<pre><code class="language-swift">Observable.combineLatest(sources) { values in
-  print(values.map { &quot;value: $0&quot; })
+</code></pre></div><p>But if you don&rsquo;t know how many sources you have in advance or in case you want to be able to easily map over the emitted values you can also provide a collection of source observables to <code>combineLatest</code>. Like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable.combineLatest(sources) { values <span style="color:#66d9ef">in</span>
+  print(values.map { <span style="color:#e6db74">&#34;value: $0&#34;</span> })
 }
-</code></pre>
-
-<p>So in the example I wrote for this article I&rsquo;m fetching JSON with the list of my followers from GitHub and show them in a collection view. For each follower object in the JSON response I fetch their avatar image and show it in a collection cell.</p>
-
+</code></pre></div><p>So in the example I wrote for this article I&rsquo;m fetching JSON with the list of my followers from GitHub and show them in a collection view. For each follower object in the JSON response I fetch their avatar image and show it in a collection cell.</p>
 <p>Let&rsquo;s start with fetching the followers JSON:</p>
-
-<pre><code class="language-swift">Observable.just(&quot;https://api.github.com/users/icanzilb/followers&quot;)
-  .map { url in
-    let apiUrl = URLComponents(string: url)!
-    return URLRequest(url: apiUrl.url!)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable.just(<span style="color:#e6db74">&#34;https://api.github.com/users/icanzilb/followers&#34;</span>)
+  .map { url <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">let</span> apiUrl = URLComponents(string: url)<span style="color:#f92672">!</span>
+    <span style="color:#66d9ef">return</span> URLRequest(url: apiUrl.url!)
   }
-  .flatMapLatest { request in
-    return URLSession.shared.rx.json(request: request)
+  .flatMapLatest { request <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> URLSession.shared.rx.json(request: request)
       .catchErrorJustReturn([])
   }
-  .map { json -&gt; [User] in
-    guard let users = json as? [JSONObject]  else { return [] }
-    return users.flatMap(User.init)
+  .map { json -&gt; [User] <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> users = json <span style="color:#66d9ef">as</span>? [JSONObject]  <span style="color:#66d9ef">else</span> { <span style="color:#66d9ef">return</span> [] }
+    <span style="color:#66d9ef">return</span> users.flatMap(User.<span style="color:#66d9ef">init</span>)
   }
-</code></pre>
-
-<p>This code makes a request to <code>https://api.github.com/users/icanzilb/followers</code> and gets back a list of JSON objects, then it maps them to an array of <code>User</code> objects. Each <code>User</code> has a <code>login</code> and an <code>avatarUrl</code> properties.</p>
-
+</code></pre></div><p>This code makes a request to <code>https://api.github.com/users/icanzilb/followers</code> and gets back a list of JSON objects, then it maps them to an array of <code>User</code> objects. Each <code>User</code> has a <code>login</code> and an <code>avatarUrl</code> properties.</p>
 <p>I bind the users list to the <code>followers</code> Variable and will map each user object to an HTTP request, which will fetch their avatar image from GitHub:</p>
-
-<pre><code class="language-swift">followers.asObservable()
-  .map { users -&gt; [Observable&lt;Data&gt;] in
-    return users.map { user in
-      let request = URLRequest(url: URL(string: user.avatarUrl)!)
-      return URLSession.shared.rx.data(request: request)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">followers.asObservable()
+  .map { users -&gt; [Observable&lt;Data&gt;] <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> users.map { user <span style="color:#66d9ef">in</span>
+      <span style="color:#66d9ef">let</span> request = URLRequest(url: URL(string: user.avatarUrl)<span style="color:#f92672">!</span>)
+      <span style="color:#66d9ef">return</span> URLSession.shared.rx.data(request: request)
         .catchErrorJustReturn(UIImage.blank)
     }
   }
-</code></pre>
-
-<p>The <code>map</code> above takes in the list of user objects <code>[User]</code> and maps those to <code>URLSession</code> observable responses <code>[Observable&lt;Data&gt;]</code>.</p>
-
+</code></pre></div><p>The <code>map</code> above takes in the list of user objects <code>[User]</code> and maps those to <code>URLSession</code> observable responses <code>[Observable&lt;Data&gt;]</code>.</p>
 <p>Neat! I&rsquo;m passing the array of observables directly to <code>combineLatest</code> and convert the returned collection of <code>Data</code> values into images:</p>
-
-<pre><code class="language-swift">.flatMap(Observable.combineLatest)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.flatMap(Observable.combineLatest)
 .map { $0.map(UIImage.fromData) }
-</code></pre>
-
-<p>I had to add a quick extension to <code>UIImage</code> to add a static method to make images out of data values:</p>
-
-<pre><code class="language-swift">extension UIImage {
-  static func fromData(data: Data) -&gt; UIImage { return UIImage(data: data)! }
+</code></pre></div><p>I had to add a quick extension to <code>UIImage</code> to add a static method to make images out of data values:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">UIImage</span> {
+  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fromData</span>(data: Data) -&gt; UIImage { <span style="color:#66d9ef">return</span> UIImage(data: data)<span style="color:#f92672">!</span> }
 }
-</code></pre>
-
-<p>Nice. Now when all my HTTP requests get their response <code>combineLatest</code> gives me a list of data values, which I turn into images and can bind to a variable or otherwise make use of.</p>
-
+</code></pre></div><p>Nice. Now when all my HTTP requests get their response <code>combineLatest</code> gives me a list of data values, which I turn into images and can bind to a variable or otherwise make use of.</p>
 <p>If you run the linked above demo project you will see that the code fetches all followers from GitHub, then fires off a bunch of requests, gets all their avatars and once that&rsquo;s done it does a single data reload on the collection view and shows them all at once:</p>
-
-<p><img src="http://rx-marin.com/images/followers-list-1.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/followers-list-1.png" alt=""></p>
 <p>Ok, that&rsquo;s all about using <code>combineLatest</code> with a collection of source sequences. But wait - there&rsquo;s more to be said on the topic &hellip;</p>
-
 <h2 id="all-at-once-vs-as-they-come">All at once vs. as they come</h2>
-
 <p>When using <code>combineLatest</code> (especially with network requests) you might want to have two very different use cases.</p>
-
 <p>In the example above you saw how to fire simulatenously an arbitrary number of network requests and only once all of them have completed emit the result of all of them.</p>
-
 <p>But how about if you didn&rsquo;t want ot wait for all requests to complete? What if you preferred to update the UI as each of the requests receives a response?</p>
-
 <p>Well, remember the discussion above? <code>combineLatest</code> does emit for each element from the source sequences but <strong>only after all of them have a latest value</strong>.</p>
-
 <p>So, I wanted to show that as well in the demo project so you will actually find two different methods in the view controller source code <code>getAllAtOnce()</code> and <code>getAsTheyCome()</code>. You can switch between those in the app UI by toggling the segment control at the top of the screen.</p>
-
 <p>So the only difference in the code of the two methds (and I mean <strong>the only</strong>) is that when I&rsquo;m reloading the collection whenever each of the avatar requests completes I&rsquo;m providing a default value for each observable.</p>
-
 <p>So here&rsquo;s the code to fetch <strong>all at once</strong>:</p>
-
-<pre><code class="language-swift">.map { users -&gt; [Observable&lt;Data&gt;] in
-  return users.map { user in
-    let request = URLRequest(url: URL(string: user.avatarUrl)!)
-    return URLSession.shared.rx.data(request: request)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.map { users -&gt; [Observable&lt;Data&gt;] <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">return</span> users.map { user <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">let</span> request = URLRequest(url: URL(string: user.avatarUrl)<span style="color:#f92672">!</span>)
+    <span style="color:#66d9ef">return</span> URLSession.shared.rx.data(request: request)
       .catchErrorJustReturn(UIImage.blank)
   }
 }
-</code></pre>
-
-<p>And here&rsquo;s the code that makes <code>combineLatest</code>&rsquo;s result emit as each response comes in:</p>
-
-<pre><code class="language-swift">.map { users -&gt; [Observable&lt;Data&gt;] in
-  return users.map { user in
-    let request = URLRequest(url: URL(string: user.avatarUrl)!)
-    return URLSession.shared.rx.data(request: request)
+</code></pre></div><p>And here&rsquo;s the code that makes <code>combineLatest</code>&rsquo;s result emit as each response comes in:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.map { users -&gt; [Observable&lt;Data&gt;] <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">return</span> users.map { user <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">let</span> request = URLRequest(url: URL(string: user.avatarUrl)<span style="color:#f92672">!</span>)
+    <span style="color:#66d9ef">return</span> URLSession.shared.rx.data(request: request)
       .startWith(UIImage.blank)
       .catchErrorJustReturn(UIImage.blank)
   }
 }
-</code></pre>
-
-<p>Yes, I&rsquo;m sure you spotted the difference - the source has a default value (in my case it&rsquo;s an empty avatar image). This way the collection starts out with a default image for each follower and then as the images are fetched one by one the collection reloads to display each new one. (Yes, not optimal but the point here is to discuss combineLatest.)</p>
-
-<p>So the screen starts with all sources&rsquo; latest values (at first those are the default images):</p>
-
-<p><img src="http://rx-marin.com/images/followers-list-2.png" alt="" /></p>
-
+</code></pre></div><p>Yes, I&rsquo;m sure you spotted the difference - the source has a default value (in my case it&rsquo;s an empty avatar image). This way the collection starts out with a default image for each follower and then as the images are fetched one by one the collection reloads to display each new one. (Yes, not optimal but the point here is to discuss combineLatest.)</p>
+<p>So the screen starts with all sources' latest values (at first those are the default images):</p>
+<p><img src="http://rx-marin.com/images/followers-list-2.png" alt=""></p>
 <p>And then you can see how the collection keeps reloading to display each of the received images:</p>
-
-<p><img src="http://rx-marin.com/images/followers-list-1.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/followers-list-1.png" alt=""></p>
 <p>To try this in the app tap on the <em>As they come</em> segment on top.</p>
-
 <p>And that&rsquo;s a wrap!</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p>Once more, the demo project for this article you will find on GitHub here: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a>.</p>
-
 <p>I hope this post has been helpful and has shown you a couple of nice <code>combineLatest</code> features. Of course these few examples don&rsquo;t cover everything - if you&rsquo;d like to go deeper into combining operators you&rsquo;re welcome to check Chapter 9, &ldquo;Combining Operators&rdquo; and Chapter 10, &ldquo;Combining Operators in Practice&rdquo;, which cover far more ground than this post.</p>
-
 <p>The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -473,13 +422,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -529,7 +471,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>bind on rx_marin&lt;blog&gt;</title>
@@ -6,11 +6,7 @@
     <description>Recent content in bind on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://rx-marin.com/tags/bind/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Tue, 31 Oct 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://rx-marin.com/tags/bind/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Introducing RxAnimated</title>
       <link>http://rx-marin.com/post/rxanimated-intro/</link>

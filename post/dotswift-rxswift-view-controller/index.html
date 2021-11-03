@@ -14,7 +14,7 @@
 <meta name="description" content="Presenting view controllers on iOS with RxSwift. Sample code from my talk at dotSwift conference.">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="(dotSwift) Presenting View Controllers with RxSwift" />
 <meta property="og:description" content="Presenting view controllers on iOS with RxSwift. Sample code from my talk at dotSwift conference." />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,28 +230,32 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#presenting-a-view-controller-from-rxswift">Presenting a View Controller from RxSwift</a>
-<ul>
-<li><a href="#why-i-chose-this-example">Why I chose this example?</a></li>
-<li><a href="#the-sample-code">The sample code</a></li>
-<li><a href="#the-complete-example">The complete example</a></li>
-<li><a href="#discussion">Discussion</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#presenting-a-view-controller-from-rxswift">Presenting a View Controller from RxSwift</a>
+      <ul>
+        <li><a href="#why-i-chose-this-example">Why I chose this example?</a></li>
+        <li><a href="#the-sample-code">The sample code</a></li>
+        <li><a href="#the-complete-example">The complete example</a></li>
+        <li><a href="#discussion">Discussion</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -294,235 +302,178 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.</p>
-
+            <p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.</p>
 <p>I already posted a write up on the GitHub API search example here: <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">http://rx-marin.com/post/dotswift-search-github-json-api/</a>. Let&rsquo;s continue with example number two.</p>
-
 <h2 id="presenting-a-view-controller-from-rxswift">Presenting a View Controller from RxSwift</h2>
-
 <p>RxSwift doesn&rsquo;t neccessarily force you into one architecture or another, it&rsquo;s really up to you to chose how are you going to structure your application. Same goes for navigation and how you move the user between your app&rsquo;s screens and different view controllers.</p>
-
 <h3 id="why-i-chose-this-example">Why I chose this example?</h3>
-
 <p>To make a point, namely that RxSwift plays very nicely with UIKit when neccessary, I chose to demo a simple code to present a view controller, get data back from that view controller, and navigate back to the presenting controller.</p>
-
 <p>It&rsquo;s a simple demo but demonstrates well one of the biggest benefits of using RxSwift - obliterating the need to deal with delegate to simply communicate between classes.</p>
-
 <h3 id="the-sample-code">The sample code</h3>
-
 <p>In this post I can go in a bit more detail about the complete code than it was reasonable in the talk at the conference. Still keep in mind this was written with the goal to fit in a single slide, so corners were cut big time :) And so let&rsquo;s get started.</p>
-
 <p>The example is ultimately about an app featuring two view controllers:</p>
-
 <ol>
 <li>A list of GitHub repos (stored in an array), displayed in a table view.</li>
 <li>A modal view controller, which allows the user to add a new repo to the list.</li>
 </ol>
-
 <p>Let&rsquo;s first have a look at the list view controller. The repos are stored in a variable (for the purpose to simplify the example):</p>
-
-<pre><code class="language-swift">private let repos = Variable&lt;[Repo]&gt;(initialRepos)
-</code></pre>
-
-<p>And the initial values are just a list of <code>Repo</code> objects:</p>
-
-<pre><code class="language-swift">private let initialRepos = [
-    Repo(1, &quot;EasyAnimation&quot;, &quot;Swift&quot;),
-    Repo(2, &quot;Unbox&quot;, &quot;Swift&quot;),
-    Repo(3, &quot;RxSwift&quot;, &quot;Swift&quot;)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">let</span> repos = Variable<span style="color:#f92672">&lt;</span>[Repo]<span style="color:#f92672">&gt;</span>(initialRepos)
+</code></pre></div><p>And the initial values are just a list of <code>Repo</code> objects:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">let</span> initialRepos = [
+    Repo(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;EasyAnimation&#34;</span>, <span style="color:#e6db74">&#34;Swift&#34;</span>),
+    Repo(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;Unbox&#34;</span>, <span style="color:#e6db74">&#34;Swift&#34;</span>),
+    Repo(<span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#34;RxSwift&#34;</span>, <span style="color:#e6db74">&#34;Swift&#34;</span>)
 ]
-</code></pre>
-
-<p><code>repos</code> are bound to the table view as usual via RxDataSources:</p>
-
-<pre><code class="language-swift">repos.asObservable()
-  .bindTo(tableView.rx.items) { (tableView, row, repo) in
-    let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+</code></pre></div><p><code>repos</code> are bound to the table view as usual via RxDataSources:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">repos.asObservable()
+  .bindTo(tableView.rx.items) { (tableView, row, repo) <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">let</span> cell = tableView.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>)<span style="color:#f92672">!</span>
     cell.textLabel!.text = repo.name
     cell.detailTextLabel?.text = repo.language
-    return cell
+    <span style="color:#66d9ef">return</span> cell
   }
   .addDisposableTo(bag)
-</code></pre>
-
-<p>Next, to present a view controller with RxSwift, we&rsquo;ll react to navigation item taps and, once pushed the view controller to the navigation stack, we&rsquo;ll subscribe an observable on the presented controller. That observable will emit a next event and complete once the user has finished working with it.</p>
-
+</code></pre></div><p>Next, to present a view controller with RxSwift, we&rsquo;ll react to navigation item taps and, once pushed the view controller to the navigation stack, we&rsquo;ll subscribe an observable on the presented controller. That observable will emit a next event and complete once the user has finished working with it.</p>
 <p>We start with subscribing for taps:</p>
-
-<pre><code class="language-swift">navigationItem.rightBarButtonItem!.rx.tap
-  .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
-</code></pre>
-
-<p>Bu using <code>throttle</code> we&rsquo;ll ignore any unintentional double taps (and avoid presenting more than one copy of the view controller one over each other).</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">navigationItem.rightBarButtonItem!.rx.tap
+  .throttle(<span style="color:#ae81ff">0.5</span>, latest: <span style="color:#66d9ef">false</span>, scheduler: MainScheduler.instance)
+</code></pre></div><p>Bu using <code>throttle</code> we&rsquo;ll ignore any unintentional double taps (and avoid presenting more than one copy of the view controller one over each other).</p>
 <p>Next we need to &ldquo;kind of wait&rdquo; until the observable of the view controller completes and get the data it emitted:</p>
-
-<pre><code class="language-swift">.flatMapFirst {[weak self] _ -&gt; Observable&lt;Repo&gt; in
-  if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &quot;NewRepoViewController&quot;) 
-  as? NewRepoViewController {
-    self?.navigationController?.pushViewController(addVC, animated: true)
-    return addVC.repoObservable
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.flatMapFirst {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] <span style="color:#66d9ef">_</span> -&gt; Observable&lt;Repo&gt; <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> addVC = <span style="color:#66d9ef">self</span>?.storyboard?.instantiateViewController(withIdentifier: <span style="color:#e6db74">&#34;NewRepoViewController&#34;</span>) 
+  <span style="color:#66d9ef">as</span>? NewRepoViewController {
+    <span style="color:#66d9ef">self</span>?.navigationController?.pushViewController(addVC, animated: <span style="color:#66d9ef">true</span>)
+    <span style="color:#66d9ef">return</span> addVC.repoObservable
   }
-  return Observable.never()
+  <span style="color:#66d9ef">return</span> Observable.never()
 }
-</code></pre>
-
-<p>The block we provide to <code>flatMap</code> fetches the view controller from a storyboard and pushes it onto the navigation stack. Once presented, we return the <code>repoObservable</code> public property of the presented view controller.</p>
-
+</code></pre></div><p>The block we provide to <code>flatMap</code> fetches the view controller from a storyboard and pushes it onto the navigation stack. Once presented, we return the <code>repoObservable</code> public property of the presented view controller.</p>
 <p>That observable is going to give us back a <code>Repo</code> object in case the user has successfully created a new one. Once we have a <code>Repo</code> we can add it to the list and let the Rx binding from earlier update the table view.</p>
-
 <p>We&rsquo;ll subscribe the result and update the list:</p>
-
-<pre><code class="language-swift">.subscribe(onNext: {[weak self] repo in
-  self?.repos.value.append(repo)
-  _ = self?.navigationController?.popViewController(animated: true)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.subscribe(onNext: {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] repo <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">self</span>?.repos.value.append(repo)
+  <span style="color:#66d9ef">_</span> = <span style="color:#66d9ef">self</span>?.navigationController?.popViewController(animated: <span style="color:#66d9ef">true</span>)
 })
-</code></pre>
-
-<p>Since we know the observable is going to emit exactly one event, we also pop the view controller from the navigation stack. And that&rsquo;s pretty much it! We present the controller, it gives us back data via a next event, and when it completes we discard it. Neat!</p>
-
+</code></pre></div><p>Since we know the observable is going to emit exactly one event, we also pop the view controller from the navigation stack. And that&rsquo;s pretty much it! We present the controller, it gives us back data via a next event, and when it completes we discard it. Neat!</p>
 <p>Now just for kicks have a look also at the code of the presented controller. The new repo controller exposes the user data via an observable like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">let</span> repo = PublishSubject&lt;Repo&gt;()
 
-<pre><code class="language-swift">private let repo = PublishSubject&lt;Repo&gt;()
-
-lazy var repoObservable: Observable&lt;Repo&gt; = {
-  return self.repo.asObservable()
+<span style="color:#66d9ef">lazy</span> <span style="color:#66d9ef">var</span> repoObservable: Observable&lt;Repo&gt; = {
+  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.repo.asObservable()
 }()
-</code></pre>
-
-<p>The controller itself can use the private <code>repo</code> subject to emit events, and other classes can subscribe to the <code>repoObservable</code> and react to events.</p>
-
+</code></pre></div><p>The controller itself can use the private <code>repo</code> subject to emit events, and other classes can subscribe to the <code>repoObservable</code> and react to events.</p>
 <p>Let&rsquo;s firstly combine all text values and make a <code>Repo</code> of them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#75715e">// current repo data</span>
+<span style="color:#66d9ef">let</span> currentRepo = Observable.combineLatest(
+  id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? <span style="color:#66d9ef">in</span>
 
-<pre><code class="language-swift">// current repo data
-let currentRepo = Observable.combineLatest(
-  id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? in
-
-  guard let id = id, let idInt = Int(id),
-    let name = name, name.characters.count &gt; 1,
-    let lang = lang, lang.characters.count &gt; 0 else {
-      return nil
+  <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> id = id, <span style="color:#66d9ef">let</span> idInt = Int(id),
+    <span style="color:#66d9ef">let</span> name = name, name.characters.count <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>,
+    <span style="color:#66d9ef">let</span> lang = lang, lang.characters.count <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> {
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
     }
-    return Repo(idInt, name, lang)
+    <span style="color:#66d9ef">return</span> Repo(idInt, name, lang)
   }
-  .shareReplay(1)
-</code></pre>
-
-<p>We combine the sequence of values from the text fields <code>id</code>, <code>name</code>, and <code>language</code> and after a simple validation routine we emit a <code>Repo</code> object. The first subscription to <code>currentRepo</code> will update the UI:</p>
-
-<pre><code class="language-swift">// toggle save button
+  .shareReplay(<span style="color:#ae81ff">1</span>)
+</code></pre></div><p>We combine the sequence of values from the text fields <code>id</code>, <code>name</code>, and <code>language</code> and after a simple validation routine we emit a <code>Repo</code> object. The first subscription to <code>currentRepo</code> will update the UI:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#75715e">// toggle save button</span>
 currentRepo
-  .map { $0 != nil }
+  .map { $0 <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> }
   .bindTo(saveButton.rx.isEnabled)
   .addDisposableTo(bag)
-</code></pre>
-
-<p>If the user&rsquo;s input produces a valid <code>Repo</code> object, the save button is enabled so the user can add it to the list of existing repos. Next we&rsquo;ll observe for taps on the Save bar item:</p>
-
-<pre><code class="language-swift">// emit repo when saved
+</code></pre></div><p>If the user&rsquo;s input produces a valid <code>Repo</code> object, the save button is enabled so the user can add it to the list of existing repos. Next we&rsquo;ll observe for taps on the Save bar item:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#75715e">// emit repo when saved</span>
 saveButton.rx.tap
   .withLatestFrom(currentRepo)
-  .subscribe(onNext: {[weak self] repo in
-    if let repo = repo {
-      self?.repo.onNext(repo)
-      self?.repo.onCompleted()
+  .subscribe(onNext: {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] repo <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> repo = repo {
+      <span style="color:#66d9ef">self</span>?.repo.onNext(repo)
+      <span style="color:#66d9ef">self</span>?.repo.onCompleted()
     }
   })
   .addDisposableTo(bag)
-</code></pre>
-
-<p>Whenever the user taps the save button we grab the latest value of <code>currentRepo</code> and in the subscribe block, we emit it from the <code>repo</code> subjects. Any subscribers to <code>repoObservable</code> will get the event and dispose afterwards.</p>
-
+</code></pre></div><p>Whenever the user taps the save button we grab the latest value of <code>currentRepo</code> and in the subscribe block, we emit it from the <code>repo</code> subjects. Any subscribers to <code>repoObservable</code> will get the event and dispose afterwards.</p>
 <p>And there you go - with few lines of code in both view controllers you move away from the delegate pattern, which could be useful in some cases but your code ends up defining and implementing tons of protocols and as always it&rsquo;s very hard to argue about the sequence in which methods are executed.</p>
-
 <p>Through the use of the <code>Observable</code> class, you saw that the two view controllers can talk to each without the need of creating extra entities, protocols, etc.</p>
-
 <h3 id="the-complete-example">The complete example</h3>
-
 <p><strong>PresentViewController.swift</strong></p>
-
-<pre><code class="language-swift">func bindUI() {
-  // display data
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bindUI</span>() {
+  <span style="color:#75715e">// display data</span>
   repos.asObservable()
-    .bindTo(tableView.rx.items) { (tableView, row, repo) in
-      let cell = tableView.dequeueReusableCell(withIdentifier: &quot;Cell&quot;)!
+    .bindTo(tableView.rx.items) { (tableView, row, repo) <span style="color:#66d9ef">in</span>
+      <span style="color:#66d9ef">let</span> cell = tableView.dequeueReusableCell(withIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>)<span style="color:#f92672">!</span>
       cell.textLabel!.text = repo.name
       cell.detailTextLabel?.text = repo.language
-      return cell
+      <span style="color:#66d9ef">return</span> cell
     }
     .addDisposableTo(bag)
 
-  // present view controller, observe output
+  <span style="color:#75715e">// present view controller, observe output</span>
   navigationItem.rightBarButtonItem!.rx.tap
-    .throttle(0.5, latest: false, scheduler: MainScheduler.instance)
-    .flatMapFirst {[weak self] _ -&gt; Observable&lt;Repo&gt; in
-      if let addVC = self?.storyboard?.instantiateViewController(withIdentifier: &quot;NewRepoViewController&quot;) as? NewRepoViewController {
-        self?.navigationController?.pushViewController(addVC, animated: true)
-        return addVC.repoObservable
+    .throttle(<span style="color:#ae81ff">0.5</span>, latest: <span style="color:#66d9ef">false</span>, scheduler: MainScheduler.instance)
+    .flatMapFirst {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] <span style="color:#66d9ef">_</span> -&gt; Observable&lt;Repo&gt; <span style="color:#66d9ef">in</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> addVC = <span style="color:#66d9ef">self</span>?.storyboard?.instantiateViewController(withIdentifier: <span style="color:#e6db74">&#34;NewRepoViewController&#34;</span>) <span style="color:#66d9ef">as</span>? NewRepoViewController {
+        <span style="color:#66d9ef">self</span>?.navigationController?.pushViewController(addVC, animated: <span style="color:#66d9ef">true</span>)
+        <span style="color:#66d9ef">return</span> addVC.repoObservable
       }
-      return Observable.never()
+      <span style="color:#66d9ef">return</span> Observable.never()
     }
-    .subscribe(onNext: {[weak self] repo in
-      self?.repos.value.append(repo)
-      _ = self?.navigationController?.popViewController(animated: true)
+    .subscribe(onNext: {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] repo <span style="color:#66d9ef">in</span>
+      <span style="color:#66d9ef">self</span>?.repos.value.append(repo)
+      <span style="color:#66d9ef">_</span> = <span style="color:#66d9ef">self</span>?.navigationController?.popViewController(animated: <span style="color:#66d9ef">true</span>)
     })
     .addDisposableTo(bag)
 }
-</code></pre>
-
-<p><strong>NewRepoViewController.swift</strong></p>
-
-<pre><code class="language-swift">func bindUI() {
-  // current repo data
-  let currentRepo = Observable.combineLatest(id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? in
-    guard let id = id, let idInt = Int(id),
-      let name = name, name.characters.count &gt; 1,
-      let lang = lang, lang.characters.count &gt; 0 else {
-        return nil
+</code></pre></div><p><strong>NewRepoViewController.swift</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">bindUI</span>() {
+  <span style="color:#75715e">// current repo data</span>
+  <span style="color:#66d9ef">let</span> currentRepo = Observable.combineLatest(id.rx.text, name.rx.text, language.rx.text) { id, name, lang -&gt; Repo? <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> id = id, <span style="color:#66d9ef">let</span> idInt = Int(id),
+      <span style="color:#66d9ef">let</span> name = name, name.characters.count <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>,
+      <span style="color:#66d9ef">let</span> lang = lang, lang.characters.count <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
     }
-    return Repo(idInt, name, lang)
+    <span style="color:#66d9ef">return</span> Repo(idInt, name, lang)
     }
-    .shareReplay(1)
+    .shareReplay(<span style="color:#ae81ff">1</span>)
 
-  // toggle save button
+  <span style="color:#75715e">// toggle save button</span>
   currentRepo
-    .map { $0 != nil }
+    .map { $0 <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> }
     .bindTo(saveButton.rx.isEnabled)
     .addDisposableTo(bag)
 
-  // emit repo when saved
+  <span style="color:#75715e">// emit repo when saved</span>
   saveButton.rx.tap
     .withLatestFrom(currentRepo)
-    .subscribe(onNext: {[weak self] repo in
-      if let repo = repo {
-        self?.repo.onNext(repo)
-        self?.repo.onCompleted()
+    .subscribe(onNext: {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>] repo <span style="color:#66d9ef">in</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> repo = repo {
+        <span style="color:#66d9ef">self</span>?.repo.onNext(repo)
+        <span style="color:#66d9ef">self</span>?.repo.onCompleted()
       }
     })
     .addDisposableTo(bag)
 }
-</code></pre>
-
-<h3 id="discussion">Discussion</h3>
-
+</code></pre></div><h3 id="discussion">Discussion</h3>
 <p>In real life you will probably never have the the whole presentation logic in one code chain like this. As said the idea above was to fit the code in a single slide and the audience to understand what&rsquo;s happening without previous RxSwift knowledge.</p>
-
 <p>But hey - it&rsquo;s nice to know you can do that :) And once you know how the code works you can go about splitting the responsibilities of digging through the storyboard, presenting, and making use of the returned data into separate classes.</p>
-
 <p>Hope that was an inspiration read! You can dig into more details below&hellip;</p>
-
 <p><strong>Links</strong></p>
-
 <p>The complete demo app from my talk: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a></p>
-
 <p>The talk slides: <a href="https://speakerdeck.com/icanzilb/rxswift-on-ios">https://speakerdeck.com/icanzilb/rxswift-on-ios</a></p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -532,13 +483,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -588,7 +532,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

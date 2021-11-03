@@ -14,7 +14,7 @@
 <meta name="description" content="Introducing a brand new book about RxSwift">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="RxSwift book - available now!" />
 <meta property="og:description" content="Introducing a brand new book about RxSwift" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,37 +230,33 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#how-it-came-to-be">How it came to be?</a></li>
-<li><a href="#the-rxswift-book">The RxSwift book</a>
-<ul>
-<li><a href="#the-book-concept">The book concept</a></li>
-<li><a href="#table-of-contents">Table of contents</a>
-<ul>
-<li><a href="#section-i-getting-started-with-rxswift">Section I: Getting Started with RxSwift</a></li>
-<li><a href="#section-ii-operators-and-best-practices">Section II: Operators and Best Practices</a></li>
-<li><a href="#section-iii-ios-apps-with-rxcocoa">Section III: iOS Apps with RxCocoa</a></li>
-<li><a href="#section-iv-intermediate-rxswift-rxcocoa">Section IV: Intermediate RxSwift/RxCocoa</a></li>
-<li><a href="#section-v-rxswift-community-cookbook">Section V: RxSwift Community Cookbook</a></li>
-<li><a href="#section-vi-putting-it-all-together">Section VI: Putting it All Together</a></li>
-</ul></li>
-</ul></li>
-<li><a href="#what-s-included">What&rsquo;s included?</a></li>
-<li><a href="#where-to-buy">Where to buy?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#how-it-came-to-be">How it came to be?</a></li>
+    <li><a href="#the-rxswift-book">The RxSwift book</a>
+      <ul>
+        <li><a href="#the-book-concept">The book concept</a></li>
+        <li><a href="#table-of-contents">Table of contents</a></li>
+      </ul>
+    </li>
+    <li><a href="#whats-included">What&rsquo;s included?</a></li>
+    <li><a href="#where-to-buy">Where to buy?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -303,98 +303,69 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>After a long time working on this project, I and my friends and colleagues <a href="https://twitter.com/fpillet">Florent Pillet</a>, <a href="https://twitter.com/bontoJR">Junior Bontognali</a>, <a href="https://twitter.com/scotteg">Scott Gardner</a>, <a href="https://twitter.com/ashfurrow">Ash Furrow</a>, <a href="https://twitter.com/crispytwit">Chris Belanger</a>, and <a href="https://twitter.com/rwenderlich">Ray</a> and <a href="https://twitter.com/vwenderlich">Vicki</a> Wenderlich are happy to announce that our new book about development with RxSwift is <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">available now</a>!</p>
-
+            <p>After a long time working on this project, I and my friends and colleagues <a href="https://twitter.com/fpillet">Florent Pillet</a>, <a href="https://twitter.com/bontoJR">Junior Bontognali</a>, <a href="https://twitter.com/scotteg">Scott Gardner</a>, <a href="https://twitter.com/ashfurrow">Ash Furrow</a>, <a href="https://twitter.com/crispytwit">Chris Belanger</a>, and <a href="https://twitter.com/rwenderlich">Ray</a> and <a href="https://twitter.com/vwenderlich">Vicki</a> Wenderlich are happy to announce that our new book about development with RxSwift is <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">available now</a>!</p>
 <h2 id="how-it-came-to-be">How it came to be?</h2>
-
 <p>When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&rsquo;t a single structured resource where people can learn systematically.</p>
-
 <p>Almost instantly I started dreaming about creating an RxSwift book that will make beginning development with Rx on iOS easier and more pleasant.</p>
-
 <p>I met with Junior, Scott, Florent, and Ash in different combinations over a number of conferences and it became clear all of us were working on some education materials in one form or another and the only sensible thing to do is to comibine our efforts!</p>
-
 <p>At the time Ray Wenderlich has already noticed that RxSwift and Rx are generating a lot of buzz and came with the idea of a book that will take the readers from complete beginner to a professinonal.</p>
-
 <p>And after some time of very hard work on this, I&rsquo;m proud to announce &hellip; (drumroll) &hellip;</p>
-
 <h2 id="the-rxswift-book">The RxSwift book</h2>
-
-<p><a href="https://store.raywenderlich.com/products/rxswift?source=underplot"><img src="http://rx-marin.com/images/RxSwift-cover.png" alt="Rxbook cover" /></a></p>
-
+<p><a href="https://store.raywenderlich.com/products/rxswift?source=underplot"><img src="http://rx-marin.com/images/RxSwift-cover.png" alt="Rxbook cover"></a></p>
 <h3 id="the-book-concept">The book concept</h3>
-
 <p>The big idea behind this book is to start from the basics and explain how the foundational APIs work and can be used, therefore eliminating any &ldquo;<em>magic</em>&rdquo; behind using RxSwift.</p>
-
 <p>We tackle introducing the RxSwift concepts by alterating between theory chapters and practice chapters:</p>
-
 <ul>
-<li><p><strong>theory chapters</strong> introduce new APIs and operators and guide the readers through trying out code in an Xcode playground. This way the reader has the context to play with simple code and understand how things really work.</p></li>
-
-<li><p><strong>practice chapters</strong> feature a starter project and guide the reader through adding RxSwift code in key places to Rx-ify the project, and excercise the newly learned skills in the relevant theory chapter.</p></li>
+<li>
+<p><strong>theory chapters</strong> introduce new APIs and operators and guide the readers through trying out code in an Xcode playground. This way the reader has the context to play with simple code and understand how things really work.</p>
+</li>
+<li>
+<p><strong>practice chapters</strong> feature a starter project and guide the reader through adding RxSwift code in key places to Rx-ify the project, and excercise the newly learned skills in the relevant theory chapter.</p>
+</li>
 </ul>
-
 <p>Once we cover the basics like observables, subjects, and operators, the book moves onto more advanced topics like error handling, testing, RxCocoa, and creating custom reactive extensions.</p>
-
 <p>The last section of the book walks the readers through two complete apps discussing app architecture (there is a separate chapter covering MVVM), app services, project navigation, and more.</p>
-
 <h3 id="table-of-contents">Table of contents</h3>
-
 <p>The book is divided into six sections. Here’s a brief overview:</p>
-
 <h4 id="section-i-getting-started-with-rxswift">Section I: Getting Started with RxSwift</h4>
-
 <p>The first section of the book covers RxSwift basics. Don’t skip this section, as you will be required to have a good understanding of how and why things work in the following sections.</p>
-
 <h4 id="section-ii-operators-and-best-practices">Section II: Operators and Best Practices</h4>
-
 <p>In this section, once you&rsquo;ve mastered the basics, you will move on to building more complex Rx code by using operators. Operators allow you to chain and compose little pieces of functionality to build up complex logic.</p>
-
 <h4 id="section-iii-ios-apps-with-rxcocoa">Section III: iOS Apps with RxCocoa</h4>
-
 <p>Once you&rsquo;ve mastered RxSwift&rsquo;s basics and know how to use operators, you will move on to iOS specific APIs, which will allow you to use and integrate your RxSwift code with the existing iOS classes and UI controls.</p>
-
-<h4 id="section-iv-intermediate-rxswift-rxcocoa">Section IV: Intermediate RxSwift/RxCocoa</h4>
-
+<h4 id="section-iv-intermediate-rxswiftrxcocoa">Section IV: Intermediate RxSwift/RxCocoa</h4>
 <p>In this section, you will look into more topics like building an error handling strategy for your app, handling your networking needs the reactive way, writing Rx tests, and more.</p>
-
 <h4 id="section-v-rxswift-community-cookbook">Section V: RxSwift Community Cookbook</h4>
-
 <p>Many of the available RxSwift based libraries are created and maintained by the community – by people just like you. In this section, we&rsquo;ll look into a few of these projects and how you can use them in your own apps.</p>
-
 <h4 id="section-vi-putting-it-all-together">Section VI: Putting it All Together</h4>
-
 <p>This part of the book deals with app architecture and strategies for building production-quality, full-blown iOS applications. You will learn how to structure your project and explore a couple of different approaches to designing your data streams and project navigation.</p>
-
-<h2 id="what-s-included">What&rsquo;s included?</h2>
-
+<h2 id="whats-included">What&rsquo;s included?</h2>
 <p>You will get to experiment in Playgrounds but also build a number of projects throughout the book:</p>
-
-<p><img src="http://rx-marin.com/images/rxbook-apps-1.png" alt="RxSwift book projects" /></p>
-
+<p><img src="http://rx-marin.com/images/rxbook-apps-1.png" alt="RxSwift book projects"></p>
 <p>Like <em>any</em> raywenderlich.com book you can purchase either a <strong>PDF</strong> or a <strong>print</strong> version. Both come with full project source code, split in:</p>
-
 <ul>
 <li>starter projects - your starting point for each chapter.</li>
 <li>final projects - the completed chapter projects as you have them at the end of each chapter.</li>
 <li>challenge projects - the final + some extra excercises you are supposed to complete on your own.</li>
 </ul>
-
 <p>Like any other digital raywenderlich.com book - you get <strong>ANY</strong> further editions of the book <strong>for free</strong>. Thanks for supporting us!</p>
-
 <p>Finally, of course you can use the code in any of your projects!</p>
-
 <p>Thanks again for considering our book and spreading the word about it - we worked very hard on putting this together and it&rsquo;s a product of love, which we hope will be helpful to many who start developing with RxSwift.</p>
-
 <h2 id="where-to-buy">Where to buy?</h2>
-
 <p>The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc. Or of course you can order a print copy for your office bookshelf!</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -404,13 +375,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -460,7 +424,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

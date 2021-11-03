@@ -14,7 +14,7 @@
 <meta name="description" content="Create observable timer based sequence and how to manually dispose a bag">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Manually disposing a bag and creating a timer" />
 <meta property="og:description" content="Create observable timer based sequence and how to manually dispose a bag" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -223,6 +227,28 @@
 
 		
 			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents"></nav>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
+					</a>
+				</div>
+
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
+					</a>
+					</div>
+		    </div>
+		    
 	    
   		<section class="post">
             <h1 class="post-title">
@@ -266,69 +292,64 @@
 Tweet</a><p>
 
             <p>I was reading through the <a href="https://github.com/ReactiveX/RxSwift/tree/master/Documentation">RxSwift docs</a> and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&rsquo;s not a bad idea to share it online.</p>
-
 <p>So <code>DisposeBag</code> kind of <code>retains</code> all your observables that&rsquo;s why you add them to a bag all the time when you create them. You probably never get to dispose them manually since the moment the bag gets disposed it also disposes all your observables (magic!).</p>
-
 <p>To test disposing I wrote this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">UIKit</span>
 
-<pre><code class="language-swift">import UIKit
-
-import RxSwift
-import RxCocoa
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxSwift</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxCocoa</span>
 
 
-class ViewController: UIViewController {
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ViewController</span>: UIViewController {
 
-    var bag: DisposeBag! = DisposeBag()
-    var sig: Observable&lt;Int&gt;!
+    <span style="color:#66d9ef">var</span> bag: DisposeBag! = DisposeBag()
+    <span style="color:#66d9ef">var</span> sig: Observable&lt;Int&gt;<span style="color:#f92672">!</span>
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">viewDidLoad</span>() {
+        <span style="color:#66d9ef">super</span>.viewDidLoad()
 
-        sig = Observable&lt;Int&gt;.interval(1.0, scheduler: MainScheduler.instance)
+        sig = Observable&lt;Int&gt;.interval(<span style="color:#ae81ff">1.0</span>, scheduler: MainScheduler.instance)
         
-        sig.map({num in
-            num * 10
-        }).subscribeNext({num in
+        sig.map({num <span style="color:#66d9ef">in</span>
+            num <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>
+        }).subscribeNext({num <span style="color:#66d9ef">in</span>
             print(num)
         }).addDisposableTo(bag)
         
         
-        let tap = UITapGestureRecognizer(target: self, action: &quot;didTap&quot;)
+        <span style="color:#66d9ef">let</span> tap = UITapGestureRecognizer(target: <span style="color:#66d9ef">self</span>, action: <span style="color:#e6db74">&#34;didTap&#34;</span>)
         view.addGestureRecognizer(tap)
     }
 
-    func didTap() {
-        bag = nil
+    <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">didTap</span>() {
+        bag = <span style="color:#66d9ef">nil</span>
     }
     
 }
-</code></pre>
-
-<p><code>Observable&lt;Int&gt;.interval(:scheduler:)</code> creates a sequence that emits each time the timer fires - in the case of the example above each second the observable emits the next integer number.</p>
-
+</code></pre></div><p><code>Observable&lt;Int&gt;.interval(:scheduler:)</code> creates a sequence that emits each time the timer fires - in the case of the example above each second the observable emits the next integer number.</p>
 <p>I map the value and finally in <code>subscribeNext()</code> I print to the console:</p>
-
-<pre><code>0
+<pre tabindex="0"><code>0
 10
 20
 30
 40
 etc.
-</code></pre>
-
-<p>I attached a gesture recognizer to the view controller&rsquo;s view and when the user taps on the view I destroy the bag:</p>
-
-<pre><code class="language-swift">bag = nil
-</code></pre>
-
-<p>If you give the code a try you will see that when you tap the view the observable stops emitting because the original bag get destroyed and it automatically disposes of all observables added to it.</p>
-
+</code></pre><p>I attached a gesture recognizer to the view controller&rsquo;s view and when the user taps on the view I destroy the bag:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">bag = <span style="color:#66d9ef">nil</span>
+</code></pre></div><p>If you give the code a try you will see that when you tap the view the observable stops emitting because the original bag get destroyed and it automatically disposes of all observables added to it.</p>
 <p>Very nice and handy when you need to be sure when a resource is deallocated. Further - how cool is that you can create a timer by simply doing <code>Observable&lt;Int&gt;.interval(:scheduler:)</code>?</p>
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -338,13 +359,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -383,7 +397,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

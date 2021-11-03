@@ -14,7 +14,7 @@
 <meta name="description" content="Modelling unidirectinonal data flow with RxSwift and RxRealm.">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="(dotSwift) Unidirectional data flow with RxSwift and RxRealm" />
 <meta property="og:description" content="Modelling unidirectinonal data flow with RxSwift and RxRealm." />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,32 +230,32 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#modelling-unidirectional-data-flow-with-rxrealm">Modelling unidirectional data flow with RxRealm</a>
-<ul>
-<li><a href="#why-i-chose-this-example">Why I chose this example?</a></li>
-<li><a href="#the-sample-code">The sample code</a>
-<ul>
-<li><a href="#1-converting-and-storing-json">1. Converting and storing JSON</a></li>
-<li><a href="#2-binding-objects-from-disk-to-ui">2. Binding objects from disk to UI</a></li>
-</ul></li>
-<li><a href="#the-complete-example">The complete example</a></li>
-<li><a href="#discussion">Discussion</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#modelling-unidirectional-data-flow-with-rxrealm">Modelling unidirectional data flow with RxRealm</a>
+      <ul>
+        <li><a href="#why-i-chose-this-example">Why I chose this example?</a></li>
+        <li><a href="#the-sample-code">The sample code</a></li>
+        <li><a href="#the-complete-example">The complete example</a></li>
+        <li><a href="#discussion">Discussion</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -298,151 +302,102 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.</p>
-
+            <p>In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.</p>
 <p>I already posted a write up on the GitHub API search example here: <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">http://rx-marin.com/post/dotswift-search-github-json-api/</a>.</p>
-
 <p>The second post in the series, the one about presenting view controllers, is online here: <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">http://rx-marin.com/post/dotswift-rxswift-view-controller/</a>.</p>
-
 <p>Let&rsquo;s continue with example number three.</p>
-
 <h2 id="modelling-unidirectional-data-flow-with-rxrealm">Modelling unidirectional data flow with RxRealm</h2>
-
 <p>RxSwift doesn&rsquo;t neccessarily force you into one architecture or another, but it really helps you keep flows of data separte. For example, one class working on a background thread will fetch data from a network API and save it to disk, another class will read from disk and bind the UI on screen.</p>
-
 <p>The two are completely separate and shouldn&rsquo;t intermix.</p>
-
 <p>In this example I used RxRealm with an online JSON API to show how to fetch JSON, store data on disk, and display it on screen easily with RxSwift and Realm.</p>
-
 <h3 id="why-i-chose-this-example">Why I chose this example?</h3>
-
 <p>To make a point, namely that RxSwift allows you to simplify incredibly not only the code but also the logic of your app by defining clean dataflows.</p>
-
 <h3 id="the-sample-code">The sample code</h3>
-
 <p>In this post I can go into a bit more detail about the complete code than it was reasonable in the talk at the conference. Still keep in mind this was written with the goal to fit in a single slide, so corners were cut big time :)</p>
-
 <p>The sample uses both RxRealm and RxRealmDataSources (which is a simplified data source library to use with realm).</p>
-
 <p>The completed project shows a table view, which updates any time new objects are added in the background. The table view displays a list of mocked repository activity items, like so:</p>
-
-<p><img src="http://rx-marin.com/images/unidirectional-completed.png" alt="completed unidirectional dataflow project" /></p>
-
+<p><img src="http://rx-marin.com/images/unidirectional-completed.png" alt="completed unidirectional dataflow project"></p>
 <p>In the simple example included in the talk, all code is added in the view controller but of course in real-life this could be split across different classes, frameworks, etc.</p>
-
 <p>The example defines two data flows:</p>
-
 <ol>
 <li>JSON from API, being converted to objects and stored on disk.</li>
 <li>Objects loaded from disk and bound to a UI table.</li>
 </ol>
-
 <h4 id="1-converting-and-storing-json">1. Converting and storing JSON</h4>
-
 <p><code>SourceControlAPI</code> is a mocked API class, which periodically provides updates in JSON format. <code>SourceControlAPI.updates()</code> returns <code>Observable&lt;[String: Any]&gt;</code>.</p>
-
 <p>The subscription begins like so:</p>
-
-<pre><code class="language-swift">SourceControlAPI.updates()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">SourceControlAPI.updates()
   .observeOn(SerialDispatchQueueScheduler(qos: .background))
   .map(Update.fromOrEmpty)
-</code></pre>
-
-<p>Via <code>observeOn</code> I switch the processing of the JSON data to a background thread, and map all the JSON objects to <code>Update</code> realm objects. <code>fromOrEmpty</code> is a static method, which takes in a dictionary and populates a new <code>Update</code> object.</p>
-
+</code></pre></div><p>Via <code>observeOn</code> I switch the processing of the JSON data to a background thread, and map all the JSON objects to <code>Update</code> realm objects. <code>fromOrEmpty</code> is a static method, which takes in a dictionary and populates a new <code>Update</code> object.</p>
 <p>Once I have the objects, I can bind the list of newly created objects to <code>add()</code>, which will add them to the default realm file:</p>
-
-<pre><code class="language-swift">.subscribe(Realm.rx.add())
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">.subscribe(Realm.rx.add())
 .addDisposableTo(bag)
-</code></pre>
-
-<p>The data flow is simple and linear:</p>
-
-<pre><code>API -&gt; JSON -&gt; [Update] -&gt; Realm
-</code></pre>
-
-<p>This happens on a background thread and perisist the data for possible offline use.</p>
-
+</code></pre></div><p>The data flow is simple and linear:</p>
+<pre tabindex="0"><code>API -&gt; JSON -&gt; [Update] -&gt; Realm
+</code></pre><p>This happens on a background thread and perisist the data for possible offline use.</p>
 <p>Now let&rsquo;s move on to &hellip;</p>
-
 <h4 id="2-binding-objects-from-disk-to-ui">2. Binding objects from disk to UI</h4>
-
 <p>This one is even easier thanks to a simple helper library called RxRealmDataSources, which helps binding a Realm collection to a table or collection view on screen.</p>
-
 <p>Let&rsquo;s start by defining a data source object:</p>
-
-<pre><code class="language-swift">let dataSource = RxTableViewRealmDataSource&lt;Update&gt;(cellIdentifier: &quot;Cell&quot;, cellType: UITableViewCell.self) {cell, ip, update in
-    cell.detailTextLabel!.text = &quot;[&quot; + update.ago + &quot;] &quot; + update.name + &quot; &quot; + update.action
-    cell.textLabel?.text = &quot;Repo: &quot; + update.repo
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> dataSource = RxTableViewRealmDataSource&lt;Update&gt;(cellIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>, cellType: UITableViewCell.<span style="color:#66d9ef">self</span>) {cell, ip, update <span style="color:#66d9ef">in</span>
+    cell.detailTextLabel!.text = <span style="color:#e6db74">&#34;[&#34;</span> <span style="color:#f92672">+</span> update.ago <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;] &#34;</span> <span style="color:#f92672">+</span> update.name <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> update.action
+    cell.textLabel?.text = <span style="color:#e6db74">&#34;Repo: &#34;</span> <span style="color:#f92672">+</span> update.repo
 }
-dataSource.headerTitle = &quot;Source Control Activity&quot;
-</code></pre>
-
-<p>This defines a data source object for <code>Update</code> objects, which is going to be producing table cells with identifier &ldquo;Cell&rdquo;. It also features a closure to configure each of the cells before it&rsquo;s being used on screen.</p>
-
+dataSource.headerTitle = <span style="color:#e6db74">&#34;Source Control Activity&#34;</span>
+</code></pre></div><p>This defines a data source object for <code>Update</code> objects, which is going to be producing table cells with identifier &ldquo;Cell&rdquo;. It also features a closure to configure each of the cells before it&rsquo;s being used on screen.</p>
 <p>Secondly, let&rsquo;s create the Realm collection to bind:</p>
-
-<pre><code class="language-swift">let realm = try! Realm()
-let updates = realm
-  .objects(Update.self)
-  .sorted(byKeyPath: &quot;date&quot;, ascending: false)
-</code></pre>
-
-<p><code>updates</code> gives access to all <code>Update</code> objects sorted in descending order by their date property.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> realm = <span style="color:#66d9ef">try</span>! Realm()
+<span style="color:#66d9ef">let</span> updates = realm
+  .objects(Update.<span style="color:#66d9ef">self</span>)
+  .sorted(byKeyPath: <span style="color:#e6db74">&#34;date&#34;</span>, ascending: <span style="color:#66d9ef">false</span>)
+</code></pre></div><p><code>updates</code> gives access to all <code>Update</code> objects sorted in descending order by their date property.</p>
 <p>Finally binding the updates to the table view, using the data source is a matter of:</p>
-
-<pre><code class="language-swift">Observable.changeset(from: updates)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">Observable.changeset(from: updates)
   .bindTo(tableView.rx.realmChanges(dataSource))
   .addDisposableTo(bag)
-</code></pre>
-
-<p>This lets RxRealmDataSources piece everything together and drive the UI:</p>
-
-<p><img src="http://rx-marin.com/images/unidirectional-animation.gif" alt="table animation" /></p>
-
+</code></pre></div><p>This lets RxRealmDataSources piece everything together and drive the UI:</p>
+<p><img src="http://rx-marin.com/images/unidirectional-animation.gif" alt="table animation"></p>
 <h3 id="the-complete-example">The complete example</h3>
-
-<pre><code class="language-swift">// 1. store data
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#75715e">// 1. store data</span>
 SourceControlAPI.updates()
     .observeOn(SerialDispatchQueueScheduler(qos: .background))
     .map(Update.fromOrEmpty)
     .subscribe(Realm.rx.add())
     .addDisposableTo(bag)
 
-// 2. display data
-let dataSource = RxTableViewRealmDataSource&lt;Update&gt;(cellIdentifier: &quot;Cell&quot;, cellType: UITableViewCell.self) {cell, ip, update in
-    cell.detailTextLabel!.text = &quot;[&quot; + update.ago + &quot;] &quot; + update.name + &quot; &quot; + update.action
-    cell.textLabel?.text = &quot;Repo: &quot; + update.repo
+<span style="color:#75715e">// 2. display data</span>
+<span style="color:#66d9ef">let</span> dataSource = RxTableViewRealmDataSource&lt;Update&gt;(cellIdentifier: <span style="color:#e6db74">&#34;Cell&#34;</span>, cellType: UITableViewCell.<span style="color:#66d9ef">self</span>) {cell, ip, update <span style="color:#66d9ef">in</span>
+    cell.detailTextLabel!.text = <span style="color:#e6db74">&#34;[&#34;</span> <span style="color:#f92672">+</span> update.ago <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;] &#34;</span> <span style="color:#f92672">+</span> update.name <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> update.action
+    cell.textLabel?.text = <span style="color:#e6db74">&#34;Repo: &#34;</span> <span style="color:#f92672">+</span> update.repo
 }
-dataSource.headerTitle = &quot;Source Control Activity&quot;
+dataSource.headerTitle = <span style="color:#e6db74">&#34;Source Control Activity&#34;</span>
 
-let realm = try! Realm()
-let updates = realm.objects(Update.self).sorted(byKeyPath: &quot;date&quot;, ascending: false)
+<span style="color:#66d9ef">let</span> realm = <span style="color:#66d9ef">try</span>! Realm()
+<span style="color:#66d9ef">let</span> updates = realm.objects(Update.<span style="color:#66d9ef">self</span>).sorted(byKeyPath: <span style="color:#e6db74">&#34;date&#34;</span>, ascending: <span style="color:#66d9ef">false</span>)
 
 Observable.changeset(from: updates)
     .bindTo(tableView.rx.realmChanges(dataSource))
     .addDisposableTo(bag)
-</code></pre>
-
-<h3 id="discussion">Discussion</h3>
-
+</code></pre></div><h3 id="discussion">Discussion</h3>
 <p>In real life you never have just two data flows in your whole app. But even in this simple example you can see the benefits of being able to clearly and simply define how data flows. Even as you scale your app, the complexity of defining these type of data flows does not increase.</p>
-
 <p>Hope that was an inspirational read! You can dig into more details below&hellip;</p>
-
 <p><strong>Links</strong></p>
-
 <p>The complete demo app from my talk: <a href="https://github.com/icanzilb/RxSwiftoniOS">https://github.com/icanzilb/RxSwiftoniOS</a></p>
-
 <p>The talk slides: <a href="https://speakerdeck.com/icanzilb/rxswift-on-ios">https://speakerdeck.com/icanzilb/rxswift-on-ios</a></p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -452,13 +407,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -510,7 +458,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

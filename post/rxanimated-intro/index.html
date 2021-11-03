@@ -14,7 +14,7 @@
 <meta name="description" content="Animated bindings for RxCocoa">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Introducing RxAnimated" />
 <meta property="og:description" content="Animated bindings for RxCocoa" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,37 +230,33 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#introducing-rxanimated">Introducing RxAnimated</a>
-<ul>
-<li>
-<ul>
-<li><a href="#non-animated-binding-code">Non-animated binding code</a></li>
-<li><a href="#animated-binding-with-rxanimated">Animated binding with RxAnimated</a></li>
-</ul></li>
-<li><a href="#api-design">API design</a>
-<ul>
-<li><a href="#animations-are-constrained-to-the-ui-component-type">Animations are constrained to the UI component type</a></li>
-<li><a href="#you-can-add-new-binding-sinks-and-animations-via-protocols">You can add new binding sinks and animations via protocols</a></li>
-</ul></li>
-<li><a href="#what-comes-out-of-the-box">What comes out of the box?</a></li>
-<li><a href="#why-only-animated-bindings">Why only animated bindings?</a></li>
-</ul></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#introducing-rxanimated">Introducing RxAnimated</a>
+      <ul>
+        <li></li>
+        <li><a href="#api-design">API design</a></li>
+        <li><a href="#what-comes-out-of-the-box">What comes out of the box?</a></li>
+        <li><a href="#why-only-animated-bindings">Why only animated bindings?</a></li>
+      </ul>
+    </li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -303,114 +303,68 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>RxCocoa is super powerful for UI bindings - you can use <code>bind(to:)</code> to bind pretty much any kind of observable to a UI Control of your choice. You can bind a <code>String</code> to a <code>UILabel</code>, <code>UIImage</code> to a <code>UIImageView</code>, or an array of objects to <code>UITableView</code> or <code>UICollectionView</code>.</p>
-
+            <p>RxCocoa is super powerful for UI bindings - you can use <code>bind(to:)</code> to bind pretty much any kind of observable to a UI Control of your choice. You can bind a <code>String</code> to a <code>UILabel</code>, <code>UIImage</code> to a <code>UIImageView</code>, or an array of objects to <code>UITableView</code> or <code>UICollectionView</code>.</p>
 <p>Now, for table and collection view bindings there is a special library to allow you to bind a list of objects called <code>RxDataSources</code> and besides all the other goodness the library can add animations to your bindings.</p>
-
 <p>And by god it makes all the difference in the world&hellip; So, I had the idea to bring the possibility to animate bindings also to other controls besides table and collection views for a while, but just recently found the time to look in more detail in implementing something re-usable.</p>
-
 <h2 id="introducing-rxanimated">Introducing RxAnimated</h2>
-
 <p>RxAnimated is a newly released library for RxSwift/RxCocoa, which allows you to:</p>
-
 <ul>
 <li>add simple pre-built transitions to your bindings, like fade and flip</li>
 <li>add arbitrary block-based animations to your transitions</li>
 <li>extend RxAnimated to support new bindings sinks in your own classes</li>
 <li>extend RxAnimated to support new your own custom animations</li>
 </ul>
-
 <p>In this post I&rsquo;m going to show how to get started with RxAnimated. In short the goal of the library is to slightly change existing binding code so that instead of instant changes it adds animations to the UI.</p>
-
 <h4 id="non-animated-binding-code">Non-animated binding code</h4>
-
 <p>To bind an observable to a label in your UI you would usually do something like this:</p>
-
-<pre><code class="language-swift">import RxCocoa
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxCocoa</span>
 ...
 counterObservable
   .bind(to: label.rx.text)
-</code></pre>
-
-<p>The binding results in instant changes in the UI like so:</p>
-
-<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-noanim.gif" alt="" /></p>
-
+</code></pre></div><p>The binding results in instant changes in the UI like so:</p>
+<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-noanim.gif" alt=""></p>
 <h4 id="animated-binding-with-rxanimated">Animated binding with RxAnimated</h4>
-
 <p>To add a simple flip transition to the same binding you need to import RxAnimated and change a bit the code like so:</p>
-
-<pre><code class="language-swift">import RxCocoa
-import RxAnimated
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxCocoa</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxAnimated</span>
 ...
 counterObservable
-  .bind(animated: label.rx.animated.flip(.top, duration: 0.33).text)
-</code></pre>
-
-<p>I struggled to create a very idiomatic API (and had some very fruitful discussions in the RxSwift slack) so you can with as little change add animations. You basically take the existing binding sink and insert the type of transition you want:</p>
-
-<p><img src="http://rx-marin.com/images/rxanimated1.png" alt="" /></p>
-
+  .bind(animated: label.rx.animated.flip(.top, duration: <span style="color:#ae81ff">0.33</span>).text)
+</code></pre></div><p>I struggled to create a very idiomatic API (and had some very fruitful discussions in the RxSwift slack) so you can with as little change add animations. You basically take the existing binding sink and insert the type of transition you want:</p>
+<p><img src="http://rx-marin.com/images/rxanimated1.png" alt=""></p>
 <p>With this change the binding triggers the transition each time it needs to produce side effects (e.g. in that case update the text of the label):</p>
-
-<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-anim.gif" alt="" /></p>
-
+<p><img src="https://raw.githubusercontent.com/RxSwiftCommunity/RxAnimated/master/etc/label-anim.gif" alt=""></p>
 <h3 id="api-design">API design</h3>
-
 <p>The API is designed to be very flexible and I&rsquo;m going to highlight just few points here:</p>
-
 <h4 id="animations-are-constrained-to-the-ui-component-type">Animations are constrained to the UI component type</h4>
-
 <p>The build-in animations like fade and flip are constrained to <code>UIView</code> so you can use them on all views. If we look at the previous example:</p>
-
-<pre><code class="language-swift">counterObservable
-  .bind(animated: label.rx.animated.flip(.top, duration: 0.33).text)
-</code></pre>
-
-<p>You would add the same animation in the same way to an image view:</p>
-
-<pre><code class="language-swift">imagesObservable
-  .bind(animated: imageView.rx.animated.flip(.top, duration: 0.33).image)
-</code></pre>
-
-<p>This will produce the same animation any time a new image is emitted by the observable:</p>
-
-<p><img src="http://rx-marin.com/images/rxanimated2.gif" alt="" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">counterObservable
+  .bind(animated: label.rx.animated.flip(.top, duration: <span style="color:#ae81ff">0.33</span>).text)
+</code></pre></div><p>You would add the same animation in the same way to an image view:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">imagesObservable
+  .bind(animated: imageView.rx.animated.flip(.top, duration: <span style="color:#ae81ff">0.33</span>).image)
+</code></pre></div><p>This will produce the same animation any time a new image is emitted by the observable:</p>
+<p><img src="http://rx-marin.com/images/rxanimated2.gif" alt=""></p>
 <p>The binding type or the observable type does not restrict the animation you apply.</p>
-
 <p>If you do want however to create your own animation and restrict it only to <code>UILabel</code> and its sub-classes you can do that and the API will not make it available for bindings to any other types.</p>
-
 <h4 id="you-can-add-new-binding-sinks-and-animations-via-protocols">You can add new binding sinks and animations via protocols</h4>
-
 <p>RxAnimated includes a list of bindings you can use out of the box but what if you have a custom view with its custom properties, which you bind to and want to animate?</p>
-
 <p>Let&rsquo;s look at the implementation of <code>UIView.rx.animated ... isHidden</code>:</p>
-
-<pre><code class="language-swift">extension AnimatedSink where Base: UIView {
-    public var isHidden: Binder&lt;Bool&gt; {
-        return Binder(self.base) { view, hidden in
-            self.type.animate(view: view, binding: {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">AnimatedSink</span> <span style="color:#66d9ef">where</span> Base: UIView {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> isHidden: Binder&lt;Bool&gt; {
+        <span style="color:#66d9ef">return</span> Binder(<span style="color:#66d9ef">self</span>.base) { view, hidden <span style="color:#66d9ef">in</span>
+            <span style="color:#66d9ef">self</span>.type.animate(view: view, binding: {
                 view.isHidden = hidden
             })
         }
     }
 }
-</code></pre>
-
-<p><code>AnimatedSink</code> is the type, which adds the <code>rx.animated</code> namespace to UI components. You extend it and make sure to set the <code>Base</code> to your target type. Then you add a property for your binding sink (above that&rsquo;s <code>isHidden</code>), which creates a new <code>Binder</code> instance. Inside the <code>Binder</code>s closure parameter you call <code>self.type.animate(...)</code> to create an animation.</p>
-
+</code></pre></div><p><code>AnimatedSink</code> is the type, which adds the <code>rx.animated</code> namespace to UI components. You extend it and make sure to set the <code>Base</code> to your target type. Then you add a property for your binding sink (above that&rsquo;s <code>isHidden</code>), which creates a new <code>Binder</code> instance. Inside the <code>Binder</code>s closure parameter you call <code>self.type.animate(...)</code> to create an animation.</p>
 <p>Finally inside the closure you do the UI updates you want to have animated. In the example above that&rsquo;s simply setting <code>view.isHidden</code> to a new value but it can be anything you want - you can transform the view, update properties, etc.</p>
-
 <p>You can add new custom animations in a similar fashion, just have a look at the code.</p>
-
 <h3 id="what-comes-out-of-the-box">What comes out of the box?</h3>
-
 <p>Here&rsquo;s a list of the built-in animated sinks:</p>
-
-<pre><code class="language-swift">UIView
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">UIView
   .rx.animated...isHidden
   .rx.animated...alpha
 
@@ -432,11 +386,8 @@ UIImageView.rx.animated...image
 NSLayoutConstraint
   .rx.animated...constant
   .rx.animated...isActive
-</code></pre>
-
-<p>List of the built-in animations:</p>
-
-<pre><code class="language-swift">UIView
+</code></pre></div><p>List of the built-in animations:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">UIView
   .rx.animated.fade(duration: TimeInterval)
   .rx.animated.flip(FlipDirection, duration: TimeInterval)
   .rx.animated.tick(FlipDirection, duration: TimeInterval)
@@ -444,28 +395,27 @@ NSLayoutConstraint
 
 NSLayoutConstraint
   .rx.animated.layout(duration: TimeInterval)
-</code></pre>
-
-<h3 id="why-only-animated-bindings">Why only animated bindings?</h3>
-
+</code></pre></div><h3 id="why-only-animated-bindings">Why only animated bindings?</h3>
 <p>Maybe some of you will ask &ldquo;What if I want to create an arbitrary animation when my observable emits a value?&rdquo; Well the good news is - you can! In <code>observe(onNext: {...})</code> is the place to perform any side effects your heart desires, including animations. For the moment I don&rsquo;t see big benefit (or a clear way to) create some animation API, which will add value to creating animations via <code>observe(onNext:..)</code>.</p>
-
 <p>Bindings on the other hand are a useful feature, which benefits of simple transition animations and I think RxAnimated adds a lot of value there.</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p><strong>RxAnimated</strong> is available for free on GitHub: <a href="https://github.com/RxSwiftCommunity/RxAnimated">https://github.com/RxSwiftCommunity/RxAnimated</a> and can be installed via CocoaPods like so <code>pod &quot;RxAnimated&quot;</code>. It supports RxSwift4+ and I&rsquo;d appreciate if you have any feedback regarding the library. As always you can reach me at <a href="https://twitter.com/icanzilb">@icanzilb</a>.</p>
-
 <p>The best way to get started is to check the code in the repo example app which demoes various types of bindings and animations:</p>
-
-<p><img src="http://rx-marin.com/images/rxanimated3.gif" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/rxanimated3.gif" alt=""></p>
 <p>To learn more about creating RxCocoa bindings and RxSwift in general check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -475,13 +425,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -533,7 +476,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

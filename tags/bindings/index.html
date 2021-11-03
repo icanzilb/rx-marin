@@ -14,7 +14,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="bindings" />
 <meta property="og:description" content="" />
@@ -101,6 +101,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -287,17 +291,11 @@ Binding to make a view visible I noticed there is a binding on the hidden proper
             </p>
             <article class="post-summary">
             	<p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
-
 <p>Well this week I am implementing exactly this functionality.</p>
-
 <p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
-
 <p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
-
-<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt=""></p>
 <p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
-
 <p>Now let&rsquo;s put all those buttons to work!</p>
             </article>
 			<div class="read-more-link">
@@ -317,7 +315,7 @@ Binding to make a view visible I noticed there is a binding on the hidden proper
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

@@ -14,7 +14,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Posts" />
 <meta property="og:description" content="" />
@@ -101,6 +101,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -223,6 +227,37 @@
             <header class="post-header">
             
             <h1 class="post-title">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">Announcing: “Modern Concurrency in Swift”</a>
+            </h1>
+            </header>
+            <p class="post-meta">
+            	
+		          <span class="post-date">
+		            <span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2021</span>
+		          </span>
+      				
+      				
+      					By <a class="post-author" >Marin Todorov</a>
+      				
+              
+                <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+              
+      				
+            </p>
+            <article class="post-summary">
+            	I&rsquo;m incredibly happy to share that today the new raywenderlich.com book &ldquo;Modern Concurrency in Swift&rdquo;, that I&rsquo;ve been working on, is available at www.swiftconcurrencybook.com!
+Together with editors Sandra Grauschopf, Felipe Laso-Marsetti, Richard Turton, and Shai Mishali, we&rsquo;ve been working very hard to get a book out as soon as possible on the newly released in 2021 Swift Concurrency:
+The book is written in the classic raywenderlich.com style that mixes key pieces of theory with step-by-step instructions, guiding the readers through working on practical, real-life projects.
+            </article>
+			<div class="read-more-link">
+				<a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/"><span class="read-more-slashes">//</span>Read More...</a>
+			</div>
+          </section>
+        
+          <section  class="post">
+            <header class="post-header">
+            
+            <h1 class="post-title">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">Binding to a table view with multiple cells and sections</a>
             </h1>
             </header>
@@ -328,6 +363,7 @@ When to use RxBlocking vs. RxTest? RxTest is a great library for testing RxSwift
             	Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.
 In this blog post I&rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&rsquo;ll go over a bunch of real-life examples from open source I&rsquo;ve written.
 Testing with RxTest  pod RxTest to install it to your test suite from https://github.com/ReactiveX/RxSwift/tree/master/RxTest
+ I&rsquo;ve already written in the past about RxTest and few people have thanked me personally for shading some light on its usage, so if you&rsquo;re interested head to the original article and read through: Testing your RxSwift code, part1.
             </article>
 			<div class="read-more-link">
 				<a href="http://rx-marin.com/post/rxblocking-part1/"><span class="read-more-slashes">//</span>Read More...</a>
@@ -1078,17 +1114,11 @@ Same thing happened with me last week - for the first time I felt like I&rsquo;m
             </p>
             <article class="post-summary">
             	<p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
-
 <p>Well this week I am implementing exactly this functionality.</p>
-
 <p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
-
 <p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
-
-<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt=""></p>
 <p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
-
 <p>Now let&rsquo;s put all those buttons to work!</p>
             </article>
 			<div class="read-more-link">
@@ -1126,27 +1156,17 @@ Same thing happened with me last week - for the first time I felt like I&rsquo;m
             </p>
             <article class="post-summary">
             	<p>I was browsing through <a href="http://rxmarbles.com/">RxMarbles</a> and was totally baffled by the <code>sample</code> function. The marble diagram looks pretty random at first sight:</p>
-
-<p><img src="http://rx-marin.com/images/marbles-sample.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/marbles-sample.png" alt=""></p>
 <p>At first I thought - &ldquo;Hey, that second sequence is getting totally ignored!&rdquo;. But after I read the description I figured it out:</p>
-
 <blockquote>
 <p>The first sequence&rsquo;s elements is <strong>what</strong> <code>sample</code> emits, while the second sequence&rsquo;s elements determine <strong>when</strong> <code>sample</code> emits. So in a way yes - the actual values A, B, C, D do get totally ignored.</p>
 </blockquote>
-
 <p>When it was clear to me what <code>sample</code> does I started wondering if this function has any practical application :]</p>
-
 <p>This brought me to creating a split lap timer app to test what <code>sample</code> can do for me. In the finished project I have a timer emitting time values (aka the first sequence) and I want to grab (or sample) the values whenever the user taps a button (aka the second sequence).</p>
-
 <p>Here&rsquo;s how the marble diagram looks like for the app setup:</p>
-
-<p><img src="http://rx-marin.com/images/sample-dia.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/sample-dia.png" alt=""></p>
 <p>And this is how the app looks like when finished:</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-finished.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/laptimer-finished.png" alt=""></p>
 <p>Let&rsquo;s build that app :]</p>
             </article>
 			<div class="read-more-link">
@@ -1202,7 +1222,7 @@ Same thing happened with me last week - for the first time I felt like I&rsquo;m
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

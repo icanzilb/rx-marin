@@ -14,7 +14,7 @@
 <meta name="description" content="Common misconception about Rx is that you cannot have state - well you can and it&#39;s pretty easy with the scan operator">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Implementing state with scan in RxSwift" />
 <meta property="og:description" content="Common misconception about Rx is that you cannot have state - well you can and it&#39;s pretty easy with the scan operator" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,27 +230,30 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#creating-a-boolean-switch">Creating a boolean switch</a></li>
-<li><a href="#creating-a-counter">Creating a counter</a></li>
-<li><a href="#geting-the-last-n-values">Geting the last N values</a></li>
-<li><a href="#using-enums-for-state">Using enums for state</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#creating-a-boolean-switch">Creating a boolean switch</a></li>
+    <li><a href="#creating-a-counter">Creating a counter</a></li>
+    <li><a href="#geting-the-last-n-values">Geting the last N values</a></li>
+    <li><a href="#using-enums-for-state">Using enums for state</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -293,204 +300,147 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<h2 id="intro">Intro</h2>
-
+            <h2 id="intro">Intro</h2>
 <p>Common misconception is that you cannot have state with Rx. Well you can - and there&rsquo;s a special operator that helps you to: <code>scan</code>.</p>
-
 <p>If you&rsquo;ve ever used <code>reduce</code> in Swift - scan is a very similar operator but <code>reduce</code> goes over the complete sequence and gives you the final value of the accumulator while <code>scan</code> emits each intermediate value as well.</p>
-
 <p>If you haven&rsquo;t used <code>reduce</code> - no worries you&rsquo;ll get to understand <code>scan</code> from the examples below. Let&rsquo;s get started!</p>
-
 <h2 id="creating-a-boolean-switch">Creating a boolean switch</h2>
-
 <p>When you have to deal with UI you inevitably have to deal with state. Imagine a button that toggles between selected and deselected state as the user taps it repeatedly. One tap - the button is selected, another tap - it&rsquo;s not, a third taps selects it again, etc.</p>
-
 <p><code>UIButton.rx_tap</code> always emits the same value of <code>Void</code> so it doesn&rsquo;t provide you with any information to decide whether to select or deselect the button. Enter <code>scan</code>&hellip;</p>
-
 <p><code>scan</code> takes two parameters:</p>
-
 <ul>
 <li>initial value - you can think of it as the first value of your state</li>
 <li>closure(lastState, newValue) - <code>scan</code> runs that closure each time it gets a new value - it calls it with two parameters: the last state you had and the value that was just emitted.</li>
 </ul>
-
 <p>You might wander what the state is? Anything you want it to be (I know&hellip; clichés) - it can be a <code>Bool</code>, <code>String</code>, an <code>Array</code> anything you need for your code. Let&rsquo;s look at the first example to make everything click together.</p>
-
 <p>I had to make button get selected/deselected as described earlier so I used <code>scan</code> in the following way:</p>
-
-<pre><code class="language-swift">myButton.rx_tap.scan(false) { lastState, newValue in
-    return !lastState
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">myButton.rx_tap.scan(<span style="color:#66d9ef">false</span>) { lastState, newValue <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>lastState
 }
-.subscribeNext {value in
-    print(&quot;tap: \(value)&quot;)
+.subscribeNext {value <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;tap: </span><span style="color:#e6db74">\(</span>value<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
 }
-</code></pre>
-
-<p>First of all consider how the <code>scan</code> above transforms the data stream. It starts with <code>Void</code> values emitted by <code>rx_tap</code> but then scan maps those to <code>Bool</code> values (determined by the type of its <code>return</code> type):</p>
-
+</code></pre></div><p>First of all consider how the <code>scan</code> above transforms the data stream. It starts with <code>Void</code> values emitted by <code>rx_tap</code> but then scan maps those to <code>Bool</code> values (determined by the type of its <code>return</code> type):</p>
 <blockquote>
 <p>(tap) &mdash;&gt; Void &mdash;&gt; (scan) &mdash;&gt; Bool &mdash;&gt; (subscribeNext)</p>
 </blockquote>
-
 <p>So scan starts with a <code>false</code> state and on each button tap it applies the closure. The first time <code>lastState = false</code> and <code>newValue = Void</code> (actually <code>newValue</code> is always <code>Void</code> so I&rsquo;ll ignore till the end of this example). You return the negation of <code>lastState</code>, which is <code>true</code>.</p>
-
 <p>The second time around <code>lastState</code> is <code>true</code> because this is what you return the first time. And your return <code>false</code>.</p>
-
 <p>Third time around <code>lastState</code> is <code>false</code> and you return <code>true</code>. Etc. etc. etc.</p>
-
 <p>The console output is:</p>
-
-<pre><code>tap: true
+<pre tabindex="0"><code>tap: true
 tap: false
 tap: true
 tap: false
 tap: true
-</code></pre>
-
-<p>So as you can see you can implement state but it&rsquo;s contained within the closure you supply to <code>scan</code>. After <code>scan</code> you get a data stream of the type your closure returns - that&rsquo;s all :)</p>
-
+</code></pre><p>So as you can see you can implement state but it&rsquo;s contained within the closure you supply to <code>scan</code>. After <code>scan</code> you get a data stream of the type your closure returns - that&rsquo;s all :)</p>
 <p>So to complete the select/deselect example you just need to bind the <code>scan</code> result to your button&rsquo;s <code>rx_selected</code> sink like so:</p>
-
-<pre><code class="language-swift">myButton.rx_tap.scan(false) { lastState, newValue in
-    return !lastState
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">myButton.rx_tap.scan(<span style="color:#66d9ef">false</span>) { lastState, newValue <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>lastState
 }
 .bindTo(myButton.rx_selected)
-</code></pre>
-
-<h2 id="creating-a-counter">Creating a counter</h2>
-
+</code></pre></div><h2 id="creating-a-counter">Creating a counter</h2>
 <p>Now let&rsquo;s get beyond alternating between <code>Bool</code> values and write a code to count how many times a button has been tapped.</p>
-
 <p>I actually had to do this few times in the last couple months so I&rsquo;ll just put in here the code:</p>
-
-<pre><code class="language-swift">myButton.rx_tap.scan(0) { lastCount, newValue in
-    return lastCount + 1
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">myButton.rx_tap.scan(<span style="color:#ae81ff">0</span>) { lastCount, newValue <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> lastCount <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
 }
-.subscribeNext {value in
-    print(&quot;taps: \(value)&quot;)
+.subscribeNext {value <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;taps: </span><span style="color:#e6db74">\(</span>value<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
 }
-</code></pre>
-
-<p>This time around the state is of type <code>Int</code> and it starts with <code>0</code>. Each time the user taps the button <code>scan</code> returns the last count plus 1. As the user taps the button the Console shows:</p>
-
-<pre><code class="language-swift">taps: 1
-taps: 2
-taps: 3
-taps: 4
-taps: 5
-</code></pre>
-
-<p>Once you grasp how the last state thing works it&rsquo;s pretty easy isn&rsquo;t it? :)</p>
-
+</code></pre></div><p>This time around the state is of type <code>Int</code> and it starts with <code>0</code>. Each time the user taps the button <code>scan</code> returns the last count plus 1. As the user taps the button the Console shows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">taps: <span style="color:#ae81ff">1</span>
+taps: <span style="color:#ae81ff">2</span>
+taps: <span style="color:#ae81ff">3</span>
+taps: <span style="color:#ae81ff">4</span>
+taps: <span style="color:#ae81ff">5</span>
+</code></pre></div><p>Once you grasp how the last state thing works it&rsquo;s pretty easy isn&rsquo;t it? :)</p>
 <h2 id="geting-the-last-n-values">Geting the last N values</h2>
-
 <p>Somebody in the RxSwift Slack asked for this and it&rsquo;s an interesting (but very simple to solve) example.</p>
-
 <p>How to get the last N elements from an Observable?</p>
-
 <p>For example if you have a sequence of <code>Int</code> values: <code>[0, 1, 2, 3, 4, 5, 6]</code> how to have the last 3 each time a new value is emitted?</p>
-
 <p>Well, this smells like having a state since you need to &ldquo;<em>remember</em>&rdquo; values. So it must be solvable with <code>scan</code>.</p>
-
 <p>Obviously the first time the sequence emits you don&rsquo;t have any previous values so the initial state to give to <code>scan</code> is an empty array <code>[]</code>. Let&rsquo;s have a look at the complete code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> numbers = [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span> , <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>].toObservable()
 
-<pre><code class="language-swift">let numbers = [0, 1, 2 , 3, 4, 5, 6].toObservable()
-
-numbers.scan([]) { lastSlice, newValue in
-    return Array(lastSlice + [newValue]).suffix(3)
+numbers.scan([]) { lastSlice, newValue <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> Array(lastSlice <span style="color:#f92672">+</span> [newValue]).suffix(<span style="color:#ae81ff">3</span>)
 }
-.subscribeNext {value in
-    print(&quot;last 3: \(value)&quot;)
+.subscribeNext {value <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;last 3: </span><span style="color:#e6db74">\(</span>value<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
 }
-</code></pre>
-
-<p>Each time <code>scan</code> adds the emitted value to the last array you had and than chops 3 elements off the end. Now the data stream looks like so:</p>
-
+</code></pre></div><p>Each time <code>scan</code> adds the emitted value to the last array you had and than chops 3 elements off the end. Now the data stream looks like so:</p>
 <blockquote>
 <p>(numbers) &mdash;&gt; Int &mdash;&gt; (scan) &mdash;&gt; [Int] &mdash;&gt; subscribeNext</p>
 </blockquote>
-
 <p>And the Console output:</p>
-
-<pre><code>last 3: [0]
+<pre tabindex="0"><code>last 3: [0]
 last 3: [0, 1]
 last 3: [0, 1, 2]
 last 3: [1, 2, 3]
 last 3: [2, 3, 4]
 last 3: [3, 4, 5]
 last 3: [4, 5, 6]
-</code></pre>
-
-<p>But didn&rsquo;t I say I wanted elements of three? Just <code>filter</code> the output of <code>scan</code> and check for the length of the emitted array and that&rsquo;s it ;)</p>
-
+</code></pre><p>But didn&rsquo;t I say I wanted elements of three? Just <code>filter</code> the output of <code>scan</code> and check for the length of the emitted array and that&rsquo;s it ;)</p>
 <h2 id="using-enums-for-state">Using enums for state</h2>
-
 <p>I didn&rsquo;t have to do any more advanced <code>scan</code> stuff yet but I can imagine all kinds of uses for it. Let&rsquo;s say you&rsquo;re building a space game.</p>
-
 <p>When you start a level in your space game your ship has to make it through an asteroid field. Therefore the longer the ship is &ldquo;alive&rdquo; the more points you get, etc.</p>
-
 <p>So you can build a timer that tracks the level time and bind the level state and the amount of points earned like so:</p>
-
-<pre><code class="language-swift">enum LevelState {
-    case Normal, PowerUp
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">LevelState</span> {
+    <span style="color:#66d9ef">case</span> Normal, PowerUp
 }
 
-let timer = Observable&lt;NSInteger&gt;.interval(0.25, scheduler: MainScheduler.instance)
+<span style="color:#66d9ef">let</span> timer = Observable&lt;NSInteger&gt;.interval(<span style="color:#ae81ff">0.25</span>, scheduler: MainScheduler.instance)
 
-timer.scan((LevelState.Normal, 0)) { lastState, _ in
+timer.scan((LevelState.Normal, <span style="color:#ae81ff">0</span>)) { lastState, <span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span>
     
-    switch lastState.0 {
-    case .Normal:
-        if lastState.1 &gt; 1000 {
-            return (.PowerUp, lastState.1 + 30)
-        } else {
-            return (.Normal, lastState.1 + 30)
+    <span style="color:#66d9ef">switch</span> lastState.<span style="color:#ae81ff">0</span> {
+    <span style="color:#66d9ef">case</span> .Normal:
+        <span style="color:#66d9ef">if</span> lastState.<span style="color:#ae81ff">1</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1000</span> {
+            <span style="color:#66d9ef">return</span> (.PowerUp, lastState.<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">30</span>)
+        } <span style="color:#66d9ef">else</span> {
+            <span style="color:#66d9ef">return</span> (.Normal, lastState.<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">30</span>)
         }
-    case .PowerUp:
-        return (.PowerUp, lastState.1 + 100)
+    <span style="color:#66d9ef">case</span> .PowerUp:
+        <span style="color:#66d9ef">return</span> (.PowerUp, lastState.<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">100</span>)
     }
 }
-.subscribeNext {_, points in
-    print(&quot;pts: \(points)&quot;)
+.subscribeNext {<span style="color:#66d9ef">_</span>, points <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;pts: </span><span style="color:#e6db74">\(</span>points<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
 }
-</code></pre>
-
-<p>You have two states in your level - normal mode and power-up. Once the player manages to survive past 1,000 points they start gaining more points much faster. To do that you have two states listed in an enum <code>LevelState</code>.</p>
-
+</code></pre></div><p>You have two states in your level - normal mode and power-up. Once the player manages to survive past 1,000 points they start gaining more points much faster. To do that you have two states listed in an enum <code>LevelState</code>.</p>
 <p>The state is a tuple of type <code>(LevelState, Int)</code> - the first element tracks the current level state, and second is the points counter.</p>
-
 <p>And this is still a pretty simple example of what is possible with <code>scan</code> and few lines of code. Woot!</p>
-
 <p>Look those numbers fly once you&rsquo;re past the <code>1,000</code> mark!</p>
-
-<pre><code class="language-swift">pts: 810
-pts: 840
-pts: 870
-pts: 900
-pts: 930
-pts: 960
-pts: 990
-pts: 1020
-pts: 1050
-pts: 1150
-pts: 1250
-pts: 1350
-</code></pre>
-
-<h2 id="conclusion">Conclusion</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">pts: <span style="color:#ae81ff">810</span>
+pts: <span style="color:#ae81ff">840</span>
+pts: <span style="color:#ae81ff">870</span>
+pts: <span style="color:#ae81ff">900</span>
+pts: <span style="color:#ae81ff">930</span>
+pts: <span style="color:#ae81ff">960</span>
+pts: <span style="color:#ae81ff">990</span>
+pts: <span style="color:#ae81ff">1020</span>
+pts: <span style="color:#ae81ff">1050</span>
+pts: <span style="color:#ae81ff">1150</span>
+pts: <span style="color:#ae81ff">1250</span>
+pts: <span style="color:#ae81ff">1350</span>
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p><code>scan</code> is simply fantastic and as I wrote in an earlier post - any time you&rsquo;re tempted to use <code>reduce</code> you probably need <code>scan</code>.</p>
-
 <p>I hope that post has been useful and if you have any operator that bums you out or can&rsquo;t figure out ping me on Twitter - I&rsquo;m also still learning but have few of those figured out pretty well :)</p>
-
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -500,13 +450,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -554,7 +497,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

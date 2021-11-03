@@ -14,7 +14,7 @@
 <meta name="description" content="The fastest way to add bindings sinks to any class">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Custom property bindings with RxSwift" />
 <meta property="og:description" content="The fastest way to add bindings sinks to any class" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,24 +230,27 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#what-are-custom-property-sinks">What are custom property sinks?</a></li>
-<li><a href="#adding-a-reactive-extension-to-swiftspinner">Adding a reactive extension to SwiftSpinner</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#what-are-custom-property-sinks">What are custom property sinks?</a></li>
+    <li><a href="#adding-a-reactive-extension-to-swiftspinner">Adding a reactive extension to SwiftSpinner</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -290,110 +297,80 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Recently, in one of the few meetups I&rsquo;ve been in person to, someone told me the didn&rsquo;t try RxSwift because somebody told them that RxSwift doesn&rsquo;t support custom views.</p>
-
+            <p>Recently, in one of the few meetups I&rsquo;ve been in person to, someone told me the didn&rsquo;t try RxSwift because somebody told them that RxSwift doesn&rsquo;t support custom views.</p>
 <p>While I&rsquo;m still baffled what that original person meant, I thought the best way to disagree is to write a short tutorial to prove them wrong.</p>
-
 <h2 id="what-are-custom-property-sinks">What are custom property sinks?</h2>
-
 <p>When you use RxCocoa bindings you can easily bind the values an observable emits to some view on screen like so:</p>
-
-<pre><code class="language-swift">myObservable
-  .map { &quot;new value is \($0)&quot; }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">myObservable
+  .map { <span style="color:#e6db74">&#34;new value is </span><span style="color:#e6db74">\(</span>$0<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span> }
   .bind(to: myLabel.rx.text )
   .disposed(by: bag)
-</code></pre>
-
-<p>But have you ever wondered what <code>rx.text</code> is and what so magical is there about it? Nothing. There&rsquo;s nothing magical - just Cmd click on it and you will see the source code:</p>
-
-<pre><code class="language-swift">extension Reactive where Base: UILabel {
-    /// Bindable sink for `text` property.
-    public var text: UIBindingObserver&lt;Base, String?&gt; {
-        return UIBindingObserver(UIElement: self.base) { label, text in
+</code></pre></div><p>But have you ever wondered what <code>rx.text</code> is and what so magical is there about it? Nothing. There&rsquo;s nothing magical - just Cmd click on it and you will see the source code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Reactive</span> <span style="color:#66d9ef">where</span> Base: UILabel {
+    <span style="color:#75715e">/// Bindable sink for `text` property.</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> text: UIBindingObserver&lt;Base, String?<span style="color:#f92672">&gt;</span> {
+        <span style="color:#66d9ef">return</span> UIBindingObserver(UIElement: <span style="color:#66d9ef">self</span>.base) { label, text <span style="color:#66d9ef">in</span>
             label.text = text
         }
     }
 }
-</code></pre>
-
-<p>The extension adds the property <code>text</code> to the <code>Reactive</code> struct (this is effectively the <code>rx</code> property on classes with reactive extensions) but only to the class <code>UILabel</code>.</p>
-
+</code></pre></div><p>The extension adds the property <code>text</code> to the <code>Reactive</code> struct (this is effectively the <code>rx</code> property on classes with reactive extensions) but only to the class <code>UILabel</code>.</p>
 <p><code>text</code> itself is of type <code>UIBindingObserver</code> - it&rsquo;s simply an observer similar to any other, that receives values and decides how to process them.</p>
-
 <blockquote>
 <p>Note: In RxSwift 4 <code>UIBindingObserver</code> has been changed to <code>Binder</code>.</p>
 </blockquote>
-
 <p>When you bind an observable subscription to the <code>text</code> property, the property returns a new observer which executes its block parameter when each value is emitted. E.g. any time it receives a new value it runs the code <code>label.text = text</code>.</p>
-
 <p>That&rsquo;s <strong>literally</strong> all there is to adding a bindable sink property to a class - in your code you might be binding a <code>UIColor</code> value instead of <code>String</code>, or adding a reactive extension to <code>UIApplication</code> instead of <code>UILabel</code> like in the example above, but the very simple demonstrated technique stays the same.</p>
-
 <h2 id="adding-a-reactive-extension-to-swiftspinner">Adding a reactive extension to SwiftSpinner</h2>
-
 <p>To show the code in action let&rsquo;s add a quick reactive extension to the <a href="https://github.com/icanzilb/SwiftSpinner">SwiftSpinner</a> library.</p>
-
 <p>I&rsquo;m creating a new Xcode project and importing all the pods I need for the demo:</p>
-
-<pre><code class="language-swift">import SwiftSpinner
-import RxSwift
-import RxCocoa
-</code></pre>
-
-<p>First I&rsquo;m adding a reactive extension on the <code>SwiftSpinner</code> class:</p>
-
-<pre><code class="language-swift">extension Reactive where Base: SwiftSpinner {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">SwiftSpinner</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxSwift</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxCocoa</span>
+</code></pre></div><p>First I&rsquo;m adding a reactive extension on the <code>SwiftSpinner</code> class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Reactive</span> <span style="color:#66d9ef">where</span> Base: SwiftSpinner {
   
 }
-</code></pre>
-
-<p>This will add an <code>rx</code> property to SwiftSpinner instances. Further I&rsquo;ll add the property <code>progress</code> so I can bind observables emitting <code>Int</code> values to it:</p>
-
-<pre><code class="language-swift">public var progress: UIBindingObserver&lt;Base, Int&gt; {
+</code></pre></div><p>This will add an <code>rx</code> property to SwiftSpinner instances. Further I&rsquo;ll add the property <code>progress</code> so I can bind observables emitting <code>Int</code> values to it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> progress: UIBindingObserver&lt;Base, Int&gt; {
 
 }
-</code></pre>
-
-<p>Finally I&rsquo;m converting values between <code>0</code> and <code>100</code> and call <code>SwiftSpinner.show(progress:title:)</code> to display the current progress on screen and the complete code is:</p>
-
-<pre><code class="language-swift">extension Reactive where Base: SwiftSpinner {
-    public var progress: UIBindingObserver&lt;Base, Int&gt; {
-        return UIBindingObserver(UIElement: self.base) { spinner, progress in
-            let progress = max(0, min(progress, 100))
-            SwiftSpinner.show(progress: Double(progress)/100.0, title: &quot;\(progress)% completed&quot;)
+</code></pre></div><p>Finally I&rsquo;m converting values between <code>0</code> and <code>100</code> and call <code>SwiftSpinner.show(progress:title:)</code> to display the current progress on screen and the complete code is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Reactive</span> <span style="color:#66d9ef">where</span> Base: SwiftSpinner {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> progress: UIBindingObserver&lt;Base, Int&gt; {
+        <span style="color:#66d9ef">return</span> UIBindingObserver(UIElement: <span style="color:#66d9ef">self</span>.base) { spinner, progress <span style="color:#66d9ef">in</span>
+            <span style="color:#66d9ef">let</span> progress = max(<span style="color:#ae81ff">0</span>, min(progress, <span style="color:#ae81ff">100</span>))
+            SwiftSpinner.show(progress: Double(progress)<span style="color:#f92672">/</span><span style="color:#ae81ff">100.0</span>, title: <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">\(</span>progress<span style="color:#e6db74">)</span><span style="color:#e6db74">% completed&#34;</span>)
         }
     }
 }
-</code></pre>
+</code></pre></div><p>And that&rsquo;s it. Let&rsquo;s test the new reactive extension:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">override</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">viewDidAppear</span>(<span style="color:#66d9ef">_</span> animated: Bool) {
+    <span style="color:#66d9ef">super</span>.viewDidAppear(animated)
 
-<p>And that&rsquo;s it. Let&rsquo;s test the new reactive extension:</p>
-
-<pre><code class="language-swift">override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-
-    Observable&lt;Int&gt;.timer(0.0, period: 0.15, scheduler: MainScheduler.instance)
+    Observable&lt;Int&gt;.timer(<span style="color:#ae81ff">0.0</span>, period: <span style="color:#ae81ff">0.15</span>, scheduler: MainScheduler.instance)
         .bind(to: SwiftSpinner.sharedInstance.rx.progress )
         .disposed(by: bag)
 }
-</code></pre>
-
-<p>Let&rsquo;s see that timer drive the progress bar like a mad man:</p>
-
-<p><img src="http://rx-marin.com/images/swiftspinner.gif" alt="" /></p>
-
+</code></pre></div><p>Let&rsquo;s see that timer drive the progress bar like a mad man:</p>
+<p><img src="http://rx-marin.com/images/swiftspinner.gif" alt=""></p>
 <p>And that&rsquo;s a wrap! If anyone is misinformed about how easy it is to create reactive extensions with RxSwift send them read this post!</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p>Dig into the source code of RxCocoa - there&rsquo;s no better way to learn about creating bindable sinks. Or even better - get our book about RxSwift :)</p>
-
 <p>The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see any updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -403,13 +380,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -459,7 +429,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

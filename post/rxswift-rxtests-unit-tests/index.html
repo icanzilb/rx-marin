@@ -14,7 +14,7 @@
 <meta name="description" content="Basic intro to writing tests with RxSwift and RxTests">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Testing your RxSwift code, part 1" />
 <meta property="og:description" content="Basic intro to writing tests with RxSwift and RxTests" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,28 +230,31 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro-to-rxtests">Intro to RxTests</a></li>
-<li><a href="#simple-tests-for-an-rx-operator">Simple tests for an rx operator</a></li>
-<li><a href="#drafting-a-unit-test-class">Drafting a unit test class</a></li>
-<li><a href="#setup">setUp()</a></li>
-<li><a href="#simple-checks-on-the-recorded-events">Simple checks on the recorded events</a></li>
-<li><a href="#check-the-recorded-events">Check the recorded events</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro-to-rxtests">Intro to RxTests</a></li>
+    <li><a href="#simple-tests-for-an-rx-operator">Simple tests for an rx operator</a></li>
+    <li><a href="#drafting-a-unit-test-class">Drafting a unit test class</a></li>
+    <li><a href="#setup">setUp()</a></li>
+    <li><a href="#simple-checks-on-the-recorded-events">Simple checks on the recorded events</a></li>
+    <li><a href="#check-the-recorded-events">Check the recorded events</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -294,165 +301,111 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&rsquo;s why I&rsquo;d like to show few of the tests I got to write.</p>
-
+            <p>I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&rsquo;s why I&rsquo;d like to show few of the tests I got to write.</p>
 <p>Before I start on the code itself I just want to mention how great contributing to open source is. If I didn&rsquo;t jump in to helping around on the <a href="https://github.com/RxSwiftCommunity/RxSwift-Ext">RxSwift-Ext</a> project I&rsquo;d probably haven&rsquo;t looked into writing unit tests with RxSwift yet, but I did - and that&rsquo;s great.</p>
-
 <p>So let&rsquo;s have a look at some of the unit tests I wrote&hellip;</p>
-
 <h2 id="intro-to-rxtests">Intro to RxTests</h2>
-
 <p><strong>RxTests</strong> is a separate library (available as well through CocoaPods), which you should import in your test target to be able to use some really handy classes to write your tests.</p>
-
 <p>Here&rsquo;s how the Swift-Ext Podfile test target looks like:</p>
-
-<pre><code>target 'RxSwiftExtDemoTests' do
+<pre tabindex="0"><code>target 'RxSwiftExtDemoTests' do
 	pod 'RxSwift+Ext'
 	pod 'RxSwift'
 	pod 'RxTests'
 end
-</code></pre>
-
-<p><strong>RxTests</strong> gives you few handy tools like:</p>
-
+</code></pre><p><strong>RxTests</strong> gives you few handy tools like:</p>
 <ul>
 <li><code>TestableObserver&lt;ElementType&gt;</code> - an observer, which records all emitted events so you can inspect them and run your asserts on those events,</li>
 <li><code>TestScheduler</code> - a scheduler which let&rsquo;s you control values and time, and let&rsquo;s you create testable observers,</li>
 <li><code>== (lhs: Event&lt;Element&gt;, rhs: Event&lt;Element&gt;)</code> adds <code>Equatable</code> implementation to Rx events so you can easily check recorded events.</li>
 </ul>
-
 <p>Let&rsquo;s have a look how to use those!</p>
-
 <h2 id="simple-tests-for-an-rx-operator">Simple tests for an rx operator</h2>
-
 <p>In <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">Custom convenience operators with RxSwift, Part 2</a> I discussed creating the <code>unwrap()</code> operator, which unwraps non-<code>nil</code> values emitted by an observable.</p>
-
 <p>It took me a lot of time to make that operator work so when I saw folks contribute their operators to RxSwift-Ext I naturally also wanted to merge mine in.</p>
-
 <p>In order to do that though, I wanted to add unit tests first&hellip;</p>
-
 <h2 id="drafting-a-unit-test-class">Drafting a unit test class</h2>
-
 <p>Here&rsquo;s how the setup of the unit tests file for <code>unwrap()</code> looked like:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">XCTest</span>
 
-<pre><code class="language-swift">import XCTest
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxSwift</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxSwift_Ext</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RxTests</span>
 
-import RxSwift
-import RxSwift_Ext
-import RxTests
-
-class UnwrapTests: XCTestCase {
-    private var observer: TestableObserver&lt;Int&gt;!
-    let numbers: Array&lt;Int?&gt; = [1, nil, Int?(3), 4]
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">UnwrapTests</span>: XCTestCase {
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">var</span> observer: TestableObserver&lt;Int&gt;<span style="color:#f92672">!</span>
+    <span style="color:#66d9ef">let</span> numbers: Array&lt;Int?<span style="color:#f92672">&gt;</span> = [<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">nil</span>, Int?(<span style="color:#ae81ff">3</span>), <span style="color:#ae81ff">4</span>]
     
 }
-</code></pre>
-
-<p>The class itself is a normal <code>XCTestCase</code> test but it features a <code>TestableObserver</code>. You have to specify what kind of values it will observe so that you can have compile time checks if your <code>Observable</code> is emitting the data type you expect to have.</p>
-
+</code></pre></div><p>The class itself is a normal <code>XCTestCase</code> test but it features a <code>TestableObserver</code>. You have to specify what kind of values it will observe so that you can have compile time checks if your <code>Observable</code> is emitting the data type you expect to have.</p>
 <p>For my tests I chose to test with an array of <code>Int?</code> values since <code>unwrap()</code> takes in a <code>Type?</code> and returns <code>Type</code>.</p>
-
 <p>The <code>numbers</code> array is the sequence of values I&rsquo;d use to feed into <code>unwrap()</code> - it includes integers, a <code>nil</code> value, and an Optional integer number.</p>
-
 <h2 id="setup">setUp()</h2>
-
 <p>Next I needed to add a <code>setUp()</code> method in the unit test class to prepare everything before the actual test methods run.</p>
-
-<pre><code class="language-swift">override func setUp() {
-    super.setUp()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">override</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">setUp</span>() {
+    <span style="color:#66d9ef">super</span>.setUp()
         
-    let scheduler = TestScheduler(initialClock: 0)
+    <span style="color:#66d9ef">let</span> scheduler = TestScheduler(initialClock: <span style="color:#ae81ff">0</span>)
     observer = scheduler.createObserver(Int)
 }
-</code></pre>
-
-<p><em>At this point I dug multiple times through the RxExample app included in the RxSwift repo in order to figure out how to use a test scheduler.</em></p>
-
+</code></pre></div><p><em>At this point I dug multiple times through the RxExample app included in the RxSwift repo in order to figure out how to use a test scheduler.</em></p>
 <p>First of all my tests didn&rsquo;t need to happen asynchronously so I didn&rsquo;t have to use virtual time for my test scheduler. I set the initial clock at time <code>0</code> and didn&rsquo;t bother with time any further.</p>
-
 <p>After creating a test scheduler I created a test observer by calling <code>TestScheduler.createObserver(Type)</code>. <code>Type</code> is the type of values I expected the observer to capture from my <code>Observable</code>.</p>
-
 <p>At this point my code was ready to emit some values, I added:</p>
-
-<pre><code class="language-swift">numbers.toObservable()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">numbers.toObservable()
      .unwrap()
      .subscribe(observer)
-</code></pre>
-
-<p>That code turned the initial array I had to an observable, fed it through <code>unwrap()</code>, and finally sent it off to the test observer.</p>
-
+</code></pre></div><p>That code turned the initial array I had to an observable, fed it through <code>unwrap()</code>, and finally sent it off to the test observer.</p>
 <p>The final line I added to <code>setUp()</code> was:</p>
-
-<pre><code class="language-swift">scheduler.start()
-</code></pre>
-
-<p>That would make the scheduler start running, have the observer consume all values from the sequence, and wrap-up.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">scheduler.start()
+</code></pre></div><p>That would make the scheduler start running, have the observer consume all values from the sequence, and wrap-up.</p>
 <h2 id="simple-checks-on-the-recorded-events">Simple checks on the recorded events</h2>
-
 <p>I decided to start easy by checking if the list of recorded events matched some general expectations.</p>
-
 <p>First I wanted to check if <code>unwrap()</code> filtered all <code>nil</code> elements:</p>
-
-<pre><code class="language-swift">func testUnwrapFilterNil() {
-    XCTAssertFalse(observer.events.contains {event in
-        event.value == nil
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testUnwrapFilterNil</span>() {
+    XCTAssertFalse(observer.events.contains {event <span style="color:#66d9ef">in</span>
+        event.value == <span style="color:#66d9ef">nil</span>
     })
 }
-</code></pre>
-
-<p>The code just checks if none of the recorded events in <code>observer.events</code> contains a <code>nil</code> value. Done!</p>
-
+</code></pre></div><p>The code just checks if none of the recorded events in <code>observer.events</code> contains a <code>nil</code> value. Done!</p>
 <p>Ok, what next? I wanted to see if the number of the output values is the one I expect: the number of the input values minus the amount of <code>nil</code> values plus the <code>Complete</code> event. I just added it to the same test method:</p>
-
-<pre><code class="language-swift">XCTAssertEqual(
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">XCTAssertEqual(
     observer.events.count,
-    numbers.count - 1/* the nr. of nil elements*/ + 1 /* complete event*/
+    numbers.count <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span><span style="color:#75715e">/* the nr. of nil elements*/</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#75715e">/* complete event*/</span>
 )
-</code></pre>
-
-<p>Also done! Sweet.</p>
-
+</code></pre></div><p>Also done! Sweet.</p>
 <h2 id="check-the-recorded-events">Check the recorded events</h2>
-
 <p><code>TestObserver</code> not only records the events that your <code>Observable</code> emits but also the values they carried and the time marks they happened at.</p>
-
 <p>It&rsquo;s really easy to check if the events you expected were the ones recorded. Let&rsquo;s have a look at what I did (again, how to do all of this I found in the RxSwift repo sources):</p>
-
-<pre><code class="language-swift">func testUnwrapResultValues() {
-    //test elements values and type
-    let correctValues = [
-        next(0, 1),
-        next(0, 3),
-        next(0, 4),
-        completed(0)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testUnwrapResultValues</span>() {
+    <span style="color:#75715e">//test elements values and type</span>
+    <span style="color:#66d9ef">let</span> correctValues = [
+        next(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>),
+        next(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>),
+        next(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">4</span>),
+        completed(<span style="color:#ae81ff">0</span>)
     ]
 }    
-</code></pre>
-
-<p>First I defined an array of expected events - 3 <code>.Next</code> events all happening at virtual time <code>0</code> and  <code>.Completed</code> event emitted when the input values are over.</p>
-
+</code></pre></div><p>First I defined an array of expected events - 3 <code>.Next</code> events all happening at virtual time <code>0</code> and  <code>.Completed</code> event emitted when the input values are over.</p>
 <p>Now I just needed to compare the <code>correctValues</code> array to the list of events <code>TestObserver</code> has recorded:</p>
-
-<pre><code class="language-swift">XCTAssertEqual(observer.events, correctValues)
-</code></pre>
-
-<p>And that&rsquo;s a wrap!</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">XCTAssertEqual(observer.events, correctValues)
+</code></pre></div><p>And that&rsquo;s a wrap!</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>It was easy and quite simple to write unit tests for <code>unwrap()</code> because I could run all tests synchronously over the values of my input array. But <code>TestObserver</code> and <code>TestScheduler</code> allow for more complex unit tests as well. In part 2 I&rsquo;ll look into writing simple asynchronous unit tests with RxSwift. Till then!</p>
-
 <p>If you want to have a look at the finished unit test class for <code>unwrap()</code> you can find it here: <a href="https://github.com/RxSwiftCommunity/RxSwift-Ext/blob/master/Demo/RxSwiftExtDemoTests/UnwrapTests.swift#L9">UnwrapTests.swift</a></p>
-
 <p>I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at <a href="https://twitter.com/icanzilb">icanzilb</a></p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -462,13 +415,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -516,7 +462,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

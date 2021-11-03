@@ -14,7 +14,7 @@
 <meta name="description" content="Announcement about the first update released for the RxSwift book">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="First update to the RxSwift book with version 1.1" />
 <meta property="og:description" content="Announcement about the first update released for the RxSwift book" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,23 +230,26 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#how-to-update">How to update?</a></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#how-to-update">How to update?</a></li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -289,55 +296,42 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>This is a short update about the first update to our RxSwift book.</p>
-
+            <p>This is a short update about the first update to our RxSwift book.</p>
 <p><strong>First of all</strong>, we&rsquo;d like to thank all of you who posted to our book errata forum!  (and if you haven&rsquo;t hit the forums yet, check &lsquo;em out - it&rsquo;s the best place to report typos, bugs, and more: <a href="https://forums.raywenderlich.com/c/books/rxswift">https://forums.raywenderlich.com/c/books/rxswift</a> ).</p>
-
 <p>I&rsquo;ve worked with the raywenderlich.com team on a number of books and I must say the RxSwift book has had, so far, the most enthusiastic feedback - we&rsquo;ve been drowned in questions, thank you messages, and typo/bugs reports. Again - <strong>thank you</strong>!</p>
-
 <p>We&rsquo;ve addressed the most part of the feedback, and are looking for more - so if you see something that doesn&rsquo;t feel or spell right, let us know.</p>
-
 <p><strong>Further</strong> we&rsquo;ve updated and tested the book projects on <strong>Xcode 8.3.2</strong> and with <strong>RxSwift 3.4</strong> - few APIs became deprecated since we published the book so to provide best experience for the readers we&rsquo;ve updated the code to the latest syntax. There were few changes touching almost all code in the book like changing <code>addDisposeableTo(_)</code> to <code>disposed(by:)</code>, and <code>bindTo(_)</code> to <code>bind(to:)</code>. If you use the code from the initial book version that&rsquo;ll still work fine but it will generate warnings asking you to change to the latest syntax.</p>
-
 <p><strong>Last, but not least</strong>, we&rsquo;ve updated the text in few places - we&rsquo;ve noticed some repeating questions and figured that few spots needed more clarifications. So please keep asking us - it helps a lot!</p>
-
 <h2 id="how-to-update">How to update?</h2>
-
 <p><strong>1) Head to your profile page on raywenderlich.com</strong></p>
-
-<p><img src="http://rx-marin.com/images/update-profile.png" alt="profile page" /></p>
-
+<p><img src="http://rx-marin.com/images/update-profile.png" alt="profile page"></p>
 <p><strong>2) Click on &ldquo;My Products&rdquo; tab</strong></p>
-
-<p><img src="http://rx-marin.com/images/update-products.png" alt="my products" /></p>
-
+<p><img src="http://rx-marin.com/images/update-products.png" alt="my products"></p>
 <p><strong>3) You will see all your purchases; click on the RxSwift book</strong> (it has a &ldquo;new&rdquo; icon on top of it)</p>
-
-<p><img src="http://rx-marin.com/images/update-book.png" alt="updated book cover" /></p>
-
+<p><img src="http://rx-marin.com/images/update-book.png" alt="updated book cover"></p>
 <p><strong>4) Scroll down the book page and download the latest version</strong></p>
-
-<p><img src="http://rx-marin.com/images/update-download.png" alt="update download" /></p>
-
+<p><img src="http://rx-marin.com/images/update-download.png" alt="update download"></p>
 <p>That&rsquo;s it - <strong>enjoy</strong>!</p>
-
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <ul>
 <li>if you&rsquo;ve found a typo, something is not clear, or you found a bug: head to the book forums <a href="https://forums.raywenderlich.com/c/books/rxswift">https://forums.raywenderlich.com/c/books/rxswift</a> and let us know!</li>
 <li>if you&rsquo;d like to chat about RxSwift in general: join over 3,000+ RxSwift developers in the RxSwift slack <a href="http://rxswift-slack.herokuapp.com/">http://rxswift-slack.herokuapp.com/</a>.</li>
 </ul>
-
 <p>See you next time!</p>
-
 <p>The book is available <strong>ONLY</strong> at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you get free updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -347,13 +341,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -403,7 +390,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

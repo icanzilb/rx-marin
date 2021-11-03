@@ -14,7 +14,7 @@
 <meta name="description" content="Some more convenience operators with RxSwift in part 2 of the series">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Custom convenience operators with RxSwift, Part 2" />
 <meta property="og:description" content="Some more convenience operators with RxSwift in part 2 of the series" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,28 +230,31 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#a-better-negate-operator">A better negate() operator</a></li>
-<li><a href="#filternegatives">filterNegatives()</a></li>
-<li><a href="#replacenilwith">replaceNilWith(_)</a></li>
-<li><a href="#filterout">filterOut(_)</a></li>
-<li><a href="#unwrap">unwrap(_)</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#a-better-negate-operator">A better negate() operator</a></li>
+    <li><a href="#filternegatives">filterNegatives()</a></li>
+    <li><a href="#replacenilwith_">replaceNilWith(_)</a></li>
+    <li><a href="#filterout_">filterOut(_)</a></li>
+    <li><a href="#unwrap_">unwrap(_)</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -294,300 +301,204 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<h2 id="intro">Intro</h2>
-
+            <h2 id="intro">Intro</h2>
 <p>I got some great feedback on last week&rsquo;s post on convenience operators <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">part 1</a> so I&rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.</p>
-
 <p>Without further ado let&rsquo;s dive in code&hellip;</p>
-
 <h2 id="a-better-negate-operator">A better negate() operator</h2>
-
 <p>First of all I have a better version of my <code>negate()</code> operator from last week for you. What I wrote on my own was a pretty simple function that looked like so:</p>
-
-<pre><code class="language-swift">extension Observable where Element: BooleanType {
-  public func negate() -&gt; Observable&lt;Bool&gt; {
-     return map {value in !value}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element: BooleanType {
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">negate</span>() -&gt; Observable&lt;Bool&gt; {
+     <span style="color:#66d9ef">return</span> map {value <span style="color:#66d9ef">in</span> <span style="color:#f92672">!</span>value}
   }
 }
-</code></pre>
-
-<p>It doesn&rsquo;t get simpler than that, right? You map a value in a single line of code and that&rsquo;s it (careful, it&rsquo;s a trick question).</p>
-
+</code></pre></div><p>It doesn&rsquo;t get simpler than that, right? You map a value in a single line of code and that&rsquo;s it (careful, it&rsquo;s a trick question).</p>
 <p><a href="http://www.tailec.com/">@tailec</a> grabbed me in Slack and showed me his version of the same operator, which definitely beats mine:</p>
-
-<pre><code class="language-swift">extension Observable where Element: BooleanType {
-    public func negate() -&gt; Observable&lt;Bool&gt; {
-        return map(!)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element: BooleanType {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">negate</span>() -&gt; Observable&lt;Bool&gt; {
+        <span style="color:#66d9ef">return</span> map(<span style="color:#f92672">!</span>)
     }
 }
-</code></pre>
-
-<p>Yup! Since <code>!</code> is a function with a single parameter you can simply use in conjunction with <code>map</code> as shown above. That code definitely looks better than mine and I&rsquo;m gonna be using this version in my own projects too. Thanks <a href="https://twitter.com/tailectailec">Pawel</a>.</p>
-
+</code></pre></div><p>Yup! Since <code>!</code> is a function with a single parameter you can simply use in conjunction with <code>map</code> as shown above. That code definitely looks better than mine and I&rsquo;m gonna be using this version in my own projects too. Thanks <a href="https://twitter.com/tailectailec">Pawel</a>.</p>
 <blockquote>
 <p><em>Please guys, if you see something I&rsquo;m posting here that can be improved get in touch, like Pawel did, and help get some awesome rx code out together!</em></p>
 </blockquote>
-
 <h2 id="filternegatives">filterNegatives()</h2>
-
 <p>I was looking over my current project&rsquo;s code and trying to identify repeating patterns I can easily <em>outsource</em> to a convenience operator.</p>
-
 <p>I noticed I have few <code>Bool</code> observables that I am sometimes interested in only if they were emitting <code>true</code> value. For example if we take the code from my <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-useWithLatest-bindings/">lap timer post</a>:</p>
-
-<pre><code class="language-swift">let isRunning = [btnPlay.rx_tap.replaceWith(true), btnStop.rx_tap.replaceWith(false)]
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> isRunning = [btnPlay.rx_tap.replaceWith(<span style="color:#66d9ef">true</span>), btnStop.rx_tap.replaceWith(<span style="color:#66d9ef">false</span>)]
   .toObservable()
   .merge()
-  .startWith(false)
+  .startWith(<span style="color:#66d9ef">false</span>)
   .shareReplayLatestWhileConnected()
-</code></pre>
-
-<p>Which produces depending on taps on the play and stop buttons:</p>
-
+</code></pre></div><p>Which produces depending on taps on the play and stop buttons:</p>
 <blockquote>
 <p>true &mdash; false &mdash; true &mdash; true &ndash;&gt;</p>
 </blockquote>
-
 <p>How about observing only the taps on play? (Except just subscribing to the play button of course)</p>
-
 <p>Since what I wanted was to basically get rid of the all <code>false</code> values I wrote:</p>
-
-<pre><code class="language-swift">extension Observable where Element: BooleanType {
-  public func filterNegatives() -&gt; Observable&lt;Bool&gt; {
-     return map {value in value.boolValue}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element: BooleanType {
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">filterNegatives</span>() -&gt; Observable&lt;Bool&gt; {
+     <span style="color:#66d9ef">return</span> map {value <span style="color:#66d9ef">in</span> value.boolValue}
   }
 }
-</code></pre>
-
-<p>Pretty easy piece of code, it does the work well and it&rsquo;s clear to read. Great!</p>
-
-<h2 id="replacenilwith">replaceNilWith(_)</h2>
-
+</code></pre></div><p>Pretty easy piece of code, it does the work well and it&rsquo;s clear to read. Great!</p>
+<h2 id="replacenilwith_">replaceNilWith(_)</h2>
 <p>This was an easy operator to implement. I had a couple of observables emitting optional values and I actually wanted to get a given <em>default</em> value instead of <code>nil</code>. I just had to map to a simple condition that checks for a <code>nil</code> value like so:</p>
-
-<pre><code class="language-swift">extension Observable {
-  func replaceNilWith(value: Element) -&gt; Observable&lt;Element&gt; {
-     return map {element in element == nil ? value : element}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> {
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">replaceNilWith</span>(value: Element) -&gt; Observable&lt;Element&gt; {
+     <span style="color:#66d9ef">return</span> map {element <span style="color:#66d9ef">in</span> element == <span style="color:#66d9ef">nil</span> ? value : element}
   }
 }
-</code></pre>
-
-<p>Note that the elements of the observable are still of type <code>Optional&lt;Element&gt;</code> but you just never get a <code>nil</code> value - you get your default value instead.</p>
-
-<h2 id="filterout">filterOut(_)</h2>
-
+</code></pre></div><p>Note that the elements of the observable are still of type <code>Optional&lt;Element&gt;</code> but you just never get a <code>nil</code> value - you get your default value instead.</p>
+<h2 id="filterout_">filterOut(_)</h2>
 <p>While I was having a lot of momentum I decided to also write a filter that gets rid of specific values. Since the approach is exactly the same as before I&rsquo;ll just add the code here:</p>
-
-<pre><code class="language-swift">extension Observable where Element: Equatable {
-    public func filterOut(targetValue: Element) -&gt; Observable&lt;Element&gt; {
-        return self.filter {value in targetValue != value}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element: Equatable {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">filterOut</span>(targetValue: Element) -&gt; Observable&lt;Element&gt; {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>.filter {value <span style="color:#66d9ef">in</span> targetValue <span style="color:#f92672">!=</span> value}
     }
 }
-</code></pre>
-
-<p>The interesting aspect about this piece of code is that to be able to identify the offending value in your sequence it needs to be <code>Equatable</code> so you have to restrict the <code>filterOut</code> operator to only observables that emit <code>Equatable</code> elements.</p>
-
+</code></pre></div><p>The interesting aspect about this piece of code is that to be able to identify the offending value in your sequence it needs to be <code>Equatable</code> so you have to restrict the <code>filterOut</code> operator to only observables that emit <code>Equatable</code> elements.</p>
 <p>This of course is a walk in the park in Swift where you can just add <code>where Element: Equatable</code> on your extension.</p>
-
 <p>The best thing about <code>filterOut(_)</code> is that whenever I have an observable emitting optional values like for example <code>Observable&lt;Bool?&gt;</code>, I can ensure no <code>nil</code> values are emitted like so:</p>
-
-<pre><code class="language-swift">optionalBoolSequence.filterOut(nil)
-</code></pre>
-
-<p>The observable elements are still of type <code>Optional&lt;Bool&gt;</code> but now I am sure that the observable never emits a <code>nil</code> value.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">optionalBoolSequence.filterOut(<span style="color:#66d9ef">nil</span>)
+</code></pre></div><p>The observable elements are still of type <code>Optional&lt;Bool&gt;</code> but now I am sure that the observable never emits a <code>nil</code> value.</p>
 <p>And leads me to &hellip;</p>
-
-<h2 id="unwrap">unwrap(_)</h2>
-
+<h2 id="unwrap_">unwrap(_)</h2>
 <p>At that point I had two convenience operators to get rid of <code>nil</code>s in my observables but the elements were still <code>Optional</code>.</p>
-
 <p>Well, I thought, it could not be so hard to actually unwrap the elements of an <code>Observable</code> with all the Swift protocols black magic and such!</p>
-
 <p>Boy, was I <strong>totally</strong> and <strong>completely</strong> wrong&hellip;</p>
-
-<p><img src="http://rx-marin.com/images/fry-wrong.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/fry-wrong.png" alt=""></p>
 <p>My first realization was that <code>Optional</code> is <strong>not</strong> a protocol. Thus I couldn&rsquo;t do any protocol black magic with it. Ugh!</p>
-
 <p><code>Optional</code> is actually an enum. Yes - this sounded pretty exciting when Swift 1.0 alpha was out, but honestly right now I&rsquo;d expect that it was a protocol or something more flexible.</p>
-
 <p>Anywho, since <code>Optional</code> isn&rsquo;t a protocol I couldn&rsquo;t create an extension on <code>Observable</code> that matches optional elements. Gulp.</p>
-
 <p>I had a long long conversation with <a href="https://twitter.com/mhollemans">Matthijs</a> and <a href="https://twitter.com/narrativium">Ross O&rsquo;Brien</a> in Slack until in the end I could figure out the way&hellip;</p>
-
 <p>First of all I had to define a protocol for optionals myself. My protocol had to define two methods:</p>
-
 <ul>
 <li>one that checks if the current value is <code>nil</code> (guess what - simply comparing <code>self</code> to <code>nil</code> didn&rsquo;t really work, yay!)</li>
 <li>another that unwraps <code>self</code> from <code>Optional&lt;Type&gt;</code> to <code>Type</code></li>
 </ul>
-
 <p>The big question that I had to wrap my mind around was: What type is the unwrapped value? I didn&rsquo;t know that in my protocol so I had to define a type that the concrete implementations would set.</p>
-
 <p>I ended up with:</p>
-
-<pre><code class="language-swift">protocol Optionable
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">protocol</span> <span style="color:#a6e22e">Optionable</span>
 {
-  typealias WrappedType
-  func unwrap() -&gt; WrappedType
-  func isEmpty() -&gt; Bool
+  <span style="color:#66d9ef">typealias</span> WrappedType
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; WrappedType
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool
 }
-</code></pre>
-
-<p>Cool - I had a protocol which I could use to add a method to <code>Observable</code> via an extension.</p>
-
+</code></pre></div><p>Cool - I had a protocol which I could use to add a method to <code>Observable</code> via an extension.</p>
 <p>But first I had to make the <code>Optional</code> enum to conform to <code>Optionable</code>. So <code>Optional</code> exposes the type of the wrapped value via <code>Wrapped</code> and that&rsquo;s where the magic fusion between <code>Optional</code> and my <code>Optionable</code> protocol happened.</p>
-
 <p>Here&rsquo;s the declaration of <code>Optional</code>:</p>
-
-<pre><code class="language-swift">public enum Optional&lt;Wrapped&gt; : _Reflectable, NilLiteralConvertible {...}
-</code></pre>
-
-<p>And here&rsquo;s how I wired <code>Optionable</code> to to the type of any concrete optional value:</p>
-
-<pre><code class="language-swift">extension Optional : Optionable
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Optional</span>&lt;Wrapped&gt; : _Reflectable, NilLiteralConvertible {...}
+</code></pre></div><p>And here&rsquo;s how I wired <code>Optionable</code> to to the type of any concrete optional value:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Optional</span> : Optionable
 {
-    typealias WrappedType = Wrapped
+    <span style="color:#66d9ef">typealias</span> WrappedType = Wrapped
 }
-</code></pre>
-
-<p>Ha! <em>(Again Matthijs and Ross helped a lot along the way of untangling all of this. I must say that there is very little info online about protocol magic and associated types.)</em></p>
-
+</code></pre></div><p>Ha! <em>(Again Matthijs and Ross helped a lot along the way of untangling all of this. I must say that there is very little info online about protocol magic and associated types.)</em></p>
 <p>Now I could also add the implementation of the two methods in the extension:</p>
-
-<pre><code class="language-swift">func unwrap() -&gt; WrappedType {
-    return self!
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; WrappedType {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>!
 }
 
-func isEmpty() -&gt; Bool {
-    return !(flatMap({_ in true})?.boolValue == true)
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>(flatMap({<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">true</span>})?.boolValue == <span style="color:#66d9ef">true</span>)
 }
-</code></pre>
-
-<p>You guessed it - coding <code>unwrap()</code> was pretty straight forward, but <code>isEmpty()</code> caused me serious headache.</p>
-
+</code></pre></div><p>You guessed it - coding <code>unwrap()</code> was pretty straight forward, but <code>isEmpty()</code> caused me serious headache.</p>
 <p>To my surprise (repeating myself here I know), <code>Optional</code> doesn&rsquo;t give you means to check whether it&rsquo;s empty or not.</p>
-
 <p>At first I came with this naïve implementation:</p>
-
-<pre><code class="language-swift">func isEmpty() -&gt; Bool {
-  switch self {
-    case .None: return false
-    case .Some(_): return true
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool {
+  <span style="color:#66d9ef">switch</span> <span style="color:#66d9ef">self</span> {
+    <span style="color:#66d9ef">case</span> .None: <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">case</span> .Some(<span style="color:#66d9ef">_</span>): <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span>
   }
 }
-</code></pre>
-
-<p>Well, let me tell you: this doesn&rsquo;t work. Although if you ask me it should. But it doesn&rsquo;t - it never falls in the <code>case .None</code> branch for some reason and is beyond me why.</p>
-
+</code></pre></div><p>Well, let me tell you: this doesn&rsquo;t work. Although if you ask me it should. But it doesn&rsquo;t - it never falls in the <code>case .None</code> branch for some reason and is beyond me why.</p>
 <p>So I had to take the hard way, I looked again through everything I can find in an <code>Optional</code>:</p>
-
-<p><img src="http://rx-marin.com/images/optional-docs.png" alt="" /></p>
-
+<p><img src="http://rx-marin.com/images/optional-docs.png" alt=""></p>
 <p>It&rsquo;s not much. Not much &hellip;</p>
-
 <p>Wait! <code>flatMap</code>? But of course! Here&rsquo;s the (complete) docs on Optional&rsquo;s flatMap:</p>
-
 <blockquote>
 <p><em>Returns nil if self is nil, f(self!) otherwise.</em></p>
 </blockquote>
-
 <p>I rewrote my <code>isEmpty()</code> method to use <code>flatMap</code> and I was off to the races:</p>
-
-<pre><code class="language-swift">func isEmpty() -&gt; Bool {
-    return !(flatMap({_ in true})?.boolValue == true)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>(flatMap({<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">true</span>})?.boolValue == <span style="color:#66d9ef">true</span>)
 }
-</code></pre>
-
-<p>And now (<em>finally</em>) I could get to adding the extension to <code>Observable</code>. Compared to all the rest I&rsquo;ve been through this was &hellip; let&rsquo;s say <em>not so difficult</em>:</p>
-
-<pre><code class="language-swift">extension Observable where Element : Optionable {
-  func unwrap() -&gt; Observable&lt;Element.WrappedType&gt; {
-    return self
-      .filter {value in
-        return !value.isEmpty()
+</code></pre></div><p>And now (<em>finally</em>) I could get to adding the extension to <code>Observable</code>. Compared to all the rest I&rsquo;ve been through this was &hellip; let&rsquo;s say <em>not so difficult</em>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element : Optionable {
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; Observable&lt;Element.WrappedType&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>
+      .filter {value <span style="color:#66d9ef">in</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>value.isEmpty()
       }
-      .map {value -&gt; Element.WrappedType in
+      .map {value -&gt; Element.WrappedType <span style="color:#66d9ef">in</span>
         value.unwrap()
       }
   }
 }
-</code></pre>
-
-<p>Notable mentions about that piece of code:</p>
-
+</code></pre></div><p>Notable mentions about that piece of code:</p>
 <ul>
 <li>I&rsquo;m matching the Observable type to <code>Optionable</code>. <code>Optional</code> implements <code>Optionable</code> but if any other type does that <code>unwrap()</code> will work for it too</li>
 <li><code>unwrap()</code> takes in an <code>Element</code> value and outputs <code>Element.WrappedType</code>, so for <code>Int?</code> outputs <code>Int</code>, for <code>NSDate?</code> outputs <code>NSDate</code>, etc.</li>
 <li>why not use <code>filterOut(nil)</code> to get rid of the <code>nil</code> values? <code>filterOut(_)</code> works for <code>Equatable</code> values and <code>Element.WrappedType</code> might not be <code>Equatable</code> in some cases</li>
 <li>I had to explicitly set the return type for my <code>map</code> closure because Xcode thought things were getting a bit too abstract for it</li>
 </ul>
-
 <p>Now let&rsquo;s see the complete implementation (and if you can think of ways to simplify this please let me know, I still think there should be an easier way):</p>
-
-<pre><code class="language-swift">protocol Optionable
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">protocol</span> <span style="color:#a6e22e">Optionable</span>
 {
-  typealias WrappedType
-  func unwrap() -&gt; WrappedType
-  func isEmpty() -&gt; Bool
+  <span style="color:#66d9ef">typealias</span> WrappedType
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; WrappedType
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool
 }
 
-extension Optional : Optionable
+<span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Optional</span> : Optionable
 {
-  typealias WrappedType = Wrapped
-  func unwrap() -&gt; WrappedType {
-    return self!
+  <span style="color:#66d9ef">typealias</span> WrappedType = Wrapped
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; WrappedType {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>!
   }
     
-  func isEmpty() -&gt; Bool {
-    return !(flatMap({_ in true})?.boolValue == true)
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">isEmpty</span>() -&gt; Bool {
+    <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>(flatMap({<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">true</span>})?.boolValue == <span style="color:#66d9ef">true</span>)
   }
 }
 
-extension Observable where Element : Optionable {
-  func unwrap() -&gt; Observable&lt;Element.WrappedType&gt; {
-    return self
-      .filter {value in
-        return !value.isEmpty()
+<span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">Observable</span> <span style="color:#66d9ef">where</span> Element : Optionable {
+  <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unwrap</span>() -&gt; Observable&lt;Element.WrappedType&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">self</span>
+      .filter {value <span style="color:#66d9ef">in</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#f92672">!</span>value.isEmpty()
       }
-      .map {value -&gt; Element.WrappedType in
+      .map {value -&gt; Element.WrappedType <span style="color:#66d9ef">in</span>
         value.unwrap()
       }
   }
 }
-</code></pre>
-
-<p>Well that was a fun day! To be fair I also learned quite a lot about protocols, associated types, etc.</p>
-
+</code></pre></div><p>Well that was a fun day! To be fair I also learned quite a lot about protocols, associated types, etc.</p>
 <p>Later on I was talking to <a href="https://twitter.com/fpillet">@fpillet</a> who shared this piece here:</p>
-
-<pre><code class="language-swift">someOptionalSequence
-  .flatMap { $0 == nil ? Observable.empty() : Observable.just($0!) }`
-</code></pre>
-
-<p>It&rsquo;s a one liner you can use directly on your Observable of <code>Optional&lt;Element&gt;</code> type. It does pretty much the same as my <code>unwrap()</code> operator but it&rsquo;s way shorter because the <code>flatMap</code> closure doesn&rsquo;t need to specify its return type - it leaves it to Xcode to figure it out out of context.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">someOptionalSequence
+  .flatMap { $0 == <span style="color:#66d9ef">nil</span> ? Observable.empty() : Observable.just($0!) }`
+</code></pre></div><p>It&rsquo;s a one liner you can use directly on your Observable of <code>Optional&lt;Element&gt;</code> type. It does pretty much the same as my <code>unwrap()</code> operator but it&rsquo;s way shorter because the <code>flatMap</code> closure doesn&rsquo;t need to specify its return type - it leaves it to Xcode to figure it out out of context.</p>
 <p>I still like my own operator though - I think it&rsquo;s much more readable and it adds less stress to the compiler to write just:</p>
-
-<pre><code class="language-swift">someOptionalSequence.unwrap()
-</code></pre>
-
-<p><img src="http://rx-marin.com/images/unwrap-doge.png" alt="" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">someOptionalSequence.unwrap()
+</code></pre></div><p><img src="http://rx-marin.com/images/unwrap-doge.png" alt=""></p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Creating your own convenience operators is awesome. The code is more readable, there is less opportunity to introduce bugs, and there&rsquo;s nothing wrong with it.</p>
-
 <p>I&rsquo;m already planning the next post: creating your own Cocoa bindings. If you have done some cool custom bindings for UIKit classes, or any other interesting bindable properties let me know. Woot!</p>
-
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -597,13 +508,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -649,7 +553,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

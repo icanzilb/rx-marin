@@ -14,7 +14,7 @@
 <meta name="description" content="Some custom bindings I made while learning about RxSwift and RxCocoa">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Custom bindings with RxSwift" />
 <meta property="og:description" content="Some custom bindings I made while learning about RxSwift and RxCocoa" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,25 +230,28 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#binding-to-make-a-view-visible">Binding to make a view visible</a></li>
-<li><a href="#binding-for-becoming-and-resigning-first-responder">Binding for becoming and resigning first responder</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#binding-to-make-a-view-visible">Binding to make a view visible</a></li>
+    <li><a href="#binding-for-becoming-and-resigning-first-responder">Binding for becoming and resigning first responder</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -291,90 +298,65 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<h2 id="intro">Intro</h2>
-
+            <h2 id="intro">Intro</h2>
 <p>After I did some convenience operators of my own, which really made things easier while writing code I thought I&rsquo;d be a good idea to look into building more stuff on my own.</p>
-
 <p>It helps learning and it&rsquo;s healthy :)</p>
-
 <h2 id="binding-to-make-a-view-visible">Binding to make a view visible</h2>
-
 <p>I noticed there is a binding on the <code>hidden</code> property of <code>UIView</code> but sometimes the code just reads better when you don&rsquo;t have to think of <em>hiding something</em> but rather <strong>showing something</strong>.</p>
-
 <p>So I thought since I can check out the source code for <code>rx_hidden</code> how hard could it be to make my own <code>rx_visible</code>?</p>
-
 <p>So I just copied over the code and made my first bindable sink:</p>
-
-<pre><code class="language-swift">extension UIView {
-    public var rx_visible: AnyObserver&lt;Bool&gt; {
-        return UIBindingObserver(UIElement: self) { view, visible in
-            view.hidden = !visible
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">UIView</span> {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> rx_visible: AnyObserver&lt;Bool&gt; {
+        <span style="color:#66d9ef">return</span> UIBindingObserver(UIElement: <span style="color:#66d9ef">self</span>) { view, visible <span style="color:#66d9ef">in</span>
+            view.hidden = <span style="color:#f92672">!</span>visible
         }.asObserver()
     }
 }
-</code></pre>
+</code></pre></div><p>I know that isn&rsquo;t a great departure from <code>rx_hidden</code> but sometimes it really makes more sense (and it&rsquo;s more readable) to use <code>rx_visible</code>. Let&rsquo;s look:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#75715e">//longer, logic is reversed</span>
+isEnabled.map {enabled <span style="color:#66d9ef">in</span> <span style="color:#f92672">!</span>enabled}.bindTo(messageView.rx_hidden)
 
-<p>I know that isn&rsquo;t a great departure from <code>rx_hidden</code> but sometimes it really makes more sense (and it&rsquo;s more readable) to use <code>rx_visible</code>. Let&rsquo;s look:</p>
-
-<pre><code class="language-swift">//longer, logic is reversed
-isEnabled.map {enabled in !enabled}.bindTo(messageView.rx_hidden)
-
-//short and sweet
+<span style="color:#75715e">//short and sweet</span>
 isEnabled.bindTo(messageView.rx_visible)
-</code></pre>
-
-<p>I really like the latter a bit better! So far so good :)</p>
-
+</code></pre></div><p>I really like the latter a bit better! So far so good :)</p>
 <h2 id="binding-for-becoming-and-resigning-first-responder">Binding for becoming and resigning first responder</h2>
-
 <p>Next - I felt like building something that would actually add functionality it isn&rsquo;t already in.</p>
-
 <p>In the project I&rsquo;m currently working on I have a search bar and I have few buttons that show and hide the search bar depending on what the user wants to do.</p>
-
 <p>Therefore I thought it&rsquo;d be great to make my own bindable sink for being a first responder.</p>
-
-<pre><code class="language-swift">extension UIResponder {
-    public var rx_firstResponder: AnyObserver&lt;Bool&gt; {
-        return UIBindingObserver(UIElement: self) {control, shouldRespond in
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">extension</span> <span style="color:#a6e22e">UIResponder</span> {
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">var</span> rx_firstResponder: AnyObserver&lt;Bool&gt; {
+        <span style="color:#66d9ef">return</span> UIBindingObserver(UIElement: <span style="color:#66d9ef">self</span>) {control, shouldRespond <span style="color:#66d9ef">in</span>
             shouldRespond ? control.becomeFirstResponder() : control.resignFirstResponder()
         }.asObserver()
     }
 }
-</code></pre>
-
-<p>The example isn&rsquo;t more complex than the previous one. It&rsquo;s a bindable <code>Bool</code> property, which either makes the control become or resign first responder.</p>
-
+</code></pre></div><p>The example isn&rsquo;t more complex than the previous one. It&rsquo;s a bindable <code>Bool</code> property, which either makes the control become or resign first responder.</p>
 <p>Now I could group the show and hide buttons into one observable:</p>
-
-<pre><code class="language-swift">let searchBarActive = [btnSearch.rx_tap.replaceWith(true), searchBarBtnCancel.replaceWith(false)].toObservable()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> searchBarActive = [btnSearch.rx_tap.replaceWith(<span style="color:#66d9ef">true</span>), searchBarBtnCancel.replaceWith(<span style="color:#66d9ef">false</span>)].toObservable()
   .merge()
-  .startWith(false)
-  .shareReplay(1)
-</code></pre>
-
-<p>And besides all the other changes in the UI make the search bar active or force it to lose focus:</p>
-
-<pre><code class="language-swift">searchBarActive.bindTo(searchController.searchBar.rx_firstResponder)
-</code></pre>
-
-<p>Neat! Since I started writing rx code I&rsquo;ve really grown to dislike having <code>if</code> operators (also <code>var</code> but that&rsquo;s a whole other story)</p>
-
+  .startWith(<span style="color:#66d9ef">false</span>)
+  .shareReplay(<span style="color:#ae81ff">1</span>)
+</code></pre></div><p>And besides all the other changes in the UI make the search bar active or force it to lose focus:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">searchBarActive.bindTo(searchController.searchBar.rx_firstResponder)
+</code></pre></div><p>Neat! Since I started writing rx code I&rsquo;ve really grown to dislike having <code>if</code> operators (also <code>var</code> but that&rsquo;s a whole other story)</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Okay so creating simple on-the-fly cocoa bindings is easy. But is it worth it if it&rsquo;s so easy?</p>
-
 <p>I like bindings better than writing code to update the UI. No <code>if</code> and no closures to update the UI - no problem. I know other people prefer to not use RxCocoa at all and just use RxSwift and update the UI themselves.</p>
-
 <p>I guess either is okay :)</p>
-
 <p>Do you know a better way to do any of this? Seen a bug? Ping me on Twitter.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -384,13 +366,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -436,7 +411,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>useWithLatest on rx_marin&lt;blog&gt;</title>
@@ -6,11 +6,7 @@
     <description>Recent content in useWithLatest on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Feb 2016 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://rx-marin.com/tags/usewithlatest/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 22 Feb 2016 00:00:00 +0000</lastBuildDate><atom:link href="http://rx-marin.com/tags/usewithlatest/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Split laps timer with RxSwift and RxCocoa: Part 2</title>
       <link>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/</link>
@@ -18,17 +14,11 @@
       
       <guid>http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/</guid>
       <description>&lt;p&gt;In my post from last week I worked on creating a split lapse timer app (&lt;a href=&#34;http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/&#34;&gt;last week&amp;rsquo;s post&lt;/a&gt;). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.&lt;/p&gt;
-
 &lt;p&gt;Well this week I am implementing exactly this functionality.&lt;/p&gt;
-
 &lt;p&gt;The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.&lt;/p&gt;
-
 &lt;p&gt;If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&amp;rsquo;ve added a couple of buttons in the user interface:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latimer-new-ui.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;http://rx-marin.com/images/latimer-new-ui.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Download the starter project to follow along here: &lt;a href=&#34;http://rx-marin.com/zip/rx_laptimer_starter.zip&#34;&gt;rx_laptimer_starter.zip&lt;/a&gt;&lt;/p&gt;
-
 &lt;p&gt;Now let&amp;rsquo;s put all those buttons to work!&lt;/p&gt;</description>
     </item>
     

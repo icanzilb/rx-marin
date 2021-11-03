@@ -14,7 +14,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <meta name="author" content="">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="rx_marin&lt;blog&gt;" />
 <meta property="og:description" content="" />
@@ -101,6 +101,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -220,10 +224,62 @@
         <div id="toc" class="pure-u-1 pure-u-md-1-4">
 		</div>
 
-
           <div class="posts">
             
             
+            
+            <section  class="post">
+                <header class="post-header">
+                    
+                    <h1 class="post-title">
+                      <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">Announcing: “Modern Concurrency in Swift”</a>
+                  </h1>
+              </header>
+              <p class="post-meta">
+                  
+                  <span class="post-date">
+                    <span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2021</span>
+                </span>
+                
+                
+                    By <a class="post-author" >Marin Todorov</a>
+                
+                
+                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>1 min. read</em></span>
+                
+                
+            </p>
+            <article class="post-summary">
+                  I&rsquo;m incredibly happy to share that today the new raywenderlich.com book &ldquo;Modern Concurrency in Swift&rdquo;, that I&rsquo;ve been working on, is available at www.swiftconcurrencybook.com!
+Together with editors Sandra Grauschopf, Felipe Laso-Marsetti, Richard Turton, and Shai Mishali, we&rsquo;ve been working very hard to get a book out as soon as possible on the newly released in 2021 Swift Concurrency:
+The book is written in the classic raywenderlich.com style that mixes key pieces of theory with step-by-step instructions, guiding the readers through working on practical, real-life projects.
+              </article>
+              <div class="read-more-link" style="float:left!important;">
+                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
+              </div>
+              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
+          </section>
+          
+          
+          
+          <div>
+          		<div id="CombineBook" style="padding-top:30px; padding-bottom:30px;float:left;margin-right: 50px; margin-left: 100px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:200px;"><br/><br/>
+					<small class="toc-label">&raquo; Team: F. Pillet, S. Mishali, M. Todorov, & S. Gardner <br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+				</div>
+				
+				<div id="RxSwiftbook" style="padding-bottom:30px;clear:right;padding-top:35px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:185px;"><br/><br/>
+					<small class="toc-label">&raquo; Authors: F. Pillet, Shai Mishali, M. Todorov, & S. Gardner <br/> &raquo; Publisher: Ray Wenderlich</small>
+					</a>
+				</div>
+          </div>
+          
+          
+          
             
             <section  class="post">
                 <header class="post-header">
@@ -264,22 +320,6 @@ We&rsquo;ll look at the following two use cases:
           </section>
           
           
-          
-          <div>
-          		<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-right: 50px; margin-left: 100px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:200px;box-shadow: 6px 6px #002d8c;"><br/><br/>
-					<small class="toc-label">&raquo; Team: F. Pillet, S. Mishali, M. Todorov, & S. Gardner <br/> &raquo; Publisher: Ray Wenderlich</small>
-					</a>
-				</div>
-				
-				<div id="RxSwiftbook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;clear:right;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"><br/><br/>
-					<small class="toc-label">&raquo; Authors: F. Pillet, J. Bontognali, M. Todorov, & S. Gardner <br/> &raquo; Tech Ed: Ash Furrow<br/> &raquo; Publisher: Ray Wenderlich</small>
-					</a>
-				</div>
-          </div>
           
           
           
@@ -359,6 +399,7 @@ When to use RxBlocking vs. RxTest? RxTest is a great library for testing RxSwift
                   Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.
 In this blog post I&rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&rsquo;ll go over a bunch of real-life examples from open source I&rsquo;ve written.
 Testing with RxTest  pod RxTest to install it to your test suite from https://github.com/ReactiveX/RxSwift/tree/master/RxTest
+ I&rsquo;ve already written in the past about RxTest and few people have thanked me personally for shading some light on its usage, so if you&rsquo;re interested head to the original article and read through: Testing your RxSwift code, part1.
               </article>
               <div class="read-more-link" style="float:left!important;">
                   <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxblocking-part1/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
@@ -625,717 +666,6 @@ What does the combineLatest operator do? combineLatest is super useful and it wa
           
           
           
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-book-free-chapters/">Two free chapters from the RxSwift book!</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>10</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>3 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-announcement" href="http://rx-marin.com//categories/announcement">announcement</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Last week we announced our brand new RxSwift book (available now)!
-The book starts with the very basics in Chapter 1, &ldquo;Hello, world!&rdquo; and leads the reader through a plethora of topics all the way to Chapter 23, &ldquo;MVVM&rdquo; and Chapter 24, &ldquo;Building a complete app with RxSwift&rdquo;.
-Being so detailed about RxSwift knowledge already sets the book apart as a great learning source, but what is really special is that it&rsquo;s written by four very active RxSwift community memebers and it&rsquo;s polished by two more editors.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-book-free-chapters/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-book-available-now/">RxSwift book - available now!</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-announcement" href="http://rx-marin.com//categories/announcement">announcement</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  After a long time working on this project, I and my friends and colleagues Florent Pillet, Junior Bontognali, Scott Gardner, Ash Furrow, Chris Belanger, and Ray and Vicki Wenderlich are happy to announce that our new book about development with RxSwift is available now!
-How it came to be? When I first tried out RxSwift (being excited about it by some of the same people who are my co-authors on the book) I immediately noticed that even though there is plenty of information on the Internet, there isn&rsquo;t a single structured resource where people can learn systematically.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-book-available-now/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/">(dotSwift) Unidirectional data flow with RxSwift and RxRealm</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>24</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I post the sample code and comment shortly why I chose to highlight these exact examples.
-I already posted a write up on the GitHub API search example here: http://rx-marin.com/post/dotswift-search-github-json-api/.
-The second post in the series, the one about presenting view controllers, is online here: http://rx-marin.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/dotswift-rxswift-rxrealm-unidirectional-dataflow/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/dotswift-rxswift-view-controller/">(dotSwift) Presenting View Controllers with RxSwift</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>28</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>7 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples.
-I already posted a write up on the GitHub API search example here: http://rx-marin.com/post/dotswift-search-github-json-api/. Let&rsquo;s continue with example number two.
-Presenting a View Controller from RxSwift RxSwift doesn&rsquo;t neccessarily force you into one architecture or another, it&rsquo;s really up to you to chose how are you going to structure your application.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/dotswift-rxswift-view-controller/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/dotswift-search-github-json-api/">(dotSwift) Search GitHub with RxSwift</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  In my talk at dotSwift 2017 I start with generic overview of some of the RxSwift basics and move to three complete code examples. In three posts I&rsquo;ll post the sample code and comment shortly why I chose to highlight these exact examples. Let&rsquo;s start with number one.
-Searching for GitHub repositories with RxSwift The first example in the talk is a simple single-screen application that allows the user to enter a repository name (or part of it) and search GitHub for matching results.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/dotswift-search-github-json-api/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-retry-with-delay/">A smarter Retry with RxSwiftExt</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>8</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2017</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.
-RxSwift offers a special operator called retry, which allows you to try another time the observable subscription upon error.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-retry-with-delay/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/">Testing your RxSwift code, part 2</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>23</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  In part 1 I looked into writing very basic tests with RxSwift and life was good. But then I wanted to do more and moved on to writing asynchronous tests&hellip;
-I contributed the code for RxRealm - the Rx extension for RealmSwift owned by the RxSwiftCommunity. For RxRealm I needed some asynchronous tests because Realm&rsquo;s collections emit notifications (which RxRealm wraps) when the underlaying data changes.
-So let&rsquo;s have a look at some of the unit tests I wrote&hellip;
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxtests-unit-tests-part-2/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part 1</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>3</sup></span><span class="post-date-separator">/</span><span class="post-date-month">May</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  I sat down recently and learned the basics of writing unit tests for RxSwift. It was way easier than I expected and that&rsquo;s why I&rsquo;d like to show few of the tests I got to write.
-Before I start on the code itself I just want to mention how great contributing to open source is. If I didn&rsquo;t jump in to helping around on the RxSwift-Ext project I&rsquo;d probably haven&rsquo;t looked into writing unit tests with RxSwift yet, but I did - and that&rsquo;s great.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/">App state with Realm and RxSwift</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Intro This post isn&rsquo;t that much about operators but how to leverage the awesome technology that Realm is.
-Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-realm-reactive-app-settings/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-state-with-scan/">Implementing state with scan in RxSwift</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>4</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Apr</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>6 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Intro Common misconception is that you cannot have state with Rx. Well you can - and there&rsquo;s a special operator that helps you to: scan.
-If you&rsquo;ve ever used reduce in Swift - scan is a very similar operator but reduce goes over the complete sequence and gives you the final value of the accumulator while scan emits each intermediate value as well.
-If you haven&rsquo;t used reduce - no worries you&rsquo;ll get to understand scan from the examples below.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-state-with-scan/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/">Custom bindings with RxSwift</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>31</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>3 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Intro After I did some convenience operators of my own, which really made things easier while writing code I thought I&rsquo;d be a good idea to look into building more stuff on my own.
-It helps learning and it&rsquo;s healthy :)
-Binding to make a view visible I noticed there is a binding on the hidden property of UIView but sometimes the code just reads better when you don&rsquo;t have to think of hiding something but rather showing something.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-bindings/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/">Custom convenience operators with RxSwift, Part 2</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>8 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Intro I got some great feedback on last week&rsquo;s post on convenience operators part 1 so I&rsquo;m really excited to publish part 2, which I hope will be even more interesting for those of you who are looking into RxSwift.
-Without further ado let&rsquo;s dive in code&hellip;
-A better negate() operator First of all I have a better version of my negate() operator from last week for you. What I wrote on my own was a pretty simple function that looked like so:
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part2/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/">Custom convenience operators with RxSwift, Part 1</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>29</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>5 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  Intro Just like when learning a new language you need to build up a dictionary to start understanding how the language works, you got to learn the Rx operators and everything will eventually click together.
-And then once you have a good common of a language it&rsquo;s okay to start coming up with new words too to boost the expressiveness of your speech and for convenience.
-Same thing happened with me last week - for the first time I felt like I&rsquo;m getting work done with RxSwift because I had good understanding how to use at least few operators.
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxcocoa-custom-convenience-operators-part1/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/">Split laps timer with RxSwift and RxCocoa: Part 2</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>22</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>4 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  <p>In my post from last week I worked on creating a split lapse timer app (<a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">last week&rsquo;s post</a>). But later on when I was playing with the application I noticed that I naturally would like to have means to start or stop the timer.</p>
-
-<p>Well this week I am implementing exactly this functionality.</p>
-
-<p>The first thing I thought about was how to implement state in my app because a timer clearly has two distinct states either running or not running. That got me thinking about combining signals, mapping, you know, all the good stuff.</p>
-
-<p>If you want to follow along you can download the starter project I prepared. It is in the shape where last weeks blog posts leaves off but I&rsquo;ve added a couple of buttons in the user interface:</p>
-
-<p><img src="http://rx-marin.com/images/latimer-new-ui.png" alt="" /></p>
-
-<p>Download the starter project to follow along here: <a href="http://rx-marin.com/zip/rx_laptimer_starter.zip">rx_laptimer_starter.zip</a></p>
-
-<p>Now let&rsquo;s put all those buttons to work!</p>
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxcocoa-timer-app-usewithlatest-bindings/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/">Split laps timer with RxSwift and RxCocoa</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Feb</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>6 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  <p>I was browsing through <a href="http://rxmarbles.com/">RxMarbles</a> and was totally baffled by the <code>sample</code> function. The marble diagram looks pretty random at first sight:</p>
-
-<p><img src="http://rx-marin.com/images/marbles-sample.png" alt="" /></p>
-
-<p>At first I thought - &ldquo;Hey, that second sequence is getting totally ignored!&rdquo;. But after I read the description I figured it out:</p>
-
-<blockquote>
-<p>The first sequence&rsquo;s elements is <strong>what</strong> <code>sample</code> emits, while the second sequence&rsquo;s elements determine <strong>when</strong> <code>sample</code> emits. So in a way yes - the actual values A, B, C, D do get totally ignored.</p>
-</blockquote>
-
-<p>When it was clear to me what <code>sample</code> does I started wondering if this function has any practical application :]</p>
-
-<p>This brought me to creating a split lap timer app to test what <code>sample</code> can do for me. In the finished project I have a timer emitting time values (aka the first sequence) and I want to grab (or sample) the values whenever the user taps a button (aka the second sequence).</p>
-
-<p>Here&rsquo;s how the marble diagram looks like for the app setup:</p>
-
-<p><img src="http://rx-marin.com/images/sample-dia.png" alt="" /></p>
-
-<p>And this is how the app looks like when finished:</p>
-
-<p><img src="http://rx-marin.com/images/laptimer-finished.png" alt="" /></p>
-
-<p>Let&rsquo;s build that app :]</p>
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-rxcocoa-sample-split-laps-timer/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
-            
-            <section  class="post">
-                <header class="post-header">
-                    
-                    <h1 class="post-title">
-                      <a href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/">Manually disposing a bag and creating a timer</a>
-                  </h1>
-              </header>
-              <p class="post-meta">
-                  
-                  <span class="post-date">
-                    <span class="post-date-day"><sup>17</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Jan</span> <span class="post-date-year">2016</span>
-                </span>
-                
-                
-                    By <a class="post-author" >Marin Todorov</a>
-                
-                
-                    <span class="post-reading-time"><i class="fa fa-clock-o"></i> <em>2 min. read</em></span>
-                
-                
-                <div class="post-categories">
-                    
-                    <a class="post-category post-category-code" href="http://rx-marin.com//categories/code">code</a>
-                    
-                </div>
-                
-            </p>
-            <article class="post-summary">
-                  <p>I was reading through the <a href="https://github.com/ReactiveX/RxSwift/tree/master/Documentation">RxSwift docs</a> and did a little test to see if I understood manual disposing. As the example made a lot of sense I thought it&rsquo;s not a bad idea to share it online.</p>
-              </article>
-              <div class="read-more-link" style="float:left!important;">
-                  <a style="font-size:1.0rem; font-weight: bold;" href="http://rx-marin.com/post/rxswift-timer-sequence-manual-dispose-bag/"><span class="read-more-slashes">//</span>Read the Full Post...</a>
-              </div>
-              <hr style="height:1px;margin:0px; border:0px; color: red; border-bottom: 1px dotted #a81818!important;clear:both;">
-          </section>
-          
-          
-          
-          
-          
         </div>
 
         <div class="footer">
@@ -1348,7 +678,7 @@ Same thing happened with me last week - for the first time I felt like I&rsquo;m
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

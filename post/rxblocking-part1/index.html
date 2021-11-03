@@ -14,7 +14,7 @@
 <meta name="description" content="How to use RxBlocking to simplify your asynchronous tests">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="Testing with RxBlocking, part 1" />
 <meta property="og:description" content="How to use RxBlocking to simplify your asynchronous tests" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,35 +230,40 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#testing-with-rxtest">Testing with RxTest</a></li>
-<li><a href="#testing-with-rxblocking">Testing with RxBlocking</a></li>
-</ul></li>
-<li><a href="#rxblocking-crash-course">RxBlocking crash course</a>
-<ul>
-<li><a href="#what-does-rxblocking-do">What does RxBlocking do?</a></li>
-<li><a href="#waiting-on-completing-sequences">Waiting on completing sequences</a></li>
-<li><a href="#waiting-on-non-completing-sequences">Waiting on non-completing sequences</a></li>
-<li><a href="#waiting-for-a-given-time-only">Waiting for a given time only</a></li>
-<li><a href="#waiting-on-the-final-element-of-a-sequence">Waiting on the final element of a sequence</a></li>
-</ul></li>
-<li><a href="#where-to-go-from-here">Where to go from here?</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#testing-with-rxtest">Testing with RxTest</a></li>
+        <li><a href="#testing-with-rxblocking">Testing with RxBlocking</a></li>
+      </ul>
+    </li>
+    <li><a href="#rxblocking-crash-course">RxBlocking crash course</a>
+      <ul>
+        <li><a href="#what-does-rxblocking-do">What does RxBlocking do?</a></li>
+        <li><a href="#waiting-on-completing-sequences">Waiting on completing sequences</a></li>
+        <li><a href="#waiting-on-non-completing-sequences">Waiting on non-completing sequences</a></li>
+        <li><a href="#waiting-for-a-given-time-only">Waiting for a given time only</a></li>
+        <li><a href="#waiting-on-the-final-element-of-a-sequence">Waiting on the final element of a sequence</a></li>
+      </ul>
+    </li>
+    <li><a href="#where-to-go-from-here">Where to go from here?</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -301,46 +310,27 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.</p>
-
+            <p>Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.</p>
 <p>In this blog post I&rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&rsquo;ll go over a bunch of real-life examples from open source I&rsquo;ve written.</p>
-
 <h3 id="testing-with-rxtest">Testing with RxTest</h3>
-
 <blockquote>
 <p><code>pod RxTest</code> to install it to your test suite from <a href="https://github.com/ReactiveX/RxSwift/tree/master/RxTest">https://github.com/ReactiveX/RxSwift/tree/master/RxTest</a></p>
 </blockquote>
-
 <p>I&rsquo;ve already written in the past about RxTest and few people have thanked me personally for shading some light on its usage, so if you&rsquo;re interested head to the original article and read through: <a href="http://rx-marin.com/post/rxswift-rxtests-unit-tests/">Testing your RxSwift code, part1</a>.</p>
-
 <p>RxTest is excellent for the cases when you need to provide a bunch of inputs and record and inspect some outputs. For example you have a view model, which given a city name outputs the name of the country the city is located in. RxTest makes it easy to test the sequence <code>&quot;Berlin&quot;, &quot;London&quot;, &quot;Barcelona&quot;</code> as input and compare if the recorded output was <code>[&quot;Germany&quot;, &quot;UK&quot;, &quot;Spain&quot;]</code> in one pass. Simple!</p>
-
 <h3 id="testing-with-rxblocking">Testing with RxBlocking</h3>
-
 <blockquote>
 <p><code>pod RxBlocking</code> to install it to your test suite from <a href="https://github.com/ReactiveX/RxSwift/tree/master/RxBlocking">https://github.com/ReactiveX/RxSwift/tree/master/RxBlocking</a></p>
 </blockquote>
-
 <p>RxBlocking on the other hand is reaaaaaly handy in case you need to test some asynchronous functionality where you can&rsquo;t control the source of asynchronisity. Often times this means you&rsquo;re stepping up from unit tests to integration tests but nonetheless you do need a tool write those too.</p>
-
 <p>What RxBlocking is great to is to allow you to consume an observable sequence in batches or even wait on a single element to be emitted. It simplifies great async tests and this is what I&rsquo;m gonna write about in this and the next blog posts.</p>
-
 <h2 id="rxblocking-crash-course">RxBlocking crash course</h2>
-
 <p>The RxBlocking library is very very simple and it features only a handful of operators. Let&rsquo;s look at couple of examples and after that we&rsquo;re going to dive into more elaborated examples.</p>
-
 <h3 id="what-does-rxblocking-do">What does RxBlocking do?</h3>
-
 <p>RxBlocking allows you to &ldquo;stop and wait for a given condition to be fulfilled&rdquo;. In regards to testing observable sequences a handy &ldquo;condition&rdquo; is to wait for an element to be emitted. Let&rsquo;s have a look:</p>
-
-<pre><code class="language-swift">let element = try! items.toBlocking().first()!
-XCTAssertEqual(1, element)
-</code></pre>
-
-<p>What this code does is the following</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> element = <span style="color:#66d9ef">try</span>! items.toBlocking().first()<span style="color:#f92672">!</span>
+XCTAssertEqual(<span style="color:#ae81ff">1</span>, element)
+</code></pre></div><p>What this code does is the following</p>
 <ol>
 <li><code>items</code> is an <code>Observable&lt;Int&gt;</code>, which you want to test</li>
 <li><code>items.toBlocking()</code> converts it to a blocking observable, and when you call <code>first()</code> on it the runtime &ldquo;stops&rdquo; and waits for the next element to be emitted.</li>
@@ -348,64 +338,45 @@ XCTAssertEqual(1, element)
 <li>finally, when <code>items</code> emits an element, the result is assigned to <code>element</code></li>
 <li>then the execution continues to the next line and by using <code>XCTAssertEqual()</code> we can check if <code>element</code> contains the value we expect.</li>
 </ol>
-
 <p>This is a minimal explanation of RxBlocking and a full unit test. The big win of using <code>toBlocking()</code> for that test is that the code is asynchronous - it could, for example, take few seconds before <code>items</code> emits.</p>
-
 <p>You can of course write the same test as an asynchronous XCTest test, but hey look at how clear and neat the RxBlocking code looks!</p>
-
 <p>Let&rsquo;s look at few quick examples.</p>
-
 <h3 id="waiting-on-completing-sequences">Waiting on completing sequences</h3>
-
 <p>In case the observable sequence completes, you can get all the emitted elements by using <code>toArray()</code> like so:</p>
-
-<pre><code class="language-swift">let elements = try! items.toBlocking().toArray()
-XCTAssertEqual([1, 5, 10, 15], elements)
-</code></pre>
-
-<p><code>toArray()</code> waits until the sequence completes and returns all emitted elements as an array. On the next line you can compare the result <code>elements</code> to the values you expected.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> elements = <span style="color:#66d9ef">try</span>! items.toBlocking().toArray()
+XCTAssertEqual([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">15</span>], elements)
+</code></pre></div><p><code>toArray()</code> waits until the sequence completes and returns all emitted elements as an array. On the next line you can compare the result <code>elements</code> to the values you expected.</p>
 <h3 id="waiting-on-non-completing-sequences">Waiting on non-completing sequences</h3>
-
 <p><code>toArray()</code> can be used directly on any observable sequence, which completes (e.g. the <code>.completed</code> event is the &ldquo;condition&rdquo; to un-block). But how about if your sequence does not complete and you&rsquo;d like to check the 4th and 5th elements only?</p>
-
 <p>You can use all operators as usual on your sequence before you convert it to a blocking observable. Let&rsquo;s have a look:</p>
-
-<pre><code class="language-swift">let elements = try! items.skip(3).take(2).toBlocking().toArray()
-XCTAssertEqual([15, 20], elements)
-</code></pre>
-
-<p>In this case you will skip over the first 3 elements and take only the next 2 in your sequence. Then you use <code>toBlocking()</code> and get the resulting 2 elements by using <code>toArray()</code>. Bam!</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> elements = <span style="color:#66d9ef">try</span>! items.skip(<span style="color:#ae81ff">3</span>).take(<span style="color:#ae81ff">2</span>).toBlocking().toArray()
+XCTAssertEqual([<span style="color:#ae81ff">15</span>, <span style="color:#ae81ff">20</span>], elements)
+</code></pre></div><p>In this case you will skip over the first 3 elements and take only the next 2 in your sequence. Then you use <code>toBlocking()</code> and get the resulting 2 elements by using <code>toArray()</code>. Bam!</p>
 <h3 id="waiting-for-a-given-time-only">Waiting for a given time only</h3>
-
 <p>It&rsquo;s worth mentioning that in case you don&rsquo;t want your test to wait for ever (which is mostly the case?) you can provide a timeout parameter:</p>
-
-<pre><code class="language-swift">let elements = try! items.toBlocking(timeout: 1).toArray()
-</code></pre>
-
-<p>If <code>items</code> does not complete within 1 second <code>toArray()</code> will raise an error. If you want to handle this properly use <code>try?</code> instead of <code>try!</code> or catch the thrown error otherwise.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> elements = <span style="color:#66d9ef">try</span>! items.toBlocking(timeout: <span style="color:#ae81ff">1</span>).toArray()
+</code></pre></div><p>If <code>items</code> does not complete within 1 second <code>toArray()</code> will raise an error. If you want to handle this properly use <code>try?</code> instead of <code>try!</code> or catch the thrown error otherwise.</p>
 <h3 id="waiting-on-the-final-element-of-a-sequence">Waiting on the final element of a sequence</h3>
-
 <p>Finally, you might be interested only in the final element of a squence. This is handy if the elements in the sequence represent some kind of state and you want to test only the final state of the observable.</p>
-
-<pre><code class="language-swift">let lastElement = try! items.toBlocking().last()!
-XCTAssertEqual(1, lastElement)
-</code></pre>
-
-<p><code>last()</code> will &ldquo;stop and wait&rdquo; for the observable to complete and return as result the last element of the sequence.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> lastElement = <span style="color:#66d9ef">try</span>! items.toBlocking().last()<span style="color:#f92672">!</span>
+XCTAssertEqual(<span style="color:#ae81ff">1</span>, lastElement)
+</code></pre></div><p><code>last()</code> will &ldquo;stop and wait&rdquo; for the observable to complete and return as result the last element of the sequence.</p>
 <h2 id="where-to-go-from-here">Where to go from here?</h2>
-
 <p>In Part 2 I&rsquo;ll look over a number of real-life examples to give you a better idea where you can take your tests with the power of RxBlocking.</p>
-
 <p>To learn more about RxSwift and testing check out the RxBook! The book is available at <a href="https://store.raywenderlich.com/products/rxswift?source=underplot">http://raywenderlich.com/store</a> - this is where you can see all updates, discuss in the website forums, etc.</p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -415,13 +386,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -471,7 +435,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

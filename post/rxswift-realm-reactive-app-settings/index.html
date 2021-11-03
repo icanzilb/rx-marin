@@ -14,7 +14,7 @@
 <meta name="description" content="Easily create a reactive app settings data model to use across your app">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="App state with Realm and RxSwift" />
 <meta property="og:description" content="Easily create a reactive app settings data model to use across your app" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,29 +230,32 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#intro">Intro</a></li>
-<li><a href="#the-data-model-class">The data model class</a></li>
-<li><a href="#app-state-subject-in-app-controller">App state subject in app controller</a></li>
-<li><a href="#provide-app-state-updates">Provide app state updates</a></li>
-<li><a href="#observe-for-app-state-updates">Observe for app state updates</a></li>
-<li><a href="#updating-the-app-state">Updating the app state</a></li>
-<li><a href="#observing-for-buttons-taps-and-mutating-the-state">Observing for buttons taps and mutating the state</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#the-data-model-class">The data model class</a></li>
+    <li><a href="#app-state-subject-in-app-controller">App state subject in app controller</a></li>
+    <li><a href="#provide-app-state-updates">Provide app state updates</a></li>
+    <li><a href="#observe-for-app-state-updates">Observe for app state updates</a></li>
+    <li><a href="#updating-the-app-state">Updating the app state</a></li>
+    <li><a href="#observing-for-buttons-taps-and-mutating-the-state">Observing for buttons taps and mutating the state</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -295,136 +302,97 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<h2 id="intro">Intro</h2>
-
+            <h2 id="intro">Intro</h2>
 <p>This post isn&rsquo;t that much about operators but how to leverage the awesome technology that Realm is.</p>
-
 <p>Long story short - I wanted to submit an app for review and literally just before hitting submit I realized I forgot to implement a favorites filter in one of the view controllers. I would&rsquo;ve quickly hacked something to send it off but since different controllers took care of the navigation bar and the actual table view showing the data could not hack my way around.</p>
-
 <p>So I sat down and wrote me a proper reactive app settings class to use around the app in some 10 minutes or so.</p>
-
 <h2 id="the-data-model-class">The data model class</h2>
-
 <p>Since the app uses Realm I created a new <code>Object</code> sub-class for my app settings - this way my settings would always persist between app launches and can be observed on any thread. Here&rsquo;s the AppState class I ended up with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">Foundation</span>
+<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">RealmSwift</span>
 
-<pre><code class="language-swift">import Foundation
-import RealmSwift
-
-class AppState: Object {
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AppState</span>: Object {
     
-    dynamic var scheduleOnlyFavorites = false
-    dynamic var speakersOnlyFavorites = false
+    <span style="color:#66d9ef">dynamic</span> <span style="color:#66d9ef">var</span> scheduleOnlyFavorites = <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">dynamic</span> <span style="color:#66d9ef">var</span> speakersOnlyFavorites = <span style="color:#66d9ef">false</span>
     
 }
-</code></pre>
-
-<p>For this version of the app I just want to persist whether the user has favorites-only toggled in the schedule screen and the speakers screen (it&rsquo;s an event app).</p>
-
+</code></pre></div><p>For this version of the app I just want to persist whether the user has favorites-only toggled in the schedule screen and the speakers screen (it&rsquo;s an event app).</p>
 <p>The default values for both properties are <code>false</code>. When the app starts it checks whether there&rsquo;s an <code>AppState</code> object already stored in Realm and if not - creates one.</p>
-
 <h2 id="app-state-subject-in-app-controller">App state subject in app controller</h2>
-
 <p>I have an app controller class that provides few generic services so I thought it&rsquo;s a good idea to add a <code>PublishSubject</code> to it that different view controllers (and other classes) can observe.</p>
-
 <p>I added an <code>appState</code> subject and a property to retain the Realm updates subscription:</p>
-
-<pre><code class="language-swift">class AppController {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AppController</span> {
     
-    private var stateNotification: NotificationToken?
-    let appState = PublishSubject&lt;AppState&gt;()
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">var</span> stateNotification: NotificationToken?
+    <span style="color:#66d9ef">let</span> appState = PublishSubject&lt;AppState&gt;()
     
 }
-</code></pre>
-
-<h2 id="provide-app-state-updates">Provide app state updates</h2>
-
+</code></pre></div><h2 id="provide-app-state-updates">Provide app state updates</h2>
 <p>Wiring up the app settings subject was very easy thanks to the  <code>addNotificationBlock</code> method on Realm&rsquo;s <code>AnyRealmCollection</code>:</p>
-
-<pre><code class="language-swift">init() {
-    stateNotification = RealmProvider.appRealm.objects(AppState).addNotificationBlock {[weak self]results, error in
-        if let state = results?.first, let `self` = self {
-            self.appState.onNext(state)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">init</span>() {
+    stateNotification = RealmProvider.appRealm.objects(AppState).addNotificationBlock {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>]results, error <span style="color:#66d9ef">in</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">let</span> state = results?.first, <span style="color:#66d9ef">let</span> `<span style="color:#66d9ef">self</span>` = <span style="color:#66d9ef">self</span> {
+            <span style="color:#66d9ef">self</span>.appState.onNext(state)
         }
     }
 }
-</code></pre>
-
-<blockquote>
+</code></pre></div><blockquote>
 <p><em><code>RealmProvider.appRealm</code> returns a Realm on the current thread that points to the particle realm file I want to use for the app state.</em></p>
 </blockquote>
-
 <p>What this code does is to fetch all objects of class <code>AppState</code> stored in Realm and any time any time those are updated call the closure provided to <code>addNotificationBlock</code>. The closure gets a reference to the results as its first parameter so it&rsquo;s pretty easy to just fetch the first result (the only <code>AppState</code> object in the Realm actually) and emit it as a <code>.Next</code> event from the <code>appState</code> subject of the app controller.</p>
-
 <p>That&rsquo;s really all there is to binding a <code>PublishSubject</code> to any Realm result. As long as anything retains <code>stateNotification</code> you will receive updates from Realm.</p>
-
 <h2 id="observe-for-app-state-updates">Observe for app state updates</h2>
-
 <p>Next - I wanted to observe for changes in the two settings in my persisted app settings object.</p>
-
 <p>So in my view model, that shows the event schedule, I added:</p>
-
-<pre><code class="language-swift">UIApplication.controller.appState
-.map {state in
-    return state.scheduleOnlyFavorites
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">UIApplication.controller.appState
+.map {state <span style="color:#66d9ef">in</span>
+    <span style="color:#66d9ef">return</span> state.scheduleOnlyFavorites
 }
 .bindTo(onlyFavorites)
 .addDisposableTo(bag)
-</code></pre>
-
-<p>I observe <code>appState</code> and map the emitted value, which is of type <code>AppState</code>, to the value of <code>scheduleOnlyFavorites</code>. The result is a <code>Bool</code> value, which I just bind to another subject that I have called <code>onlyFavorites</code>.</p>
-
+</code></pre></div><p>I observe <code>appState</code> and map the emitted value, which is of type <code>AppState</code>, to the value of <code>scheduleOnlyFavorites</code>. The result is a <code>Bool</code> value, which I just bind to another subject that I have called <code>onlyFavorites</code>.</p>
 <p>Cool! Now any class could update my app settings and that&rsquo;ll reflect the bindings I have in this particular view model.</p>
-
 <h2 id="updating-the-app-state">Updating the app state</h2>
-
 <p>The last piece of the puzzle was the code to run when the user toggles the favorites-only button. I went back to my app controller class and added a new method that would update my app state:</p>
-
-<pre><code class="language-swift">func updateState(updates: (inout AppState)-&gt;Void) {
-    try! RealmProvider.appRealm.write {
-        var currentState = RealmProvider.appRealm.objects(AppState).first!
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">updateState</span>(updates: (<span style="color:#66d9ef">inout</span> AppState)-&gt;Void) {
+    <span style="color:#66d9ef">try</span>! RealmProvider.appRealm.write {
+        <span style="color:#66d9ef">var</span> currentState = RealmProvider.appRealm.objects(AppState).first!
         updates(&amp;currentState)
     }
 }
-</code></pre>
-
-<p><code>updateState</code> takes a closure inside which you can mutate the app state. This pattern let me create a Realm on the current thread, fetch the current app state and inject it to the user-defined updates closure.</p>
-
+</code></pre></div><p><code>updateState</code> takes a closure inside which you can mutate the app state. This pattern let me create a Realm on the current thread, fetch the current app state and inject it to the user-defined updates closure.</p>
 <p>I wrapped the whole thing in a <code>Realm.write</code> call so that it is actually allowed to mutate the state object from inside the closure.</p>
-
 <h2 id="observing-for-buttons-taps-and-mutating-the-state">Observing for buttons taps and mutating the state</h2>
-
 <p>It was finally time to wire everything together. In the view controller taking care of my navigation bar where the favorites button lives I added:</p>
-
-<pre><code class="language-swift">btnFavorites.rx_tap
-    .subscribeNext {[weak self]_ in
-        guard let `self` = self else {return}
-        UIApplication.controller.updateState {state in
-            state.scheduleOnlyFavorites = self.btnFavorites.selected
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">btnFavorites.rx_tap
+    .subscribeNext {[<span style="color:#66d9ef">weak</span> <span style="color:#66d9ef">self</span>]<span style="color:#66d9ef">_</span> <span style="color:#66d9ef">in</span>
+        <span style="color:#66d9ef">guard</span> <span style="color:#66d9ef">let</span> `<span style="color:#66d9ef">self</span>` = <span style="color:#66d9ef">self</span> <span style="color:#66d9ef">else</span> {<span style="color:#66d9ef">return</span>}
+        UIApplication.controller.updateState {state <span style="color:#66d9ef">in</span>
+            state.scheduleOnlyFavorites = <span style="color:#66d9ef">self</span>.btnFavorites.selected
         }
     }
     .addDisposableTo(bag)
-</code></pre>
-
-<p>When the user taps the favorites button I call <code>updateState</code> and set the value of <code>scheduleOnlyFavorites</code> to the <code>selected</code> property of my button. <code>selected</code> toggles between <code>true</code> and <code>false</code> so that changes the app state property accordingly.</p>
-
+</code></pre></div><p>When the user taps the favorites button I call <code>updateState</code> and set the value of <code>scheduleOnlyFavorites</code> to the <code>selected</code> property of my button. <code>selected</code> toggles between <code>true</code> and <code>false</code> so that changes the app state property accordingly.</p>
 <p>As soon as my <code>updateState</code> closure executes, app controller gets a notification from Realm that one of the stored <code>AppState</code> objects was modified and that emits a new value from the <code>appState</code> subject.</p>
-
 <p>And finally since my view models throughout the app observe that subject they update their bindings and UI throughout the app gets updated accordingly.</p>
-
 <h2 id="conclusion">Conclusion</h2>
-
 <p>It took me very little time to add a persisted reactive app state to the project. Using Realm for the task made it very easy to have the app state reactive and accessible across classes and threads.</p>
-
 <p>The code in my app controller is 10-15 lines and I have another 5 lines in the data model class. How cool is that?</p>
-
 <p>I hope this post has been useful! Do you know a better way to do any of this? Seen a bug? Ping me on Twitter at <a href="https://twitter.com/icanzilb">icanzilb</a></p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -434,13 +402,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -486,7 +447,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

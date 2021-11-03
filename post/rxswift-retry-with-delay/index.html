@@ -14,7 +14,7 @@
 <meta name="description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry">
 <meta name="keywords" content="">
 <meta name="author" content="Marin Todorov">
-<meta name="generator" content="Hugo 0.56.1" />
+<meta name="generator" content="Hugo 0.88.1" />
 
   <meta property="og:title" content="A smarter Retry with RxSwiftExt" />
 <meta property="og:description" content="When you need more than what the built-in retry operator offers, you can use RxSwiftExt&#39;s smart retry" />
@@ -103,6 +103,10 @@
     
     <div class="sidebar-posts" style="padding-top:20px!important;">
 	    Latest posts:
+        
+          <li class="sidebar-post">
+              <a href="http://rx-marin.com/post/announcing-modern-swift-concurrency-book/">3/Nov &middot; Announcing: “Modern Concurrency in Swift”</a>
+          </li>
         
           <li class="sidebar-post">
               <a href="http://rx-marin.com/post/bind-multiple-cells/">25/Dec &middot; Binding to a table view with multiple cells and sections</a>
@@ -226,28 +230,32 @@
 		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
 				<small class="toc-label">Contents</small>
 		   	 	<nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#retrying-at-equal-intervals">Retrying at equal intervals</a></li>
-<li><a href="#retrying-in-increasing-intervals">Retrying in increasing intervals</a></li>
-<li><a href="#calculating-the-delay">Calculating the delay</a></li>
-<li><a href="#a-non-rxswift-retry">A non RxSwift retry</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#retrying-at-equal-intervals">Retrying at equal intervals</a></li>
+        <li><a href="#retrying-in-increasing-intervals">Retrying in increasing intervals</a></li>
+        <li><a href="#calculating-the-delay">Calculating the delay</a></li>
+        <li><a href="#a-non-rxswift-retry">A non RxSwift retry</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
-		   	 	<div id="CombineBook" style="border-top:1px none gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;float:left;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?combine" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/combine.png" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-top:30px;padding-bottom:10px;float:left;margin-left:20px;">
+				  <a href="https://combinebook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/combine.png" style="width:180px;"><br/><br/>
 					</a>
 				</div>
 
-					<div id="RxSwiftbook" style="border-top:1px dashed gray; padding-top:30px; border-bottom:1px none gray; padding-bottom:30px;margin-left:20px;">
-				  <a href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;">
-						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:180px;box-shadow: 6px 6px #002d8c;"><br/><br/>
+		   	 	<div id="CombineBook" style="padding-bottom:10px;float:left;margin-left:25px;">
+				  <a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+					</a>
+				</div>
+
+					<div id="RxSwiftbook" style="padding-top:30px; padding-bottom:30px;margin-left:20px;">
+				  <a href="https://store.raywenderlich.com/a/17706/link/20" target="_blank" style="text-decoration:none;">
+						<img src="http://rx-marin.com/images/rx-new.jpg" style="width:170px;margin-left:10px;"><br/><br/>
 					</a>
 					</div>
 		    </div>
@@ -294,95 +302,68 @@
   data-size="medium">
 Tweet</a><p>
 
-            
-
-<p>Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.</p>
-
+            <p>Sometimes your observable will fail with an error but that would not mean that you need to give up trying. For example saving to a file might fail because the file is locked temporarily but a split second later would be unlocked and ready for your changes. Same goes for web requests - there might be a temporary glitch in connectivity which could make the observable fail.</p>
 <p>RxSwift offers a special operator called <code>retry</code>, which allows you to try another time the observable subscription upon error.</p>
-
 <p>You can even tell <code>retry</code> how many times to keep trying, which is very useful. The code looks like this:</p>
-
-<pre><code class="language-swift">responseObservable.retry(3)
-  .subscribe(onNext: {next in
-    print(&quot;next: \(next)&quot;)
-  }, onError: { error in
-    print(&quot;error: &quot;)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">responseObservable.retry(<span style="color:#ae81ff">3</span>)
+  .subscribe(onNext: {next <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;next: </span><span style="color:#e6db74">\(</span>next<span style="color:#e6db74">)</span><span style="color:#e6db74">&#34;</span>)
+  }, onError: { error <span style="color:#66d9ef">in</span>
+    print(<span style="color:#e6db74">&#34;error: &#34;</span>)
   })
-</code></pre>
-
-<p>In case <code>responseObservable</code> fails, the subscription will &ldquo;<em>restart</em>&rdquo; up to 3 times and in case it fails all 3 times, it will error out.</p>
-
+</code></pre></div><p>In case <code>responseObservable</code> fails, the subscription will &ldquo;<em>restart</em>&rdquo; up to 3 times and in case it fails all 3 times, it will error out.</p>
 <p>As useful as the built-in operator is - you rarely can solve a real problem by retrying immediately.</p>
-
 <p>Especially in problems caused by lack of connectivity (and others of course) it&rsquo;s much more useful to wait a little and then retry, hoping that meanwhile the problem was resolved.</p>
-
 <p>Sometimes it even makes sense to first wait a short interval of time, and after few fails wait longer and longer before retrying.</p>
-
 <p>There is no built-in <code>retry</code> operator that will allow you to do that, but you could give a try to <code>RxSwiftExt</code> - an extra set of operators developed by the community (maintainer of the library is <a href="https://github.com/fpillet">fpillet</a> ).</p>
-
 <p>You can have a look at all of the operators included in RxSwiftExt in its README: <a href="https://github.com/RxSwiftCommunity/RxSwiftExt">https://github.com/RxSwiftCommunity/RxSwiftExt</a>.</p>
-
 <p>After you include (via CocoaPods or Carthage) RxSwiftExt in your project you have few options how to use the smarter <code>retry</code> operator.</p>
-
 <p>The smarter <code>retry</code> takes in a parameter of the <code>RepeatBehavior</code> enum, which can be one of these four types:</p>
-
 <ul>
 <li><code>immediate (maxCount:)</code> - similar to the built-in behavior</li>
 <li><code>delayed (maxCount:time:)</code> - retries up to <code>maxCount</code> times, but with <code>time</code> amount of seconds between retries</li>
 <li><code>exponentialDelayed (maxCount:initial:multiplier:)</code> - retries up to <code>maxCount</code> times, starts with <code>initial</code> amount of seconds but uses <code>multiplier</code> to increase the delay between retries.</li>
 <li><code>customTimerDelayed(max:delayCalculator:)</code> - retries up to <code>max</code> times. <code>delayCalculator</code> is a closure that gets as input the number of retries so far, and returns how much seconds to wait before trying again.</li>
 </ul>
-
 <p>As an extra functionality you can add a closure that evaluates on each retry whether the operator shoud keep trying at all.</p>
-
 <h3 id="retrying-at-equal-intervals">Retrying at equal intervals</h3>
-
-<pre><code class="language-swift">responseObservable.retry(.delayed(maxCount: 3, time: 5.0),
- shouldRetry: {error in
-  return 50..&lt;80 ~= (error as NSError).code
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">responseObservable.retry(.delayed(maxCount: <span style="color:#ae81ff">3</span>, time: <span style="color:#ae81ff">5.0</span>),
+ shouldRetry: {error <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">50.</span>.&lt;<span style="color:#ae81ff">80</span> <span style="color:#f92672">~=</span> (error <span style="color:#66d9ef">as</span> NSError).code
 })
-</code></pre>
-
-<p>This is a more elaborate example so let&rsquo;s have a look. If <code>responseObservable</code> emits an error <code>retry</code> will try up to 3 times, with 5 second intervals between the retries.</p>
-
+</code></pre></div><p>This is a more elaborate example so let&rsquo;s have a look. If <code>responseObservable</code> emits an error <code>retry</code> will try up to 3 times, with 5 second intervals between the retries.</p>
 <p>Additionally between retries <code>retry</code> will consult with the <code>shouldRetry</code> closure if it should keep going. Once the code casts <code>error</code> as an <code>NSError</code>, it checks the code of the error. It lets <code>retry</code> keep trying if the error code is between 50 and 80, and stops retrying if the code is not in that range.</p>
-
 <p>In your own app return <code>true</code> or <code>false</code> depending on your business logic.</p>
-
 <h3 id="retrying-in-increasing-intervals">Retrying in increasing intervals</h3>
-
 <p>The formula calculting the delay between retries is <code>initial * pow(1 + multiplier, Double(currentRepetition - 1))</code>.</p>
-
 <p>Let&rsquo;s have a look at an example:</p>
-
-<pre><code class="language-swift">retry(.exponentialDelayed(maxCount: 3, initial: 2.0, multiplier: 1.5))
-</code></pre>
-
-<p>The delay between first and second tries is 2.0 seconds (the value of <code>initial</code> parameter). Then between second and third tries is 5.0 seconds - <code>2.0 * 2.5</code> seconds.</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift">retry(.exponentialDelayed(maxCount: <span style="color:#ae81ff">3</span>, initial: <span style="color:#ae81ff">2.0</span>, multiplier: <span style="color:#ae81ff">1.5</span>))
+</code></pre></div><p>The delay between first and second tries is 2.0 seconds (the value of <code>initial</code> parameter). Then between second and third tries is 5.0 seconds - <code>2.0 * 2.5</code> seconds.</p>
 <h3 id="calculating-the-delay">Calculating the delay</h3>
-
 <p>In the end  - if you go for a custom calculator you can simply return any value based on any kind of custom business logic so sky is pretty much the limit.</p>
-
 <p>As an example here is a piece of code that implements decreasing delays between tries: 10, 9, 8, 7, 6, etc.</p>
-
-<pre><code class="language-swift">let speedUp: (UInt) -&gt; Double = {retries in
-  return max(0.0, 10 - Double(retries))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#66d9ef">let</span> speedUp: (UInt) -&gt; Double = {retries <span style="color:#66d9ef">in</span>
+  <span style="color:#66d9ef">return</span> max(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">10</span> <span style="color:#f92672">-</span> Double(retries))
 }
 
-responseObservable.retry(.customTimerDelayed(maxCount: 10,
+responseObservable.retry(.customTimerDelayed(maxCount: <span style="color:#ae81ff">10</span>,
   delayCalculator: speedUp))
     .subscribe()
-</code></pre>
-
-<h3 id="a-non-rxswift-retry">A non RxSwift retry</h3>
-
+</code></pre></div><h3 id="a-non-rxswift-retry">A non RxSwift retry</h3>
 <p>As a fun bonus, I&rsquo;ve made a <code>retry</code> library which doesn&rsquo;t use RxSwift at all as I find a custom-delay <code>retry</code> very useful in all kinds of apps. You can use the pure Swift <code>retry</code> in a very similar manner: <a href="https://github.com/icanzilb/retry">https://github.com/icanzilb/retry</a></p>
 
 	
 			
 
-<div style="padding:10px; border:1px solid silver; margin:10px;">
+<div style="padding:10px; border:1px solid silver; margin:10px; height: 260px;">
+	
+	<div style="float: left; margin-right: 50px;">
+		<a href="https://swiftconcurrencybook.com" target="_blank" style="text-decoration:none;">
+			<img src="http://rx-marin.com/images/concurrency-book.png" style="width:175px;"><br/><br/>
+		</a>
+	</div>
+	
+	
 <p>Hope that post was helpful, and if you want to get in touch you can find me here <a class="twitter-follow-button"
   href="https://twitter.com/icanzilb">
 Follow @icanzilb</a></p>
@@ -392,13 +373,6 @@ Follow @icanzilb</a></p>
 Tweet</a></p>
 </div>
 
-<div style="padding:10px; border:1px solid #bfbfef; margin:10px; height:300px;">
-	<a style="display:block;float:left;margin-right:20px;margin-left:20px;" href="http://underplot.com/book.php?rxswift" target="_blank" style="text-decoration:none;"><img src="http://rx-marin.com/images/rx-new.jpg" style="width:200px;box-shadow: 6px 6px #002d8c;"></a>
-	<br/>
-	If you'd like to learn how to create professional production apps with RxSwift, the best resource out there is the RxSwift book written by Florent Pillet, Junior Bontognali, Marin Todorov, & Scott Gardner. <br/><br/>
-	It features 20+ chapters covering the basics, the Rx operators, and advanced topics like testing, error handling, and app architecture. <br/><br/>
-	Available from Ray Wenderlich: <a style="font-weight: bold;" href="http://underplot.com/book.php?rxswift" target="_blank">&raquo; Learn more</a>.
-</div>
 
 			
 				<div class="tags-list">
@@ -450,7 +424,7 @@ Tweet</a></p>
 		</ul>
 	</div>
 
-	<p>&copy; 2019. All rights reserved.</p>
+	<p>&copy; 2021. All rights reserved.</p>
 </div>
 
 <script src="http://rx-marin.com/etc/prism.js"></script>

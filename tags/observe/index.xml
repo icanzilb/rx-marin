@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>observe on rx_marin&lt;blog&gt;</title>
@@ -6,11 +6,7 @@
     <description>Recent content in observe on rx_marin&lt;blog&gt;</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="http://rx-marin.com/tags/observe/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate><atom:link href="http://rx-marin.com/tags/observe/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Testing with RxBlocking, part 2</title>
       <link>http://rx-marin.com/post/rxblocking-part2/</link>
@@ -31,7 +27,8 @@ When to use RxBlocking vs. RxTest? RxTest is a great library for testing RxSwift
       <guid>http://rx-marin.com/post/rxblocking-part1/</guid>
       <description>Whenever you decide to test your Rx code you have not one but two excellent choices - RxTest and RxBlocking.
 In this blog post I&amp;rsquo;ll go over the RxBlocking API and explain shortly how does the libary work. In Part 2 I&amp;rsquo;ll go over a bunch of real-life examples from open source I&amp;rsquo;ve written.
-Testing with RxTest  pod RxTest to install it to your test suite from https://github.com/ReactiveX/RxSwift/tree/master/RxTest</description>
+Testing with RxTest  pod RxTest to install it to your test suite from https://github.com/ReactiveX/RxSwift/tree/master/RxTest
+ I&amp;rsquo;ve already written in the past about RxTest and few people have thanked me personally for shading some light on its usage, so if you&amp;rsquo;re interested head to the original article and read through: Testing your RxSwift code, part1.</description>
     </item>
     
     <item>
